@@ -1,3 +1,2 @@
-This is a test Project.
+This is just a test Project.
 Say Hi to Everybody!
-Hi ~~
