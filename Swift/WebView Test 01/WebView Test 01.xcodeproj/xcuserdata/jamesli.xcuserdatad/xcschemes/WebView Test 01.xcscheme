@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0EFBBC851A0E41150045FD2B"
-               BuildableName = "SwiftTest01Beginner.app"
-               BlueprintName = "SwiftTest01Beginner"
-               ReferencedContainer = "container:SwiftTest01Beginner.xcodeproj">
+               BlueprintIdentifier = "0ED417E41A1116DD0047C403"
+               BuildableName = "WebView Test 01.app"
+               BlueprintName = "WebView Test 01"
+               ReferencedContainer = "container:WebView Test 01.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0EFBBC9A1A0E41150045FD2B"
-               BuildableName = "SwiftTest01BeginnerTests.xctest"
-               BlueprintName = "SwiftTest01BeginnerTests"
-               ReferencedContainer = "container:SwiftTest01Beginner.xcodeproj">
+               BlueprintIdentifier = "0ED417F91A1116DD0047C403"
+               BuildableName = "WebView Test 01Tests.xctest"
+               BlueprintName = "WebView Test 01Tests"
+               ReferencedContainer = "container:WebView Test 01.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,20 +46,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0EFBBC9A1A0E41150045FD2B"
-               BuildableName = "SwiftTest01BeginnerTests.xctest"
-               BlueprintName = "SwiftTest01BeginnerTests"
-               ReferencedContainer = "container:SwiftTest01Beginner.xcodeproj">
+               BlueprintIdentifier = "0ED417F91A1116DD0047C403"
+               BuildableName = "WebView Test 01Tests.xctest"
+               BlueprintName = "WebView Test 01Tests"
+               ReferencedContainer = "container:WebView Test 01.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0EFBBC851A0E41150045FD2B"
-            BuildableName = "SwiftTest01Beginner.app"
-            BlueprintName = "SwiftTest01Beginner"
-            ReferencedContainer = "container:SwiftTest01Beginner.xcodeproj">
+            BlueprintIdentifier = "0ED417E41A1116DD0047C403"
+            BuildableName = "WebView Test 01.app"
+            BlueprintName = "WebView Test 01"
+            ReferencedContainer = "container:WebView Test 01.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -75,10 +75,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0EFBBC851A0E41150045FD2B"
-            BuildableName = "SwiftTest01Beginner.app"
-            BlueprintName = "SwiftTest01Beginner"
-            ReferencedContainer = "container:SwiftTest01Beginner.xcodeproj">
+            BlueprintIdentifier = "0ED417E41A1116DD0047C403"
+            BuildableName = "WebView Test 01.app"
+            BlueprintName = "WebView Test 01"
+            ReferencedContainer = "container:WebView Test 01.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -93,10 +93,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0EFBBC851A0E41150045FD2B"
-            BuildableName = "SwiftTest01Beginner.app"
-            BlueprintName = "SwiftTest01Beginner"
-            ReferencedContainer = "container:SwiftTest01Beginner.xcodeproj">
+            BlueprintIdentifier = "0ED417E41A1116DD0047C403"
+            BuildableName = "WebView Test 01.app"
+            BlueprintName = "WebView Test 01"
+            ReferencedContainer = "container:WebView Test 01.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

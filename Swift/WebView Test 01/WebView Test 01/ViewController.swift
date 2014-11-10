@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  SwiftTest01Beginner
+//  WebView Test 01
 //
-//  Created by James Li on 14-11-8.
+//  Created by James Li on 14-11-10.
 //  Copyright (c) 2014年 James Li. All rights reserved.
 //
 
@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        println("Hello world!")
     }
 
     override func didReceiveMemoryWarning() {
