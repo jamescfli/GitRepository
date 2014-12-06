@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,11 +7,24 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cn.nec.nlc.example.activitytest15.MainActivity" >
+    tools:context=".MainActivity" >
 
-    <TextView
+    <EditText
+        android:id="@+id/inputforintent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:minHeight="60dip"
+        android:text="First Activity"
+        android:textSize="20sp" >
+    </EditText>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/startintent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/inputforintent"
+        android:layout_below="@+id/inputforintent"
+        android:onClick="onClick"
+        android:text="Calling an intent" />
+
+</RelativeLayout> 
