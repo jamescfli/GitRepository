@@ -1,7 +1,7 @@
 package cn.nec.nlc.example.activitytest16;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+//import java.io.BufferedReader;
+//import java.io.InputStreamReader;
 import java.net.URL;
 
 import android.app.Activity;
@@ -9,9 +9,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.webkit.WebView;
+//import android.widget.TextView;
 
 public class BrowserActivity extends Activity {
 
@@ -26,7 +25,9 @@ public class BrowserActivity extends Activity {
 
 	    setContentView(R.layout.activity_main);
 	    Intent intent = getIntent();
-	    TextView text = (TextView) findViewById(R.id.textView);
+//	    TextView text = (TextView) findViewById(R.id.textView);
+	    WebView webview = (WebView) findViewById(R.id.webview);
+
 	    
 	    // To get the action of the intent use
 	    String action = intent.getAction();
@@ -39,11 +40,12 @@ public class BrowserActivity extends Activity {
 	    URL url;
 	    try {
 	    	url = new URL(data.getScheme(), data.getHost(), data.getPath());
-	    	BufferedReader rd = new BufferedReader(new InputStreamReader(url.openStream()));
-	    	String line = "";
-	    	while ((line = rd.readLine()) != null) {
-	    		text.append(line);
-	    	}
+	    	webview.loadUrl(url.toString());
+//	    	BufferedReader rd = new BufferedReader(new InputStreamReader(url.openStream()));
+//	    	String line = "";
+//	    	while ((line = rd.readLine()) != null) {
+//	    		text.append(line);
+//	    	}
 	    } catch (Exception e) {
 	    	e.printStackTrace();
 	    }
