@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Activity Test 19</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="second_activity_text">This is the second activity!</string>
     <string name="action_settings">Settings</string>
 
 </resources>
