@@ -43,3 +43,8 @@ This repository is for all test Android projects, including:
     a) ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM
     b) MenuItem.setActionView(), expandActionView(), collapseActionView()
     c) AsyncTask<String, Void, String> doInBackground() onPostExecute()
+
+7) ActivityTest21ShareActionProvider
+    a) Menu.findItem().getActionProvider()
+    b) ShareActionProvider.setShareIntent()
+    c) Intent(Intent.ACTION_SEND) to Weibo or Wechat
