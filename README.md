@@ -4,6 +4,9 @@ This repository is for all test Android projects, including:
     a) Activity.startActivityForResult() and Activity.onActivityResult()
     b) Intent.hasExtra(), Intent.getExtras(), Intent.putExtra()
     c) Bundle.getIntent().getExtras()
+    d) home icon to go back to parent activity: android.R.id.home
+    e) Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    f) ActionBar actionBar = Activity.getActionBar(), ActionBar.setHomeButtonEnabled(true)
 
 2) ActivityTest16Browser
     a) StrictMode.ThreadPolicy.Builder() and StrictMode.setThreadPolicy(policy)

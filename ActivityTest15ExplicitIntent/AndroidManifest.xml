@@ -24,7 +24,8 @@
         </activity>
         <activity
             android:label="Result Activity"
-            android:name=".ResultActivity" >
+            android:name=".ResultActivity"
+            android:parentActivityName=".MainActivity" >
         </activity>
     </application>
 
