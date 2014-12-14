@@ -38,3 +38,8 @@ This repository is for all test Android projects, including:
         .build();
     NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     notificationManager.notify(id_of_notification, notification)
+
+6) ActivityTest20ActionBarProg
+    a) ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM
+    b) MenuItem.setActionView(), expandActionView(), collapseActionView()
+    c) AsyncTask<String, Void, String> doInBackground() onPostExecute()
