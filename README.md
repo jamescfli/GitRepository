@@ -51,3 +51,6 @@ This repository is for all test Android projects, including:
     a) Menu.findItem().getActionProvider()
     b) ShareActionProvider.setShareIntent()
     c) Intent(Intent.ACTION_SEND) to Weibo or Wechat
+
+8) ActivityTest22NavDrawer
+    a) 
