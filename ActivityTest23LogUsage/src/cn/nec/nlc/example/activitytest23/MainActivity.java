@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
 		// and isn't a part of the SDK tools/common build stuff
 		// ADT(r17)中添加了一个新功能可以允许开发者只在Debug模式下允许某些代码
 		if (BuildConfig.DEBUG) {
+			// e-ERROR, w-WARN, i-INFO, d-DEBUG, v-VERBOSE
 			Log.d(Constants.LOG_TAG, "onCreate called");
 		}
 		setContentView(R.layout.activity_main);
