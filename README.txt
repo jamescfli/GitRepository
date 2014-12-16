@@ -54,3 +54,7 @@ This repository is for all test Android projects, including:
 
 8) ActivityTest22NavDrawer
     a) 
+
+9) ActivityTest23LogUsage
+    a) BuildConfig.DEBUG <=> public Boolean DEBUG = true/false(in release)
+    b) Log.d(Constants.LOG_TAG, “text content”); where Constants is a public interface

@@ -2,7 +2,6 @@ package cn.nec.nlc.example.activitytest22;
 
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
