@@ -58,3 +58,14 @@ This repository is for all test Android projects, including:
 9) ActivityTest23LogUsage
     a) BuildConfig.DEBUG <=> public Boolean DEBUG = true/false(in release)
     b) Log.d(Constants.LOG_TAG, “text content”); where Constants is a public interface
+
+10) ActivityTest24SimpleDialog
+    a) Activity.showDialog(DIALOG_ID);
+    b) Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(“Dialog message shown”)
+	builder.setCancelable(true/false)
+	builder.setPositiveButton(“I agree”, new OkOnClickListener());
+	builder.setNegativeButton(“No, no”, new CancelOnClickListener());
+	AlertDialog dialog = builder.create();
+	dialog.show();
+    c) both OkOnClickListener and CancelOnClickListener implements DialogInterface.OnClickListener interface
