@@ -69,3 +69,11 @@ This repository is for all test Android projects, including:
 	AlertDialog dialog = builder.create();
 	dialog.show();
     c) both OkOnClickListener and CancelOnClickListener implements DialogInterface.OnClickListener interface
+
+11) ContentProviderTest03SQLiteBasics
+    a) wrapper SQLiteOpenHelper: database create() execSQL(), onCreate() and onUpgrade()
+    b) DAO - Data Access Object - DataSource: SQLiteDataBase, SQLiteOpenHelper
+    c) ContentValues
+    d) cursor.moveToFirst(), cursor.isAfterLast(), cursor.moveToNext(), cursor.close(), cursor.getLong(), cursor.getString()
+    e) database.query(), database.delete()
+    f) ArrayAdapter, ListView.setAdapter(), Adapter.add(), Adapter.notifyDataSetChanged()
