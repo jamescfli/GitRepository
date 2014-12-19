@@ -49,7 +49,7 @@ public class TestDatabaseActivity extends Activity {
 			int nextInt = new Random().nextInt(comments.length);
 			// save the new comment to the database
 			comment = datasource.createComment(comments[nextInt]);
-			adapter.add(comment);
+			adapter.add(comment);	// add to the tail of the listView
 			break;
 		case R.id.delete:
 			if (adapter.getCount() > 0) {

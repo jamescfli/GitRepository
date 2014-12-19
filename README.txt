@@ -75,5 +75,5 @@ This repository is for all test Android projects, including:
     b) DAO - Data Access Object - DataSource: SQLiteDataBase, SQLiteOpenHelper
     c) ContentValues
     d) cursor.moveToFirst(), cursor.isAfterLast(), cursor.moveToNext(), cursor.close(), cursor.getLong(), cursor.getString()
-    e) database.query(), database.delete()
+    e) database.query(), database.delete(), database.insert()
     f) ArrayAdapter, ListView.setAdapter(), Adapter.add(), Adapter.notifyDataSetChanged()

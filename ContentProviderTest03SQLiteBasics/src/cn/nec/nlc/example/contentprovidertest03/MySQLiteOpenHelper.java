@@ -16,11 +16,21 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "commments.db";
 	private static final int DATABASE_VERSION = 1;
 	
-	// Database creation SQL statement, full command?
+	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table "
 			+ TABLE_COMMENTS + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_COMMENT
 			+ " text not null);";
+	// .. full command:
+	//	CREATE TABLE table_name (
+	//		column1 datatype,
+	//		column2 datatype,
+	//		column3 datatype,
+	//		...
+	//		columnN datatype,
+	//		PRIMARY KEY ( one or more columns )
+	//	);
+	
 	
 	// constructor
 	public MySQLiteOpenHelper(Context context) {
@@ -38,7 +48,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		Log.w(MySQLiteOpenHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 		        + newVersion + ", which will destroy all old data");
-		// delete old database
+		// delete old database, DROP TABLE database_name.table_name
+		// where database_name is already given by db
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMENTS);
 		// replace with the new one by calling onCreate() again
 		onCreate(db);
