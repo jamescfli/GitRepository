@@ -77,3 +77,9 @@ This repository is for all test Android projects, including:
     d) cursor.moveToFirst(), cursor.isAfterLast(), cursor.moveToNext(), cursor.close(), cursor.getLong(), cursor.getString()
     e) database.query(), database.delete(), database.insert()
     f) ArrayAdapter, ListView.setAdapter(), Adapter.add(), Adapter.notifyDataSetChanged()
+
+12) ContentProviderTest04Contacts
+    a) <uses-permission android:name="android.permission.READ_CONTACTS" />
+    b) Activity.getContacts()
+    c) ContactsContract.Data.DISPLAY_NAME, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.IN_VISIBLE_GROUP, ContactsContract.Contacts.CONTENT_URI
+    d) Activity.managedQuery() note: deprecated
