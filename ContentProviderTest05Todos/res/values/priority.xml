@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="priorities">
+        <item>Urgent</item>
+        <item>Reminder</item>
+        <item>Just FYI</item>
+        <item>Important</item>
+    </string-array>
+
+</resources> 
