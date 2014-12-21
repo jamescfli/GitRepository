@@ -83,3 +83,5 @@ This repository is for all test Android projects, including:
     b) Activity.getContacts()
     c) ContactsContract.Data.DISPLAY_NAME, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.IN_VISIBLE_GROUP, ContactsContract.Contacts.CONTENT_URI
     d) Activity.managedQuery() note: deprecated
+
+13) ContentProviderTest05Todos
