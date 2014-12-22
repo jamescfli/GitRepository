@@ -27,32 +27,52 @@ public class MyTodoContentProvider extends ContentProvider {
 	private static final String AUTHORITY = "cn.nec.nlc.example.ContentProviderTest05";
 
 	private static final String BASE_PATH = "ContentProviderTest05";
+	
+	// for public access
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + BASE_PATH);
 
+	// ContentResolver.CURSOR_DIR_BASE_TYPE:
+	// This is the Android platform's base MIME type for a content: URI 
+	// containing a Cursor of zero or more items.
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
 			+ "/todos";
+	// ContentResolver.CURSOR_ITEM_BASE_TYPE
+	// This is the Android platform's base MIME type for a content: URI 
+	// containing a Cursor of a single item.
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
 			+ "/todo";
 	
+	// Utility class to aid in matching URIs in Content Provider
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
-		  sURIMatcher.addURI(AUTHORITY, BASE_PATH, TODOS);
-		  sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", TODO_ID);
+		// .addURI(String authority, String path, int code)
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH, TODOS);
+		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", TODO_ID);
 	}
-	  
+	
+	@Override
+	public boolean onCreate() {
+		database = new TodoDatabaseHelper(getContext());
+		return false;	// true if provider was successfully loaded, false o.w.
+	}
+	
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		int uriType = sURIMatcher.match(uri);
+		int uriType = sURIMatcher.match(uri);	// return -1 if no match
+		// database was initiated in onCreate()
 	    SQLiteDatabase sqlDB = database.getWritableDatabase();
 	    int rowsDeleted = 0;
 	    switch (uriType) {
 	    case TODOS:
+	    	// .delete(String table, String whereClause, String[] whereArgs)
 	    	rowsDeleted = sqlDB.delete(TodoTable.TABLE_TODO, selection,
 	    			selectionArgs);
 	    	break;
 	    case TODO_ID:
+	    	// return the decoded last segment or null if the path is empty
 	    	String id = uri.getLastPathSegment();
+	    	// TextUtils.isEmpty(): return true if the string is null or 0-length
 	    	if (TextUtils.isEmpty(selection)) {
 	    		rowsDeleted = sqlDB.delete(TodoTable.TABLE_TODO,
 	    				TodoTable.COLUMN_ID + "=" + id, 
@@ -67,6 +87,7 @@ public class MyTodoContentProvider extends ContentProvider {
 	    default:
 	    	throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }
+	    // Notify registered observers that a row was updated.
 	    getContext().getContentResolver().notifyChange(uri, null);
 	    return rowsDeleted;
 	}
@@ -93,19 +114,13 @@ public class MyTodoContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public boolean onCreate() {
-		database = new TodoDatabaseHelper(getContext());
-		return false;
-	}
-
-	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 		      String[] selectionArgs, String sortOrder) {
 		// Uisng SQLiteQueryBuilder instead of query() method
 	    SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
 	    // check if the caller has requested a column which does not exists
-	    checkColumns(projection);
+	    checkColumns(projection);	// throw exception if not existing
 
 	    // Set the table
 	    queryBuilder.setTables(TodoTable.TABLE_TODO);
@@ -140,10 +155,10 @@ public class MyTodoContentProvider extends ContentProvider {
 	    int rowsUpdated = 0;
 	    switch (uriType) {
 	    case TODOS:
-	    	rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO, 
-	    			values, 
-	    			selection,
-	    			selectionArgs);
+	    	rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO, 	// table_name
+	    			values, 									// content values
+	    			selection,									// whereClause
+	    			selectionArgs);								// selectionArgs
 	    	break;
 	    case TODO_ID:
 	    	String id = uri.getLastPathSegment();

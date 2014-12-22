@@ -93,6 +93,7 @@ public class TodoDetailActivity extends Activity {
 		}
 	}
 
+	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		saveState();

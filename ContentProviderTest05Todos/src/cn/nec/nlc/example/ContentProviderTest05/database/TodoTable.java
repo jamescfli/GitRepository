@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class TodoTable {
 	// Database table
-	public static final String TABLE_TODO = "todo";	// table name
+	public static final String TABLE_TODO = "todo";	// table_name
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_CATEGORY = "category";
 	public static final String COLUMN_SUMMARY = "summary";
@@ -33,4 +33,4 @@ public class TodoTable {
 	    database.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
 	    onCreate(database);
 	}
-} 
+}

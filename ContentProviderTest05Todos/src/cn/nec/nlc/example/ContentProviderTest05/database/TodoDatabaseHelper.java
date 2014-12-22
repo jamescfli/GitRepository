@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-// wrapper for TodoTable class
+// database for TodoTable class, it may contain more than one table
 public class TodoDatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "todotable.db";
 	private static final int DATABASE_VERSION = 1;
@@ -17,11 +17,13 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		TodoTable.onCreate(database);
+		// more tables can be created here
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 		TodoTable.onUpgrade(database, oldVersion, newVersion);
+		// more tables can be upgraded here
 	}
 
 }

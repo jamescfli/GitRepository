@@ -85,3 +85,10 @@ This repository is for all test Android projects, including:
     d) Activity.managedQuery() note: deprecated
 
 13) ContentProviderTest05Todos
+    a) ContentResolver
+    b) ContentProvider.delete(), onCreate(), insert(), query(), update()
+    c) UriMatcher.addURI(), match()
+    d) throw new IllegalArgumentException() for switch(case) - default
+    e) AdapterView.AdapterContextMenuInfo
+    f) Loader, CursorLoader
+    g) Activity.onSaveInstanceState()
