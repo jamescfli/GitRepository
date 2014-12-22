@@ -30,6 +30,10 @@ public class TodoTable {
 	    Log.w(TodoTable.class.getName(), "Upgrading database from version "
 	        + oldVersion + " to " + newVersion
 	        + ", which will destroy all old data");
+	    // DROP TABLE statement is used to remove a table definition and all 
+	    // associated data, indexes, triggers, constraints and permission 
+	    // specifications for that table.
+	    // e.g. DROP TABLE database_name.table_name;
 	    database.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
 	    onCreate(database);
 	}
