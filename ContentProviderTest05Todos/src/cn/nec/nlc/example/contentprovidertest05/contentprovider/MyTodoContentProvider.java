@@ -61,7 +61,7 @@ public class MyTodoContentProvider extends ContentProvider {
 	// A request to delete one or more rows
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		int uriType = sURIMatcher.match(uri);	// return -1 if no match
+		int uriType = sURIMatcher.match(uri);	// TODO_ID = 20, return -1 if no match
 		// database was initiated in onCreate()
 	    SQLiteDatabase sqlDB = database.getWritableDatabase();
 	    int rowsDeleted = 0;
@@ -73,7 +73,7 @@ public class MyTodoContentProvider extends ContentProvider {
 	    	break;
 	    case TODO_ID:
 	    	// return the decoded last segment or null if the path is empty
-	    	String id = uri.getLastPathSegment();
+	    	String id = uri.getLastPathSegment(); // .../<id>
 	    	// TextUtils.isEmpty(): return true if the string is null or 0-length
 	    	if (TextUtils.isEmpty(selection)) {
 	    		rowsDeleted = sqlDB.delete(TodoTable.TABLE_TODO,
@@ -122,14 +122,18 @@ public class MyTodoContentProvider extends ContentProvider {
 	    SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
 	    // check if the caller has requested a column which does not exists
-	    checkColumns(projection);	// throw exception if not existing
+	    checkColumns(projection);	
+	    // .. throw exception if not existing, projection = [_id, summary]
 
 	    // Set the table
-	    queryBuilder.setTables(TodoTable.TABLE_TODO);
-
-	    int uriType = sURIMatcher.match(uri);
+	    queryBuilder.setTables(TodoTable.TABLE_TODO); 
+	    // .. mTable = "todo" table_name
+	    
+	    // uri = content://cn.nec.nlc.example.contentprovidertest05
+	    // .contentprovider/contentprovidertest05
+	    int uriType = sURIMatcher.match(uri);  // uriType = 10
 	    switch (uriType) {
-	    case TODOS:
+	    case TODOS:	// = 10
 	    	break;
 	    case TODO_ID:
 	    	// adding the ID to the original query
@@ -139,13 +143,15 @@ public class MyTodoContentProvider extends ContentProvider {
 	    default:
 	    	throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }
-
+	    
+	    // database path: /data/data/cn.nec.nlc.example.contentprovidertest05
+	    // /databases/todotable.db
 	    SQLiteDatabase db = database.getWritableDatabase();
 	    Cursor cursor = queryBuilder.query(db, projection, selection,
 	        selectionArgs, null, null, sortOrder);
 	    // make sure that potential listeners are getting notified
 	    cursor.setNotificationUri(getContext().getContentResolver(), uri);
-
+	    // .. update adapter with new inserted reminder
 	    return cursor;
 	}
 

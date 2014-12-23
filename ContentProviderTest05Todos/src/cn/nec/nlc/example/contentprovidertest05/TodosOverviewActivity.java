@@ -79,12 +79,15 @@ public class TodosOverviewActivity extends ListActivity implements
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case DELETE_ID:
+		case DELETE_ID:	// after long press the listview item
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-				.getMenuInfo();
+				.getMenuInfo(); // id = ?, position = ?
 			Uri uri = Uri.parse(MyTodoContentProvider.CONTENT_URI + "/"
-					+ info.id);
-			// .. info.id: The row id of the item for which the context menu is being displayed.
+					+ info.id);  
+			// .. content://cn.nec.nlc.example.contentprovidertest05
+			// .contentprovider/contentprovidertest05/<id>
+			// .. info.id: The row id of the item for which the context menu 
+			// is being displayed.
 			getContentResolver().delete(uri, null, null);
 			fillData();
 			return true;
@@ -103,8 +106,10 @@ public class TodosOverviewActivity extends ListActivity implements
 		super.onListItemClick(l, v, position, id);
 		Intent i = new Intent(this, TodoDetailActivity.class);
 		Uri todoUri = Uri.parse(MyTodoContentProvider.CONTENT_URI + "/" + id);
+		// .. todoUri = content://cn.nec.nlc.example.contentprovidertest05
+		// .contentprovider/contentprovidertest05/2
 		i.putExtra(MyTodoContentProvider.CONTENT_ITEM_TYPE, todoUri);
-
+		// .. CONTENT_ITEM_TYPE = vnd.android.cursor.item/todo
 		startActivity(i);
 	}
 
