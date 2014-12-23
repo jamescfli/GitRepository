@@ -28,8 +28,7 @@
         </activity>
         <provider 
       		android:name=".contentprovider.MyTodoContentProvider"
-      		android:authorities="cn.nec.nlc.example.contentprovidertest05"
-      		android:enabled="false" >
+      		android:authorities="cn.nec.nlc.example.contentprovidertest05.contentprovider" >
    		</provider> <!-- android:enabled="false" -->
     </application>
 

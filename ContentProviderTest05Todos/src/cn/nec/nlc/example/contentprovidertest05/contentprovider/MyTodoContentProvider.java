@@ -24,7 +24,8 @@ public class MyTodoContentProvider extends ContentProvider {
 	private static final int TODOS = 10;
 	private static final int TODO_ID = 20;
 
-	private static final String AUTHORITY = "cn.nec.nlc.example.contentprovidertest05";
+	private static final String AUTHORITY = 
+			"cn.nec.nlc.example.contentprovidertest05.contentprovider";
 
 	private static final String BASE_PATH = "contentprovidertest05";
 	
