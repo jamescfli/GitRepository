@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.nec.nlc.example.ContentProviderTest05"
+    package="cn.nec.nlc.example.contentprovidertest05"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -28,7 +28,7 @@
         </activity>
         <provider 
       		android:name=".contentprovider.MyTodoContentProvider"
-      		android:authorities="cn.nec.nlc.example.ContentProviderTest05"
+      		android:authorities="cn.nec.nlc.example.contentprovidertest05"
       		android:enabled="false" >
    		</provider> <!-- android:enabled="false" -->
     </application>

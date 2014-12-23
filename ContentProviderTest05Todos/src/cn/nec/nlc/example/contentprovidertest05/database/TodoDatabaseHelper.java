@@ -1,4 +1,4 @@
-package cn.nec.nlc.example.ContentProviderTest05.database;
+package cn.nec.nlc.example.contentprovidertest05.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

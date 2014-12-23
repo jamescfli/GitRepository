@@ -1,7 +1,7 @@
-package cn.nec.nlc.example.ContentProviderTest05;
+package cn.nec.nlc.example.contentprovidertest05;
 
-import cn.nec.nlc.example.ContentProviderTest05.contentprovider.MyTodoContentProvider;
-import cn.nec.nlc.example.ContentProviderTest05.database.TodoTable;
+import cn.nec.nlc.example.contentprovidertest05.contentprovider.MyTodoContentProvider;
+import cn.nec.nlc.example.contentprovidertest05.database.TodoTable;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -26,6 +26,9 @@ import android.widget.SimpleCursorAdapter;
  * 
  * You can create new ones via the ActionBar entry "Insert"
  * You can delete existing ones via a long press on the item
+ * 
+ * It is a good practice that an activity or the fragment which uses 
+ * a Loader implements the LoaderManager.LoaderCallbacks interface.
  */
 
 public class TodosOverviewActivity extends ListActivity implements
@@ -44,9 +47,14 @@ public class TodosOverviewActivity extends ListActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.todo_list);
-		this.getListView().setDividerHeight(2);
+		// getListView() for ListActivity
+		// setDividerHeight() sets the height of the divider that will be drawn
+		// between each item in the list. Calling this will override the 
+		// intrinsic height as set by setDivider(Drawable)
+		this.getListView().setDividerHeight(2);	// ListActivity
 		fillData();
-		registerForContextMenu(getListView());
+		// Registers a context menu to be shown for the given view
+		registerForContextMenu(getListView());	// for content update
 	}
 
 	// create the menu based on the XML definition
@@ -108,12 +116,19 @@ public class TodosOverviewActivity extends ListActivity implements
 		// Must include the _id column for the adapter to work
 		String[] from = new String[] { TodoTable.COLUMN_SUMMARY };
 		// Fields on the UI to which we map
-		int[] to = new int[] { R.id.label };
+		int[] to = new int[] { R.id.label }; // textView
 
+		// initLoader(int loader_id, Bundle args, LoaderCallbacks<D>)
+		// start a new loader or re-connect to existing one
+		// Ensures a loader is initialized and active. If the loader doesn't 
+		// already exist, one is created and (if the activity/fragment is 
+		// currently started) starts the loader. Otherwise the last created 
+		// loader is re-used.
 		getLoaderManager().initLoader(0, null, this);
+		// (context, layout, cursor, fromString, toInt, flags)
 		adapter = new SimpleCursorAdapter(this, R.layout.todo_row, null, from,
 				to, 0);
-		
+		// ListActivity
 		setListAdapter(adapter);
 	}
 
@@ -125,6 +140,9 @@ public class TodosOverviewActivity extends ListActivity implements
 	}
 
 	// creates a new loader after the initLoader () call
+	// allow you to load data asynchronously in an activity or fragment. 
+	// They can monitor the source of the data and deliver new results when the 
+	// content changes. They also persist data between configuration changes.
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		String[] projection = { TodoTable.COLUMN_ID, TodoTable.COLUMN_SUMMARY };
@@ -133,11 +151,15 @@ public class TodosOverviewActivity extends ListActivity implements
 		return cursorLoader;
 	}
 
+	// Once the Loader has finished reading data asynchronously, the 
+	// onLoadFinished() method of the callback class is called.
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		adapter.swapCursor(data);
 	}
 
+	// If the Cursor becomes invalid, the onLoaderReset() method is called 
+	// on the callback class.
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		// data is not available anymore, delete reference

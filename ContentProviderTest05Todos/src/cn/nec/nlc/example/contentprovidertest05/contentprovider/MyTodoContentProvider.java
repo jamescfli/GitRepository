@@ -1,10 +1,10 @@
-package cn.nec.nlc.example.ContentProviderTest05.contentprovider;
+package cn.nec.nlc.example.contentprovidertest05.contentprovider;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-import cn.nec.nlc.example.ContentProviderTest05.database.TodoDatabaseHelper;
-import cn.nec.nlc.example.ContentProviderTest05.database.TodoTable;
+import cn.nec.nlc.example.contentprovidertest05.database.TodoDatabaseHelper;
+import cn.nec.nlc.example.contentprovidertest05.database.TodoTable;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -20,15 +20,15 @@ public class MyTodoContentProvider extends ContentProvider {
 	// database
 	private TodoDatabaseHelper database;
 	
-	// used for the UriMacher
+	// used for the UriMacher, define uriType
 	private static final int TODOS = 10;
 	private static final int TODO_ID = 20;
 
-	private static final String AUTHORITY = "cn.nec.nlc.example.ContentProviderTest05";
+	private static final String AUTHORITY = "cn.nec.nlc.example.contentprovidertest05";
 
-	private static final String BASE_PATH = "ContentProviderTest05";
+	private static final String BASE_PATH = "contentprovidertest05";
 	
-	// for public access
+	// for public access, create a Uri which parses the given encoded URI string.
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + BASE_PATH);
 
@@ -57,6 +57,7 @@ public class MyTodoContentProvider extends ContentProvider {
 		return false;	// true if provider was successfully loaded, false o.w.
 	}
 	
+	// A request to delete one or more rows
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		int uriType = sURIMatcher.match(uri);	// return -1 if no match
@@ -87,7 +88,7 @@ public class MyTodoContentProvider extends ContentProvider {
 	    default:
 	    	throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }
-	    // Notify registered observers that a row was updated.
+	    // Notify registered observers that a row was updated, e.g. listView
 	    getContext().getContentResolver().notifyChange(uri, null);
 	    return rowsDeleted;
 	}

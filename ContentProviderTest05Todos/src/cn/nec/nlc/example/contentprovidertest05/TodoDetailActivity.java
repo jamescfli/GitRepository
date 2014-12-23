@@ -1,7 +1,7 @@
-package cn.nec.nlc.example.ContentProviderTest05;
+package cn.nec.nlc.example.contentprovidertest05;
 
-import cn.nec.nlc.example.ContentProviderTest05.contentprovider.MyTodoContentProvider;
-import cn.nec.nlc.example.ContentProviderTest05.database.TodoTable;
+import cn.nec.nlc.example.contentprovidertest05.contentprovider.MyTodoContentProvider;
+import cn.nec.nlc.example.contentprovidertest05.database.TodoTable;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -44,7 +44,8 @@ public class TodoDetailActivity extends Activity {
 		todoUri = (bundle == null) ? null : (Uri) bundle
 				.getParcelable(MyTodoContentProvider.CONTENT_ITEM_TYPE);
 
-		// Or passed from the other activity
+		// Or passed from the other activity, i.e. TodosOverviewActivity by
+		// press item in the ListView
 		if (extras != null) {
 			todoUri = extras
 					.getParcelable(MyTodoContentProvider.CONTENT_ITEM_TYPE);
@@ -55,7 +56,7 @@ public class TodoDetailActivity extends Activity {
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				if (TextUtils.isEmpty(mTitleText.getText().toString())) {
-					makeToast();
+					makeToast();	// title is empty, reminding by Toast
 				} else {
 					setResult(RESULT_OK);
 					finish();
@@ -97,6 +98,7 @@ public class TodoDetailActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		saveState();
+		// putParcelable(key, value)
 		outState.putParcelable(MyTodoContentProvider.CONTENT_ITEM_TYPE, todoUri);
 	}
 
@@ -117,7 +119,7 @@ public class TodoDetailActivity extends Activity {
 		if (description.length() == 0 && summary.length() == 0) {
 			return;
 		}
-
+		// for ContentResolver to read
 		ContentValues values = new ContentValues();
 		values.put(TodoTable.COLUMN_CATEGORY, category);
 		values.put(TodoTable.COLUMN_SUMMARY, summary);
@@ -127,7 +129,7 @@ public class TodoDetailActivity extends Activity {
 			// New todo
 			todoUri = getContentResolver().insert(MyTodoContentProvider.CONTENT_URI, values);
 		} else {
-			// Update todo
+			// Update existing todo
 			getContentResolver().update(todoUri, values, null, null);
 		}
 	}
