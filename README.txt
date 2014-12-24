@@ -92,3 +92,9 @@ This repository is for all test Android projects, including:
     e) AdapterView.AdapterContextMenuInfo
     f) Loader, CursorLoader
     g) Activity.onSaveInstanceState()
+
+14) XmlPullParserTest01
+    a) factory = XmlPullParserFactory.newInstance(); factory.setNamespaceAware(true); XmlPullParser xpp = factory.newPullParser();
+    b) xpp.setInput(new StringReader(“some String”));
+    c) XmlPullParser.setInput(), .getEventType(), .next(), getName(), getText()
+    d) XmlPullParser.START_DOCUMENT, .END_DOCUMENT, .START_TAG, .END_TAG, TEXT
