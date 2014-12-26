@@ -9,7 +9,10 @@
         android:targetSdkVersion="19" />
     
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- To read external storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- To write external storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"

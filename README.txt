@@ -107,3 +107,4 @@ This repository is for all test Android projects, including:
     e) PreferenceCategory, Preference.setKey(), .setTitle(), .setSummary()
     f) PreferenceFragment.getPreferenceScreen(), PreferenceGroup.getPreferenceCount(), Preference.getSharedPreferences()
     g) SharedPreferences.registerOnSharedPreferenceChangeListener(), .unregisterOnSharedPreferenceChangeListener()
+    h) writeConfiguration(), readFileFromInternalStorage(), readFileFromSDCard()
