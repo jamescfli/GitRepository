@@ -62,6 +62,8 @@ public class SettingsActivity extends PreferenceActivity {
         }
 
 		private void initSummary(Preference preference) {
+			// PreferenceCategory: used to group Preference objects and provide
+			// a disabled title above the group.
 			if (preference instanceof PreferenceCategory) {
 				PreferenceCategory cat = (PreferenceCategory) preference;
 				for (int i = 0; i < cat.getPreferenceCount(); i++) {
@@ -75,6 +77,7 @@ public class SettingsActivity extends PreferenceActivity {
 		private void updatePreferences(Preference findPreference) {
 			if (findPreference instanceof EditTextPreference) {
 				EditTextPreference editTextPref = (EditTextPreference) findPreference;
+				// setKey(), setTitle(), setSummary()
 				findPreference.setSummary(editTextPref.getText());
 			}
 		}

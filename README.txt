@@ -104,3 +104,6 @@ This repository is for all test Android projects, including:
     b) getFragmentManager().beginTransaction().replace().commit();
     c) SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     d) prefs.getString(<key>, <default value if failing to retrieve preferences>)
+    e) PreferenceCategory, Preference.setKey(), .setTitle(), .setSummary()
+    f) PreferenceFragment.getPreferenceScreen(), PreferenceGroup.getPreferenceCount(), Preference.getSharedPreferences()
+    g) SharedPreferences.registerOnSharedPreferenceChangeListener(), .unregisterOnSharedPreferenceChangeListener()
