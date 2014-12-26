@@ -98,3 +98,9 @@ This repository is for all test Android projects, including:
     b) xpp.setInput(new StringReader(“some String”));
     c) XmlPullParser.setInput(), .getEventType(), .next(), getName(), getText()
     d) XmlPullParser.START_DOCUMENT, .END_DOCUMENT, .START_TAG, .END_TAG, TEXT
+
+15) ActivityTest25SharedPreferences
+    a) res/xml/mypreferences.xml, addPreferencesFromResource(R.xml.mypreferences) in PreferenceFragment
+    b) getFragmentManager().beginTransaction().replace().commit();
+    c) SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    d) prefs.getString(<key>, <default value if failing to retrieve preferences>)
