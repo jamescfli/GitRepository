@@ -108,3 +108,8 @@
     * PreferenceFragment.getPreferenceScreen(), PreferenceGroup.getPreferenceCount(), Preference.getSharedPreferences()
     * SharedPreferences.registerOnSharedPreferenceChangeListener(), .unregisterOnSharedPreferenceChangeListener()
     * writeConfiguration(), readFileFromInternalStorage(), readFileFromSDCard()
+
+16. ActivityTest26ThreadProgBar
+    * ProgressBar in layout: style="?android:attr/progressBarStyleHorizontal"
+    * ProgressBar.post(new Runnable), .setProgress(int), setMax in layout file
+    * new Thread(runnable).start(), Thread.sleep(long inMilliSecs)
