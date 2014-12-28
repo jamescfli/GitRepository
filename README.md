@@ -62,12 +62,12 @@
 10. ActivityTest24SimpleDialog
     * Activity.showDialog(DIALOG_ID);
     * Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(“Dialog message shown”)
-	builder.setCancelable(true/false)
-	builder.setPositiveButton(“I agree”, new OkOnClickListener());
-	builder.setNegativeButton(“No, no”, new CancelOnClickListener());
-	AlertDialog dialog = builder.create();
-	dialog.show();
+        + builder.setMessage(“Dialog message shown”)
+        + builder.setCancelable(true/false)
+        + builder.setPositiveButton(“I agree”, new OkOnClickListener());
+        + builder.setNegativeButton(“No, no”, new CancelOnClickListener());
+        + AlertDialog dialog = builder.create();
+        + dialog.show();
     * both OkOnClickListener and CancelOnClickListener implements DialogInterface.OnClickListener interface
 
 11. ContentProviderTest03SQLiteBasics
@@ -79,7 +79,7 @@
     * ArrayAdapter, ListView.setAdapter(), Adapter.add(), Adapter.notifyDataSetChanged()
 
 12. ContentProviderTest04Contacts
-    * <uses-permission android:name="android.permission.READ_CONTACTS" />
+    * uses-permission android:name="android.permission.READ_CONTACTS"
     * Activity.getContacts()
     * ContactsContract.Data.DISPLAY_NAME, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.IN_VISIBLE_GROUP, ContactsContract.Contacts.CONTENT_URI
     * Activity.managedQuery() note: deprecated
