@@ -113,3 +113,12 @@
     * ProgressBar in layout: style="?android:attr/progressBarStyleHorizontal"
     * ProgressBar.post(new Runnable), .setProgress(int), setMax in layout file
     * new Thread(runnable).start(), Thread.sleep(long inMilliSecs)
+
+17. ActivityTest27AsyncTask
+    * AsyncTask <TypeOfVarArgParams , ProgressValue , ResultValue>
+    * doInBackground(TypeOfVarArgParams), onPostExecute(ProgressValue , ResultValue)
+    * DefaultHttpClient client = new DefaultHttpClient();
+    * HttpGet httpGet = new HttpGet(url);
+    * HttpResponse execute = client.execute(httpGet);
+    * InputStream content = execute.getEntity().getContent();
+    * BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
