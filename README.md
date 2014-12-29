@@ -129,3 +129,10 @@
     * SharedPreferences.Editor .getInt(KEY, DEFAULT_VALUE), putInt(KEY, VALUE), SharedPreferencesLoader.persist(editor)
     * AsyncTaskLoader<SharedPreferences>, onContentChanged(), deliverResult(), forceLoad()
     * SharedPreferences.OnSharedPreferenceChangeListener loadInBackground(), onSharedPreferenceChanged(), onStartLoading()
+
+19. ActivityTest29ImageLoader
+    * ImageView.setImageBitmap()
+    * ProgressDialog.dismiss(), show(), isShowing()
+    * Thread.isAlive(), start(), sleep()
+    * HttpEntity entity = response.getEntity(); byte[] bytes = EntityUtils.toByteArray(entity); 
+    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
