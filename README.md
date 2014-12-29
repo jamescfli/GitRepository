@@ -122,3 +122,10 @@
     * HttpResponse execute = client.execute(httpGet);
     * InputStream content = execute.getEntity().getContent();
     * BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+
+18. ActivityTest28Loader
+    * Activity.getLoaderManager().initLoader(0, null, this);
+    * Interface LoaderManager.LoaderCallbacks<SharedPreferences> onCreateLoader(), onLoadFinished(), onLoaderReset()
+    * SharedPreferences.Editor .getInt(KEY, DEFAULT_VALUE), putInt(KEY, VALUE), SharedPreferencesLoader.persist(editor)
+    * AsyncTaskLoader<SharedPreferences>, onContentChanged(), deliverResult(), forceLoad()
+    * SharedPreferences.OnSharedPreferenceChangeListener loadInBackground(), onSharedPreferenceChanged(), onStartLoading()
