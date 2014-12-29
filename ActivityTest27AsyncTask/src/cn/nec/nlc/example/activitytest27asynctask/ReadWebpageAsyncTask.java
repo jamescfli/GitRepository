@@ -42,12 +42,24 @@ public class ReadWebpageAsyncTask extends Activity {
 		protected String doInBackground(String... urls) { // TypeOfVarArgParams
 			String response = "";
 		    for (String url : urls) {
-		    	DefaultHttpClient client = new DefaultHttpClient();
-		        HttpGet httpGet = new HttpGet(url);
+		    	// Default implementation of an HTTP client. 
+		    	// This class replaces HttpClient in HttpClient 3.
+		    	DefaultHttpClient client = new DefaultHttpClient(); 
+		    	// .. HttpParams: represents a collection of HTTP protocol and framework parameters.
+		    	
+		    	// retrieve whatever information (in the form of an entity) is 
+		    	// identified by the Request-URI.
+		        HttpGet httpGet = new HttpGet(url); // HttpGet(URI uri)
 		        try {
 		        	HttpResponse execute = client.execute(httpGet);
+		        	// getEntity(): Obtains the message entity of this response, if any. 
+		        	// The entity is provided by calling setEntity. Return HttpEntity
+		        	// HttpEntity: An entity that can be sent or received with an HTTP message. 
+		        	// Entities can be found in some requests and in responses, where they are optional.
 		        	InputStream content = execute.getEntity().getContent();
-
+		        	// .. HttpEntity.getContent() creates a new InputStream object of the entity
+		        	
+		        	// BufferedReader wraps an existing Reader and buffers the input, typical usage
 		        	BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
 		        	String s = "";
 		        	while ((s = buffer.readLine()) != null) {
