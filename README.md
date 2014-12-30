@@ -136,3 +136,11 @@
     * Thread.isAlive(), start(), sleep()
     * HttpEntity entity = response.getEntity(); byte[] bytes = EntityUtils.toByteArray(entity); 
     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+20. ActivityTest30JSON
+    * StrictMode.ThreadPolicy.Builder().permitAll().build() = policy
+    * StrictMode.setThreadPolicy(policy)
+    * JSONObject.put(KEY, VALUE)
+    * StringBuilder.append()
+    * HttpClient = new DefaultHttpClient(), HttpGet = new HttpGet(url) -> HttpResponse -> StatusLine -> StatusCode -> 200
+    * HttpResponse.getEntity() -> HttpEntity.getContent() -> InputStream => BufferedReader = new BufferedReader(new InputStreamReader(content)) -> line = reader.readLine() != null
