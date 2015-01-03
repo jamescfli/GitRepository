@@ -1,0 +1,56 @@
+apply plugin: 'java'
+
+// How does Gradle find the files for external dependencies? Gradle looks for them in a repository.
+// By default, Gradle does not define any repositories.
+// You need to define at least one before you can use external dependencies.
+// One option is use the Maven central repository:
+repositories {
+    // tells Gradle to look in the Maven central repository for any dependencies that are required.
+    mavenCentral()
+}
+// // Or a remote Maven repository:
+// repositories {
+//     maven {
+//         url "http://repo.mycompany.com/maven2"
+//     }
+// }
+// // Or a remote Ivy repository:
+// repositories {
+//     ivy {
+//         url "http://repo.mycompany.com/repo"
+//     }
+// }
+
+dependencies {
+    // Hibernate core 3.6.7.Final is required to compile the project's production source
+    // By implication, Hibernate core and its dependencies are also required at runtime.
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '3.6.7.Final'
+//    // shortcut form for declaring external dependencies looks like “group:name:version”
+//    compile 'org.hibernate:hibernate-core:3.6.7.Final'
+    // any junit >= 4.0 is required to compile the project's tests
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+// publishing to a remote Ivy repository
+uploadArchives {
+    repositories {
+        ivy {
+            credentials {
+                username "username"
+                password "pw"
+            }
+            url "http://repo.mycompany.com"
+        }
+    }
+}
+
+// publishing to a Maven repository
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://localhost/tmp/myRepo/")
+        }
+    }
+}
