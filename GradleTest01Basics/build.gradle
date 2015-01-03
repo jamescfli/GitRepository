@@ -1,9 +1,20 @@
+defaultTasks 'clean', 'hello'
+
+task clean << {
+    println "Default clean"
+}
+
 task hello {
     doLast {
         println 'Hello world!'
     }
 }
+// Access task as a property of the building script
+hello.doLast {
+    println "Greetings from the $hello.name task."
+}
 
+// The << operator is simply an alias for doLast
 task upper << {
     String someString = 'mY_nAmE'
     println "Original: " + someString
@@ -25,5 +36,31 @@ task taskY << {
 4.times { counter ->
     task "task$counter" << {
         println "I'm task number $counter"
+    }
+}
+
+task0.dependsOn task2, task3
+
+// Add extra properties to a task
+task myTask {
+    ext.myProperty = "myValue"
+}
+task printTaskProperties << {
+    println myTask.name + ": " + myTask.myProperty
+}
+
+// Different outcomes of build depending on chosen tasks
+task distribution << {
+    println "We build the zip with version=$version"
+}
+task release(dependsOn: 'distribution') << {
+    println 'We release now'
+}
+// Configure by DAG
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(release)) {
+        version = '1.0'
+    } else {
+        version = '1.0-SNAPSHOT'
     }
 }
