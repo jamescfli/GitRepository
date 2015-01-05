@@ -1,0 +1,24 @@
+// For most multi-project builds, there is some configuration
+// which is common to all projects
+// we will define this common configuration in the root project,
+// using a technique called configuration injection.
+subprojects {
+    apply plugin: 'java'    // applies the Java plugin to each subproject
+    // .. So, you can compile, test, and JAR all the projects by running gradle build
+    // from the root project directory.
+    apply plugin: 'eclipse-wtp'
+
+    repositories {
+       mavenCentral()
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.11'
+    }
+
+    version = '1.0'
+
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+}

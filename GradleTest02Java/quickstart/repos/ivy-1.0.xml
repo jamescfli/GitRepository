@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="" module="GradleTest02Java" revision="1.0" status="integration" publication="20150103152047">
+  <info organisation="" module="quickstart" revision="1.0" status="integration" publication="20150105231756">
     <description/>
   </info>
   <configurations>
@@ -12,6 +12,10 @@
     <conf name="testRuntime" visibility="private" description="Runtime classpath for source set 'test'." extends="runtime,testCompile"/>
   </configurations>
   <publications>
-    <artifact name="GradleTest02Java" type="jar" ext="jar" conf="archives,runtime"/>
+    <artifact name="quickstart" type="jar" ext="jar" conf="archives,runtime"/>
   </publications>
+  <dependencies>
+    <dependency org="commons-collections" name="commons-collections" rev="3.2" conf="compile-&gt;default"/>
+    <dependency org="junit" name="junit" rev="4.+" conf="testCompile-&gt;default"/>
+  </dependencies>
 </ivy-module>
