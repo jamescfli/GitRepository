@@ -1,0 +1,41 @@
+// println name
+// println project.name
+
+// define local variables
+// def dest = "dest"
+// task copy(type: Copy) {
+//     from "source"
+//     into dest
+// }
+
+// Extra properties
+// an ext block can be used to add multiple properties at once.
+apply plugin: "java"
+
+ext {
+    // an ext block adds two extra properties to the project object
+    springVersion = "3.1.0.RELEASE"
+    emailNotification = "build@master.org"
+}
+
+// a property named purpose is added to each source set by setting ext.purpose to null
+sourceSets.all { ext.purpose = null }
+
+sourceSets {
+    main {
+        purpose = "production"
+    }
+    test {
+        purpose = "test"
+    }
+    plugin {
+        purpose = "production"
+    }
+}
+
+task printProperties << {
+    println springVersion
+    println emailNotification
+    sourceSets.matching { it.purpose == "production" }.each { println it.name }
+    // .. in this example, main and plugin have this purpose
+}
