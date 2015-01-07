@@ -1,6 +1,3 @@
-// println name
-// println project.name
-
 // define local variables
 // def dest = "dest"
 // task copy(type: Copy) {
@@ -39,3 +36,50 @@ task printProperties << {
     sourceSets.matching { it.purpose == "production" }.each { println it.name }
     // .. in this example, main and plugin have this purpose
 }
+
+// test System properties
+task projectSetterGetter << {
+    println name    // name of the task
+    println project.name    // name of the project
+
+    // Using a getter method
+    println project.buildDir
+    println getProject().getBuildDir()
+
+    // Using a setter method
+    project.buildDir = 'target1'    // change buildDir name
+    println project.buildDir
+    getProject().setBuildDir('target2') // change buildDir name again
+    println project.buildDir
+}
+
+// test directory maker
+def classesDir = new File('build/classes')
+
+task resources << {
+    classesDir.mkdirs() // directory creation
+    // do something
+}
+task compile(dependsOn: 'resources') << {
+    if (classesDir.isDirectory()) {
+        println 'The class directory exists. I can start to operate'
+    }
+    // do something
+}
+
+// Configuring arbitrary objects
+task configure << {
+    def pos = configure(new java.text.FieldPosition(10)) {
+        beginIndex = 1
+        endIndex = 5
+    }
+    println pos.beginIndex
+    println pos.endIndex
+}
+
+// Caching
+// To improve responsiveness Gradle caches all compiled scripts by default.
+// This includes all build scripts, initialization scripts, and other scripts.
+// Gradle creates a .gradle directory in which it puts the compiled script.
+// The next time you run this build, Gradle uses the compiled script, if the script has not changed since it was compiled.
+// If you run Gradle with the --recompile-scripts option, the cached script is discarded and the script is compiled and stored in the cache.
