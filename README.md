@@ -145,5 +145,6 @@
     * HttpClient = new DefaultHttpClient(), HttpGet = new HttpGet(url) -> HttpResponse -> StatusLine -> StatusCode -> 200
     * HttpResponse.getEntity() -> HttpEntity.getContent() -> InputStream => BufferedReader = new BufferedReader(new InputStreamReader(content)) -> line = reader.readLine() != null
 
-21. GradleTest01Basics
-    * test groovy and print out 'Hello World!'
+21. GradleTest01~08 for Gradle practices
+
+22.

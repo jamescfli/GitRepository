@@ -1,0 +1,217 @@
+// This = the current project
+// Project.file() can locate a file relative to the project directory
+File configFile = file('src/config.xml')    // relative path
+configFile = file(configFile.absolutePath)  // use absolute path
+configFile = file(new File('src/config.xml'))   // use a File object with relative path
+
+// obtain a FileCollection instance is to use the Project.files() method
+FileCollection collection = files('src/file1.txt',
+    new File('src/file2.txt'),
+    ['src/file3.txt', 'src/file4.txt'])
+// file collection is iterable
+// Iterate over the files in the collection
+collection.each {File file ->
+    println file.name
+}
+// Convert the collection to various types
+Set set = collection.files
+Set set2 = collection as Set
+List list = collection as List
+String path = collection.asPath
+File file = collection.singleFile
+File file2 = collection as File
+// Add and subtract collections
+def union = collection + files('src/file3.txt')
+def different = collection - files('src/file3.txt')
+
+// implementing a file collection
+task list << {
+    File srcDir
+
+    // Create a file collection using a closure
+    collection = files { srcDir.listFiles() }
+
+    srcDir = file('src')
+    println "Contents of $srcDir.name"
+    collection.collect { relativePath(it) }.sort().each { println it }
+
+    srcDir = file('src2')
+    println "Contents of $srcDir.name"
+    collection.collect { relativePath(it) }.sort().each { println it }
+}
+
+// Create a file tree with a base directory
+FileTree tree = fileTree(dir: 'src/main')
+// Add include and exclude patterns to the tree
+tree.include '**/*.java'
+tree.exclude '**/Abstract*'
+// Create a tree using path
+tree = fileTree('src').include('**/*.java')
+// Create a tree using closure
+tree = fileTree('src') {
+include '**/*.java'
+}
+// Create a tree using a map
+tree = fileTree(dir: 'src', include: '**/*.java')
+tree = fileTree(dir: 'src', includes: ['**/*.java', '**/*.xml'])
+tree = fileTree(dir: 'src', include: '**/*.java', exclude: '**/*test*/**')
+
+// Using the file tree
+// Iterate over the contents of a tree
+tree.each {File file ->
+    println file
+}
+// Filter a tree
+FileTree filtered = tree.matching {
+    include 'org/gradle/api/**'
+}
+// Add trees together
+FileTree sum = tree + fileTree(dir: 'src/test')
+// Visit the elements of the tree
+tree.visit {element ->
+    println "$element.relativePath => $element.file"
+}
+
+// Using an archive as a file tree
+// Create a ZIP file tree using path
+FileTree zip = zipTree('someFile.zip')
+// Create a TAR file tree using path
+FileTree tar = tarTree('someFile.tar')
+//tar tree attempts to guess the compression based on the file extension
+//however if you must specify the compression explicitly you can:
+FileTree someTar = tarTree(resources.gzip('someTar.ext'))
+
+// Specifying a set of files
+// Use a File object to specify the source directory
+compile {
+    source = file('src/main/java')
+}
+// Use a String path to specify the source directory
+compile {
+    source = 'src/main/java'
+}
+// Use a collection to specify multiple source directories
+compile {
+    source = ['src/main/java', '../shared/java']
+}
+// Use a FileCollection (or FileTree in this case) to specify the source files
+compile {
+    source = fileTree(dir: 'src/main/java').matching { include 'org/gradle/api/**' }
+}
+// Using a closure to specify the source files.
+compile {
+    source = {
+        // Use the contents of each zip file in the src dir
+        file('src').listFiles().findAll {it.name.endsWith('.zip')}.collect { zipTree(it) }
+    }
+}
+
+// Specifying a set of files
+compile {
+    // Add some source directories use String paths
+    source 'src/main/java', 'src/main/groovy'
+
+    // Add a source directory using a File object
+    source file('../shared/java')
+
+    // Add some source directories using a closure
+    source { file('src/test/').listFiles() }
+}
+
+// Copying files using the copy task
+task copyTask(type: Copy) {
+    from 'src/main/webapp'   // from() method by CopySpec interface
+    into 'build/explodedWar'    // into() method by CopySpec interface
+}
+
+// Specifying copy task source files and destination directory
+task anotherCopyTask(type: Copy) {
+    // Copy everything under src/main/webapp
+    from 'src/main/webapp'
+    // Copy a single file
+    from 'src/staging/index.html'
+    // Copy the output of a task
+    from copyTask
+    // Copy the output of a task using Task outputs explicitly.
+    from copyTaskWithPatterns.outputs
+    // Copy the contents of a Zip file
+    from zipTree('src/main/assets.zip')
+    // Determine the destination directory later
+    into { getDestDir() }
+}
+// select the files to copy using Ant-style include or exclude patterns, or using a closure
+task copyTaskWithPatterns(type: Copy) {
+    from 'src/main/webapp'
+    into 'build/explodedWar'
+    include '**/*.html'
+    include '**/*.jsp'
+    exclude { details -> details.file.name.endsWith('.html') &&
+    details.file.text.contains('staging') }
+}
+
+// Copying files using the copy() method WITHOUT up-to-date check
+task copyMethod << {
+    copy {
+        from 'src/main/webapp'
+        into 'build/explodedWar'
+        include '**/*.html'
+        include '**/*.jsp'
+    }
+}
+// Copying files using the copy() method WITH up-to-date check
+task copyMethodWithExplicitDependencies{
+    // up-to-date check for inputs, plus add copyTask as dependency
+    inputs.file copyTask
+    outputs.dir 'some-dir' // up-to-date check for outputs
+    doLast{
+        copy {
+            // Copy the output of copyTask
+            from copyTask
+            into 'some-dir'
+        }
+    }
+}
+
+// Renaming files as they are copied
+task rename(type: Copy) {
+    from 'src/main/webapp'
+    into 'build/explodedWar'
+    // Use a closure to map the file name
+    rename { String fileName ->
+        fileName.replace('-staging-', '')
+    }
+    // Use a regular expression to map the file name
+    rename '(.+)-staging-(.+)', '$1$2'
+    rename(/(.+)-staging-(.+)/, '$1$2')
+}
+
+// Using the Sync task to copy dependencies
+// maintains a copy of the project's runtime dependencies in the build/libs directory
+task libs(type: Sync) {
+    from configurations.runtime
+    into "$buildDir/libs"
+}
+
+// Creating a ZIP archive
+apply plugin: 'java'
+task zip(type: Zip) {
+    from 'src/dist'
+    into('libs') {
+        from configurations.runtime
+    }
+}
+
+// Creation of ZIP archive
+apply plugin: 'java'
+// archivesBaseName = 'gradle'
+version = 1.0
+task myZip(type: Zip) {
+    // appendix = 'wrapper'
+    // classifier = 'src'
+    from 'somedir'
+    baseName = 'customName' // customize archive name
+}
+println myZip.archiveName
+println relativePath(myZip.destinationDir)
+println relativePath(myZip.archivePath)
+
