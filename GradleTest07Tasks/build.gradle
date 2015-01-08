@@ -1,0 +1,199 @@
+// Defining tasks with alternative syntax
+tasks.create(name: 'hello') << {
+    println "hello"
+}
+tasks.create(name: 'copy', type: Copy) {
+    from(file('srcDir'))
+    into(buildDir)
+}
+
+project(':projectA') {
+    task hello
+}
+
+task hello
+
+println tasks.hello.name
+println tasks['hello'].name
+
+println tasks.getByPath('hello').path
+println tasks.getByPath(':hello').path
+println tasks.getByPath('projectA:hello').path
+println tasks.getByPath(':projectA:hello').path
+
+// Creating a copy task
+task myCopy(type: Copy)
+
+// Configuring a task - various ways
+Copy myCopy = task(myCopy, type: Copy)
+myCopy.from 'resources'
+myCopy.into 'target'
+myCopy.include('**/*.txt', '**/*.xml', '**/*.properties')
+
+// another way of configuring a task, more readable
+task myCopy(type: Copy)
+myCopy {    // shortcut for the tasks.getByName(), pass a closure to the getByName() method
+    from 'resources'
+    into 'target'
+    include('**/*.txt', '**/*.xml', '**/*.properties')
+}
+
+// use a configuration closure when you define a task
+task copy(type: Copy) {
+    from 'resources'
+    into 'target'
+    include('**/*.txt', '**/*.xml', '**/*.properties')
+}
+
+// Adding dependency on task from another project
+project('projectA') {
+    task taskX(dependsOn: ':projectB:taskY') << {
+        println 'taskX'
+    }
+}
+project('projectB') {
+    task taskY << {
+        println 'taskY'
+    }
+}
+// .. note the project name is given by the directory name, so could not find projectA
+
+// Using task object instead
+task taskX << {
+    println 'taskX'
+}
+task taskY << {
+    println 'taskY'
+}
+taskX.dependsOn taskY
+
+// Adding dependency using closure
+task taskX << {
+    println 'taskX'
+}
+taskX.dependsOn {
+    tasks.findAll { task -> task.name.startsWith('lib') }
+}
+task lib1 << {
+    println 'lib1'
+}
+task lib2 << {
+    println 'lib2'
+}
+task notALib << {
+    println 'notALib'
+}
+
+// task run ordering
+task taskX << {
+    println 'taskX'
+}
+task taskY << {
+    println 'taskY'
+}
+//taskY.mustRunAfter taskX
+taskY.shouldRunAfter taskX  // test gradle -q taskY taskX
+
+// break ordering cycle by should run after
+task taskX << {
+    println 'taskX'
+}
+task taskY << {
+    println 'taskY'
+}
+task taskZ << {
+    println 'taskZ'
+}
+taskX.dependsOn taskY
+taskY.dependsOn taskZ
+taskZ.shouldRunAfter taskX  // gradle -q taskX
+
+// Adding description to a task
+task copy(type: Copy) {
+    description 'Copies the resource directory to the target directory.'
+    from 'resources'
+    into 'target'
+    include('**/*.txt', '**/*.xml', '**/*.properties')
+}
+
+// Overwrite a existing task
+task copy(overwrite: true) << {
+    println('I am the new one.')
+}
+
+// Skipping a task using a predicate
+task hello << {
+    println 'hello world'
+}
+hello.onlyIf { !project.hasProperty('skipHello') }
+// .. gradle hello -P skipHello
+
+// logic for skipping a task can't be expressed with a predicate, you can use the StopExecutionException
+// the further execution of this action as well as the execution of any following action of THIS task is skipped
+task compile << {
+    println 'We are doing the compile'
+}
+compile.doFirst {
+    // Here you would put arbitrary conditions in real life.
+    // But this is used in an integration test so we want defined behavior.
+    if (true) { throw new StopExecutionException() }
+}
+task myTask(dependsOn: 'compile') << {
+    println 'I am not affected'
+}
+// .. gradle -q myTask
+
+// Enabling and disabling tasks
+task disableMe << {
+    println 'This should not be printed if the task is disabled.'
+}
+disableMe.enabled = false
+
+// Declaring a task's inputs and outputs, a generator task
+task transform {
+    ext.srcFile = file('./mountains.xml')
+    ext.destDir = new File(buildDir, 'generated')
+    // add the following two lines to eliminate duplicate build by using Gradle's up-to-date checking
+    inputs.file srcFile
+    outputs.dir destDir
+    // .. as a result, when: "gradle transform", we have: ":transform UP-TO-DATE"
+    doLast {
+        println "Transforming source file."
+        destDir.mkdirs()
+        def mountains = new XmlParser().parse(srcFile)
+        mountains.mountain.each { mountain ->
+            def name = mountain.name[0].text()
+            def height = mountain.height[0].text()
+            def destFile = new File(destDir, "${name}.txt") // Filename: Mount Everest.txt
+            destFile.text = "$name -> ${height}\n"  // content: Mount Everest -> 8848
+        }
+    }
+}
+
+// Setting task ruls
+tasks.addRule("Pattern: ping<ID>") { String taskName -> // "Pattern: ping<ID>" name of the rule
+    if (taskName.startsWith("ping")) {
+        task(taskName) << {
+            println "Pinging: " + (taskName - 'ping')
+        }
+    }
+}
+// .. gradle -q pingServer1
+// .. show rules by gradle tasks
+// Dependency on rule based tasks
+task groupPing {
+    dependsOn pingServer1, pingServer2
+}
+// .. gradle groupPing without -q
+
+// Adding a task as finalizer
+task taskX << {
+    println 'taskX'
+    // Finalizer tasks will be executed even if the finalized task fails, e.g.
+    throw new RuntimeException()
+}
+task taskY << {
+    println 'taskY'
+}
+taskX.finalizedBy taskY
+// .. gradle -q TaskX
