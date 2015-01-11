@@ -147,4 +147,5 @@
 
 21. GradleTest01~08 for Gradle practices
 
-22.
+22. ActivityTest31DragDrop
+    *
