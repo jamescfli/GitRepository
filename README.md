@@ -148,4 +148,7 @@
 21. GradleTest01~08 for Gradle practices
 
 22. ActivityTest31DragDrop
-    *
+
+23. ActivityTest09CompassOrientation - Sensor Test
+    * XiaoMi Acc = 100, Mag = 50, Gyro = 100
+    * T1 Acc = 120, Mag = 60, Gyro = 200
