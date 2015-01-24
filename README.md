@@ -152,3 +152,11 @@
 23. ActivityTest09CompassOrientation - Sensor Test
     * XiaoMi Acc = 100, Mag = 50, Gyro = 100
     * T1 Acc = 120, Mag = 60, Gyro = 200
+
+24. ActivityTest32Drawable
+    * AssetManager, Activity.getAssets() from assets folder
+    * InputStream open = AssetManager#open("apple.png");
+    * Bitmap bitmap = BitmapFactory.decodeStream(open);
+    * ImageView#setImageBitmap(bitmap)
+    * InputStream#close()
+    * Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.apple) from drawable folder
