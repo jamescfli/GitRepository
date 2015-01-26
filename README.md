@@ -162,3 +162,5 @@
     * Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.apple) from drawable folder
 
 25. ActivityTest33CumtomDrawable
+
+26. WidgetTest01RandomNumber
