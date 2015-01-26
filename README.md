@@ -164,3 +164,5 @@
 25. ActivityTest33CumtomDrawable
 
 26. WidgetTest01RandomNumber
+
+27. WidgetTest02UpdateWithService
