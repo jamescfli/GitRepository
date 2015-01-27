@@ -24,7 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="cn.nec.nlc.example.servicetest2.DownloadService" >
+        <service 
+            android:name="cn.nec.nlc.example.servicetest2.DownloadService"
+            android:process=":my_process"
+            android:icon="@drawable/ic_launcher"   
+            android:label="@string/service_name" > <!-- : makes service run its own process, not for other application -->
         </service>
     </application>
 
