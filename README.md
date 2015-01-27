@@ -166,3 +166,10 @@
 26. WidgetTest01RandomNumber
 
 27. WidgetTest02UpdateWithService
+
+28. ServiceTest02DownloadFile
+    * IntentService, #onHandleIntent()
+    * Environment.getExternalStorageDirectory()
+    * URL#openConnection().getInputStream()
+    * sendBroadcast(intent)
+    * BroadcastReceiver @Override onReceive(), registerReceiver(BroadcastReceiver, IntentFilter) in onResume(), and unregisterReceiver(BroadcastReceiver) in onPause()
