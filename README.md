@@ -177,3 +177,6 @@
 29. ServiceTest03BindLocalService
     * bindService(Intent, ServiceConnection, flags), unbindService(ServiceConnection)
     * access service by Service's public methods after defined in ServiceConnection'
+
+30. ServiceTest05JobScheduler
+    *
