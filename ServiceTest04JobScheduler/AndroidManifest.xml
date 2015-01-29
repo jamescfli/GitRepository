@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.nec.nlc.example.servicetest05jobscheduler"
+    package="cn.nec.nlc.example.servicetest04jobscheduler"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="20"
+        android:minSdkVersion="21"
         android:targetSdkVersion="21" />
 
     <application
@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="cn.nec.nlc.example.servicetest04jobscheduler.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <service 
-            android:name=".TestJobService" >
+            android:name="cn.nec.nlc.example.servicetest04jobscheduler.TestJobService" >
         </service>
     </application>
 

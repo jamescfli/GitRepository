@@ -1,12 +1,15 @@
-package cn.nec.nlc.example.servicetest05jobscheduler;
+package cn.nec.nlc.example.servicetest04jobscheduler;
 
 import android.app.Activity;
-//import android.app.job.JobInfo;
-//import android.app.job.JobScheduler;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;

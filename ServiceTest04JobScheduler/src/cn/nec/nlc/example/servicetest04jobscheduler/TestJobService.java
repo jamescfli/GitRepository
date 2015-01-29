@@ -1,9 +1,9 @@
-package cn.nec.nlc.example.servicetest05jobscheduler;
+package cn.nec.nlc.example.servicetest04jobscheduler;
 
 import java.util.LinkedList;
-//import android.app.job.JobInfo;
-//import android.app.job.JobParameters;
-//import android.app.job.JobScheduler;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
+import android.app.job.JobScheduler;
 //import android.app.job.JobService;
 
 import android.util.Log;

@@ -120,5 +120,4 @@
             android:onClick="cancelAllJobs"
             android:text="@string/button_cancel_text"/>
     </LinearLayout>
-</ScrollView> 
-
+</ScrollView>
