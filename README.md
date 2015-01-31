@@ -179,4 +179,8 @@
     * access service by Service's public methods after defined in ServiceConnection'
 
 30. ServiceTest04JobScheduler
-    *
+
+31. BroadcastReceiverTest01DisplayCallNum
+    * extends BroadcastReceiver, onReceive()
+    * intent.getExtras().getString(TelephonyManager.EXTRA_STATE)
+    * if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)), then String phoneNumber = extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
