@@ -184,3 +184,6 @@
     * extends BroadcastReceiver, onReceive()
     * intent.getExtras().getString(TelephonyManager.EXTRA_STATE)
     * if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)), then String phoneNumber = extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+
+32. BroadcastReceiverTest02AlarmManager
+    * with issue on vibrating for multiple times
