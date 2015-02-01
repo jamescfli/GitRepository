@@ -19,7 +19,19 @@ public class MainActivity extends Activity {
 	public void showNotification(View v) {
 		// prepare intent which is triggered if the notification is selected
 		Intent intent = new Intent(this, NotificationReceiver.class);
+		// pIntent will be triggered later by notification, wrapper for intents which will not be executed immediately
+		// Retrieve a PendingIntent that will start a new activity, like calling Context.startActivity(Intent)
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+		// .. context: the current context will be saved and the new intent will be started from this context
+		// 0: requestCode
+		// intent: the intent will be started later
+		// flags: May be 
+		//		FLAG_ONE_SHOT, - PendingIntent can be used only once
+		//		FLAG_NO_CREATE, - if not exist, then simply return null instead of creating it
+		//		FLAG_CANCEL_CURRENT, - the current one, if exists, should be canceled before generating a new one
+		//		FLAG_UPDATE_CURRENT, - if exists, keep it but replace its extra data with what is in this new Intent
+		// 	or any of the flags as supported by Intent.fillIn() to control 
+		// which unspecified parts of the intent that can be supplied when the actual send happens.
 
 		// build notification
 		// the addAction re-use the same intent to keep the example short
