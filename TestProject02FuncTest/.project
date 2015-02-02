@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>TestProject02LayoutTest</name>
+	<name>TestProject02FuncTest</name>
 	<comment></comment>
 	<projects>
 		<project>TestProject02Activity</project>

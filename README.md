@@ -201,5 +201,5 @@
     * NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     * notificationManager.notify(0, n);
 
-34. TestProject02Activity and TestProject02ActivityTest
+34. TestProject02Activity, TestProject02LayoutTest and TestProject02FunctionTest
     * JUnit example
