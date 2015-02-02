@@ -200,3 +200,6 @@
         .addAction(R.drawable.ic_launcher, "And more", pIntent).build();
     * NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     * notificationManager.notify(0, n);
+
+34. TestProject02Activity and TestProject02ActivityTest
+    * JUnit example
