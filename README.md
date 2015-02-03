@@ -202,4 +202,7 @@
     * notificationManager.notify(0, n);
 
 34. TestProject02Activity, TestProject02LayoutTest and TestProject02FunctionTest
-    * JUnit example
+    * JUnit example, test layout
+
+35. TestProject03Async, TestProject03AsyncTest
+    * JUnit, test AsyncTask
