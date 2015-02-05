@@ -44,10 +44,6 @@ public class MainActivity extends Activity {
         radioBtnMag = (RadioButton) findViewById(R.id.radio_button_mag);
         textViewOutputSensorType = (TextView) findViewById(R.id.textView_output_sensor_type);
         textViewOutputSamRate = (TextView) findViewById(R.id.textView_output_sensor_rate);
-
-//        // set default checked sensor
-//        radioBtnAcc.setChecked(true);
-
     }
 
     @Override
