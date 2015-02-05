@@ -206,3 +206,6 @@
 
 35. TestProject03Async, TestProject03AsyncTest
     * JUnit, test AsyncTask
+
+36. ActivityTest34SensSampleRate
+    * Monitor sensors (accelerometer, gyroscope and magnetic field) sampling rate on the mobile
