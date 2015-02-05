@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sensor S-Rate</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="welcome_words">Sensor Selection:</string>
+    <string name="radio_button_acc">Accelerometer</string>
+    <string name="radio_button_gyro">Gyroscope</string>
+    <string name="radio_button_mag">Magnetic Field</string>
+    <string name="cal_sensor_rate">Calculate Sampling Rate</string>
+    <string name="text_output_sensor_type">Sensor Selected</string>
+
+</resources>
