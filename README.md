@@ -211,3 +211,5 @@
     * Monitor sensors (accelerometer, gyroscope and magnetic field) sampling rate on the mobile
 
 37. ActivityTest36SimplePedometer
+
+38. ActivityTest35ActTransAnimation
