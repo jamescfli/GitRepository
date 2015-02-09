@@ -213,3 +213,5 @@
 37. ActivityTest36SimplePedometer
 
 38. ActivityTest35ActTransAnimation
+
+39. ActivityTest37ViewAnimation
