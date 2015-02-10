@@ -215,3 +215,5 @@
 38. ActivityTest35ActTransAnimation
 
 39. ActivityTest37ViewAnimation
+
+40. ActivityTest38Network
