@@ -25,7 +25,11 @@ import java.net.URL;
 
 public class MainActivity extends ActionBarActivity {
     private EditText editTextWebsite;
+<<<<<<< HEAD
     private WebView webViewShow;    // API Level 1, substituted by other web application
+=======
+    private WebView webViewShow;
+>>>>>>> 5150dc07e66fafe527dea2c5fa3f81c18fe09170
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
