@@ -217,3 +217,7 @@
 39. ActivityTest37ViewAnimation
 
 40. ActivityTest38Network
+
+41. ActivityTest39Storage
+
+42. ActivityTest40Soundpool
