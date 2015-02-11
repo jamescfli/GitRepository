@@ -221,3 +221,10 @@
 41. ActivityTest39Storage
 
 42. ActivityTest40Soundpool
+
+43. ActivityTest41SoundRecording
+<table sytle="border: 0px;">
+<tr>
+<td><img width="400px" src="mediarecorder_state_diagram.gif" /></td>
+</tr>
+</table>
