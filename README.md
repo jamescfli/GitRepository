@@ -228,3 +228,7 @@
 <td><img width="400px" src="mediarecorder_state_diagram.gif" /></td>
 </tr>
 </table>
+
+44. ActivityTest42Storage
+    * test SharedPreferences, get, edit and commit
+    * example is from [Android Official Site - Storage](https://developer.android.com/guide/topics/providers/document-provider.html)
