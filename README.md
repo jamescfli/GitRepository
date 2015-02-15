@@ -232,3 +232,11 @@
 44. ActivityTest42Storage
     * test SharedPreferences, get, edit and commit
     * example is from [Android Official Site - Storage](https://developer.android.com/guide/topics/providers/document-provider.html)
+    * storage directory:
+        + getFilesDir(): /data/data/cn.nec.nlc.example.jamesli.activitytest42storage/files
+        + getExternalFilesDir():
+            - Docs: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/Documents
+            - Movies: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/Movies
+            - Music: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/Music
+            - Pictures: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/Pictures
+            - DCIM: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/DCIM
