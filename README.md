@@ -240,3 +240,6 @@
             - Music: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/Music
             - Pictures: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/Pictures
             - DCIM: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/DCIM
+
+45. ActivityTest43Gyroscope
+    * Note: the app does not work with Smartisan T1 and its reason is unknown.

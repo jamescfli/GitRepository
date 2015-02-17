@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
     // gyroscope matrix and vector
 //    private float[] rotationVector = new float[4];
-//    private float[] rvRotationMatrix = new float[9];
+    private float[] rvRotationMatrix = new float[9];
     private float[] rotationVectorOrientation = new float[3];
 //    private float[] deltaRotationVectorOrientation = new float[3];
 
@@ -68,6 +68,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 mSensorManager.registerListener(MainActivity.this, gyroSensor,
                         SensorManager.SENSOR_DELAY_FASTEST);
                 textViewStatus.setText("Status: sensor listener is on.");
+                initGyroMatrix(); // initiate with identity matrix
             }
         });
 
@@ -81,11 +82,15 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 textViewGyroY.setText(R.string.text_gyroy_na);
                 textViewGyroP.setText(R.string.text_gyrop_na);
                 textViewGyroR.setText(R.string.text_gyror_na);
-//                rotationVectorOrientation[0] = 0;
-//                rotationVectorOrientation[1] = 0;
-//                rotationVectorOrientation[2] = 0;
             }
         });
+    }
+
+    private void initGyroMatrix() {
+        // initialise rvRotationMatrix with identity matrix
+        rvRotationMatrix[0] = 1.0f; rvRotationMatrix[1] = 0.0f; rvRotationMatrix[2] = 0.0f;
+        rvRotationMatrix[3] = 0.0f; rvRotationMatrix[4] = 1.0f; rvRotationMatrix[5] = 0.0f;
+        rvRotationMatrix[6] = 0.0f; rvRotationMatrix[7] = 0.0f; rvRotationMatrix[8] = 1.0f;
     }
 
 
@@ -153,13 +158,12 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 float[] deltaRotationMatrix = new float[9];
                 // helper function to convert a rotation vector to a rotation matrix
                 SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaRotationVector);
-                // translate to orientation
-//                SensorManager.getOrientation(deltaRotationMatrix, deltaRotationVectorOrientation);
-//                rotationVectorOrientation[0] += deltaRotationVectorOrientation[0];
-//                rotationVectorOrientation[1] += deltaRotationVectorOrientation[1];
-//                rotationVectorOrientation[2] += deltaRotationVectorOrientation[2];
+                  // User code should concatenate the delta rotation we computed with the current rotation
+                  // in order to get the updated rotation.
+                  // rotationCurrent = rotationCurrent * deltaRotationMatrix;
+                updateRvRotationMatrix(deltaRotationMatrix);    // update rvRotationMatrix[]
 
-                SensorManager.getOrientation(deltaRotationMatrix, rotationVectorOrientation);
+                SensorManager.getOrientation(rvRotationMatrix, rotationVectorOrientation);
                 textViewGyroY.setText("GyroY: " +
                         String.valueOf(Math.toDegrees(rotationVectorOrientation[0])));
                 textViewGyroP.setText("GyroP: " +
@@ -171,6 +175,37 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 Toast.makeText(this, "Unknown sensor type event", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void updateRvRotationMatrix(float[] deltaRotationMatrix) {
+        float[] rvRotationMatrixCopy = rvRotationMatrix.clone();
+        rvRotationMatrix[0] = rvRotationMatrixCopy[0] * deltaRotationMatrix[0]
+                + rvRotationMatrixCopy[1] * deltaRotationMatrix[3]
+                + rvRotationMatrixCopy[2] * deltaRotationMatrix[6];
+        rvRotationMatrix[1] = rvRotationMatrixCopy[0] * deltaRotationMatrix[1]
+                + rvRotationMatrixCopy[1] * deltaRotationMatrix[4]
+                + rvRotationMatrixCopy[2] * deltaRotationMatrix[7];
+        rvRotationMatrix[2] = rvRotationMatrixCopy[0] * deltaRotationMatrix[2]
+                + rvRotationMatrixCopy[1] * deltaRotationMatrix[5]
+                + rvRotationMatrixCopy[2] * deltaRotationMatrix[8];
+        rvRotationMatrix[3] = rvRotationMatrixCopy[3] * deltaRotationMatrix[0]
+                + rvRotationMatrixCopy[4] * deltaRotationMatrix[3]
+                + rvRotationMatrixCopy[5] * deltaRotationMatrix[6];
+        rvRotationMatrix[4] = rvRotationMatrixCopy[3] * deltaRotationMatrix[1]
+                + rvRotationMatrixCopy[4] * deltaRotationMatrix[4]
+                + rvRotationMatrixCopy[5] * deltaRotationMatrix[7];
+        rvRotationMatrix[5] = rvRotationMatrixCopy[3] * deltaRotationMatrix[2]
+                + rvRotationMatrixCopy[4] * deltaRotationMatrix[5]
+                + rvRotationMatrixCopy[5] * deltaRotationMatrix[8];
+        rvRotationMatrix[6] = rvRotationMatrixCopy[6] * deltaRotationMatrix[0]
+                + rvRotationMatrixCopy[7] * deltaRotationMatrix[3]
+                + rvRotationMatrixCopy[8] * deltaRotationMatrix[6];
+        rvRotationMatrix[7] = rvRotationMatrixCopy[6] * deltaRotationMatrix[1]
+                + rvRotationMatrixCopy[7] * deltaRotationMatrix[4]
+                + rvRotationMatrixCopy[8] * deltaRotationMatrix[7];
+        rvRotationMatrix[8] = rvRotationMatrixCopy[6] * deltaRotationMatrix[2]
+                + rvRotationMatrixCopy[7] * deltaRotationMatrix[5]
+                + rvRotationMatrixCopy[8] * deltaRotationMatrix[8];
     }
 
     @Override
