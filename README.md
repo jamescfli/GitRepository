@@ -243,3 +243,8 @@
 
 45. ActivityTest43Gyroscope
     * Note: the app does not work with Smartisan T1 and its reason is unknown.
+
+46 ActivityTest44RequestFile
+    * basesd on ActivityTest17PickImageWithIntent
+    * [Loading Large Bitmaps Efficiently](http://developer.android.com/training/displaying-bitmaps/load-bitmap.html)
+    * handle OOM (OutOfMemoryError Exception) from getContentResolver().openInputStream(returnUri) by setting options.inJustDecodeBounds = true;
