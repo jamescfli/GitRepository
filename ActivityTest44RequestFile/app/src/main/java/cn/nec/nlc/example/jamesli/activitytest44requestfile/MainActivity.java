@@ -8,11 +8,13 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -26,6 +28,7 @@ public class MainActivity extends ActionBarActivity {
     private ParcelFileDescriptor mInputPFD;
     private Bitmap bitmap;
     private ImageView mImageView;
+    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         mImageView = (ImageView) findViewById(R.id.imageView);
+        mTextView = (TextView) findViewById(R.id.textView);
 
         mRequestFileIntent = new Intent(Intent.ACTION_PICK);
         mRequestFileIntent.setType("image/jpg");
@@ -61,10 +65,20 @@ public class MainActivity extends ActionBarActivity {
              * error log and return.
              */
             try {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int screenWidth = displayMetrics.widthPixels;
+                int screenHeight = displayMetrics.heightPixels;
 //                // display a 100x100 pixel thumbnail, as shown in the following
 //                mImageView.setImageBitmap(
 //                        decodeSampledBitmapFromResource(getResources(), R.id.myimage, 100, 100));
-                mImageView.setImageBitmap(decodeSampledBitmapFromUri(returnUri, 100, 100));
+                mImageView.setImageBitmap(decodeSampledBitmapFromUri(returnUri,
+                        mImageView.getWidth(), mImageView.getHeight()));
+                // ImageView 788x656, XiaoMi note 1280x720 display size
+                // Smartisan T1 resolution = 1920 x 1080, 445 PPI
+                mTextView.setText("ImageView dimension: " + mImageView.getHeight()
+                        + " x " + mImageView.getWidth() + "\n"
+                        + "Screen dimension: " + screenHeight + " x " + screenWidth);
 
 //                // test OOM: Out of Memory Exception may pop out, getResources().getDisplayMetrics()
 //                if (bitmap != null)
