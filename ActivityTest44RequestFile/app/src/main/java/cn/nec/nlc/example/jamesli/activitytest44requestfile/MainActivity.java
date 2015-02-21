@@ -66,7 +66,9 @@ public class MainActivity extends ActionBarActivity {
 //                        decodeSampledBitmapFromResource(getResources(), R.id.myimage, 100, 100));
                 mImageView.setImageBitmap(decodeSampledBitmapFromUri(returnUri, 100, 100));
 
-//                // OOM: Out of Memory Exception may pop out, getResources().getDisplayMetrics()
+//                // test OOM: Out of Memory Exception may pop out, getResources().getDisplayMetrics()
+//                if (bitmap != null)
+//                    bitmap.recycle();
 //                stream = getContentResolver().openInputStream(returnUri);
 //                // display in imageView
 //                bitmap = BitmapFactory.decodeStream(stream);
@@ -102,15 +104,28 @@ public class MainActivity extends ActionBarActivity {
           // throws FileNotFoundException
         // Get a regular file descriptor for the file
         FileDescriptor fd = mInputPFD.getFileDescriptor();
-
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+        if (bitmap != null)
+            bitmap.recycle();
         bitmap = BitmapFactory.decodeFileDescriptor(fd, null, options);
         // Calculate inSampleSize, display a reqWidth*reqHeight pixel thumbnail
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFileDescriptor(fd, null, options);
+
+//        // getContentResolver().openInputStream() does not work properly
+//        InputStream inputStream = null;
+//        inputStream = getContentResolver().openInputStream(returnUri);
+//        final BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+//        // Calculate inSampleSize, display a reqWidth*reqHeight pixel thumbnail
+//        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+//        // Decode bitmap with inSampleSize set
+//        options.inJustDecodeBounds = false;
+//        return BitmapFactory.decodeStream(inputStream, null, options);
     }
 
     private Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
