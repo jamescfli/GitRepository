@@ -42,6 +42,37 @@ public class MainActivity extends ActionBarActivity {
         mRequestFileIntent.setType("image/jpg");
 //        mRequestFileIntent.setAction(Intent.ACTION_GET_CONTENT);
 //        mRequestFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        Log.i("MainActivity", "onCreate()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("MainActivity", "onResume()");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i("MainActivity", "onRestart()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("MainActivity", "onPause()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("MainActivity", "onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("MainActivity", "onDestroy()");
     }
 
     public void requestImage(View view) {
