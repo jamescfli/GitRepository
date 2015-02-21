@@ -84,10 +84,7 @@ public class MainActivity extends ActionBarActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent returnIntent) {
         InputStream stream = null;
         // check the result state to see if the selection works or not
-        if ((resultCode != RESULT_OK) || (requestCode != REQUEST_CODE)) {
-            // Exit without doing anything else
-            return;
-        } else {
+        if ((resultCode == RESULT_OK) && (requestCode == REQUEST_CODE)) {
             // get the file's content URI from the incoming Intent
             Uri returnUri = returnIntent.getData();
             /*
@@ -121,18 +118,17 @@ public class MainActivity extends ActionBarActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Log.e("MainActivity", "File not found.");
-                return;
             } catch (OutOfMemoryError e) {
                 e.printStackTrace();
                 Log.e("MainActivity", "out of memory for openInputStream");
-            } finally {
-                if (stream !=  null)
-                    try {
-                        stream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-            }
+            } // finally {
+//                if (stream !=  null)
+//                    try {
+//                        stream.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//            }
 //            // Get a regular file descriptor for the file
 //            FileDescriptor fd = mInputPFD.getFileDescriptor();
 //            // ...
@@ -205,6 +201,7 @@ public class MainActivity extends ActionBarActivity {
             // height and width larger than the requested height and width.
             while ((halfHeight / inSampleSize) > reqHeight
                     && (halfWidth / inSampleSize) > reqWidth) {
+                // because inSampleSize in BitmapFactory.Options has to be 2^n, not others
                 inSampleSize *= 2;
             }
         }
