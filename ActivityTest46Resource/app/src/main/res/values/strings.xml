@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ActivityTest46Resource</string>
+    <string name="action_settings">Settings</string>
+    <string name="personal_welcome_message">Welcome %s!</string>
+
+    <!--
+    <plurals name="inbox_message_count">
+        <item quantity="zero">Your inbox message in your inbox!</item>
+        <item quantity="one">You have one message in your inbox!</item>
+        <item quantity="two">You have two messages in your inbox!</item>
+        <item quantity="few">You have %d messages waiting!</item>
+        <item quantity="many">%1$d messages in your inbox! %2$s, you should really login more often!</item>
+        <item quantity="other">%1$d messages in your inbox! %2$s, you should really login more often!</item>
+    </plurals>
+    -->
+
+    <!-- plurals have only 3 levels, i.e. one few and other -->
+    <plurals name="inbox_message_count">
+        <item quantity="one">You one message in your inbox!</item>
+        <item quantity="few">You have %d messages waiting!</item>
+        <item quantity="other">%1$d messages in your inbox! %2$s, you should really login here more often!</item>
+    </plurals>
+
+    <string-array name="default_categories">
+        <item>Work</item>
+        <item>Personal</item>
+        <item>Private</item>
+        <item>Spam</item>
+        <item>Trash</item>
+        <item>Draft</item>
+    </string-array>
+
+</resources>

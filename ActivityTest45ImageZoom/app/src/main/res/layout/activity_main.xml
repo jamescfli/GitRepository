@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/layout1"
+    >
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="19"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical">
+        <HorizontalScrollView
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content">
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/layoutImage"
+                >
+                <ImageView
+                    android:id="@+id/myImageView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="19"
+                    android:paddingTop="5dip"
+                    android:paddingBottom="5dip"
+                    />
+            </LinearLayout>
+        </HorizontalScrollView >
+    </ScrollView>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:id="@+id/myButton1"
+            android:layout_width="45dip"
+            android:layout_height="30dip"
+            android:layout_alignParentLeft="true"
+            android:gravity="left"
+            android:visibility="gone"
+            android:text="缩小"
+            />
+        <Button
+            android:id="@+id/myButton2"
+            android:layout_width="45dip"
+            android:layout_height="30dip"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:visibility="gone"
+            android:text="放大"
+            />
+    </RelativeLayout>
+</FrameLayout>
