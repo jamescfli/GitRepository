@@ -254,3 +254,12 @@
 48. ActivityTest46Resource
     * see examples from Erik Hellman's book - [Android Programming - Pushing the limits](http://atibook.ir/dl/en/Engineering/Computer%20Science/9781118717370_android_programming.pdf)
     * note commen error [Resources$NotFoundException](http://blog.csdn.net/zhouyingge1104/article/details/39338271)
+
+49. ActivityTest47CanvasView
+    * lifecycle of android.view.View
+<table sytle="border: 0px;">
+<tr>
+<td><img width="400px" src="Android_view_lifecycle.png" /></td>
+</tr>
+</table>
+    * usage of invalidate()
