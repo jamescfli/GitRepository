@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/layout1"
+    android:id="@+id/layoutFrameLayout"
     >
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="19"
         android:scrollbars="vertical"
-        android:fadingEdge="vertical">
+        android:fadingEdge="vertical" >
         <HorizontalScrollView
             android:layout_height="fill_parent"
             android:layout_width="wrap_content">
@@ -37,24 +37,26 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:id="@+id/layoutButtons"
         >
         <Button
-            android:id="@+id/myButton1"
-            android:layout_width="45dip"
-            android:layout_height="30dip"
+            android:id="@+id/buttonScaleDown"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
             android:layout_alignParentLeft="true"
             android:gravity="left"
             android:visibility="gone"
-            android:text="缩小"
+            android:text="S Down"
             />
         <Button
-            android:id="@+id/myButton2"
-            android:layout_width="45dip"
-            android:layout_height="30dip"
+            android:id="@+id/buttonScaleUp"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:gravity="right"
             android:visibility="gone"
-            android:text="放大"
+            android:text="S Up"
             />
     </RelativeLayout>
 </FrameLayout>

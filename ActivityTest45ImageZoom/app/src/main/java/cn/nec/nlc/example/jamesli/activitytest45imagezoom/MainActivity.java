@@ -1,6 +1,7 @@
 package cn.nec.nlc.example.jamesli.activitytest45imagezoom;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,79 +20,123 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-public class MainActivity extends Activity implements View.OnTouchListener, GestureDetector.OnGestureListener {
-    private static final String TAG = "DisplayImage";
+public class MainActivity extends Activity implements View.OnTouchListener,
+        GestureDetector.OnGestureListener {
+    private static final String TAG = "MainActivity";
     private static final int FLING_MIN_DISTANCE = 100;
     private static final int FLING_MIN_VELOCITY = 200;
 
-
-    /* 相关变量声明 */
     private ImageView mImageView;
-    private Button mButton01;
-    private Button mButton02;
-    private FrameLayout layout1;
+    private Button mButtonScaleDown;
+    private Button mButtonScaleUp;
+    private FrameLayout layoutFrameLayout;
     private LinearLayout layoutImage;
-    private Bitmap bmp;
-    private int id=0;
+    private Bitmap bitmap;
+    private int id = 0;
     private int displayWidth;
     private int displayHeight;
-    private float scaleWidth=1;
-    private float scaleHeight=1;
+    private float scaleWidth = 1;
+    private float scaleHeight = 1;
     private GestureDetector mGestureDetector;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)    {
         super.onCreate(savedInstanceState);
-        /* 加载display.xml Layout */
         setContentView(R.layout.activity_main);
 
-        /* 取得屏幕分辨率大小 */
-        DisplayMetrics dm=new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        displayWidth=dm.widthPixels;
-        displayHeight=dm.heightPixels;
+        // get the screen size, describe the size and density of this display
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        displayWidth = displayMetrics.widthPixels;
+        displayHeight = displayMetrics.heightPixels;
 
-        /* 初始化相关变量 */
-        Bundle bundle = this.getIntent().getExtras();
-        Integer imageId = bundle.getInt("imageId");
-        Log.i(TAG, "onCreate, imageId = " + imageId);
+//        Bundle bundle = this.getIntent().getExtras();
+//        Integer imageId = bundle.getInt("imageId");
+//        Log.i(TAG, "onCreate, imageId = " + imageId);
 
-        bmp= BitmapFactory.decodeResource(getResources(), imageId);
+//        if (bitmap != null)
+//            bitmap.recycle();
+//        bitmap = BitmapFactory.decodeResource(getResources(), imageId);
+//        mImageView = (ImageView)findViewById(R.id.myImageView);
+//        mImageView.setImageBitmap(bitmap);
+//        mImageView.setOnTouchListener(this);
+//        mImageView.setLongClickable(true);
+
+
+        if (bitmap != null)
+            bitmap.recycle();
         mImageView = (ImageView)findViewById(R.id.myImageView);
-        mImageView.setImageBitmap(bmp);
-        mImageView.setOnTouchListener(this);
-        mImageView.setLongClickable(true);
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.raw.pink_heart, 500, 500);
+        mImageView.setImageBitmap(bitmap);
 
-        layout1 = (FrameLayout)findViewById(R.id.layout1);
-        layoutImage = (LinearLayout)findViewById(R.id.layoutImage);
-        mButton01 = (Button)findViewById(R.id.myButton1);
-        mButton02 = (Button)findViewById(R.id.myButton2);
+        // only two referred layouts
+        layoutFrameLayout = (FrameLayout)findViewById(R.id.layoutFrameLayout);  // whole framelayout
+        layoutImage = (LinearLayout)findViewById(R.id.layoutImage);             // image scroll view
+        mButtonScaleDown = (Button)findViewById(R.id.buttonScaleDown);
+        mButtonScaleUp = (Button)findViewById(R.id.buttonScaleUp);
 
-        /* 缩小按钮onClickListener */
-        mButton01.setOnClickListener(new Button.OnClickListener() {
+        mButtonScaleDown.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                small();
+                scaleDown();
             }
         });
 
-        /* 放大按钮onClickListener */
-        mButton02.setOnClickListener(new Button.OnClickListener() {
+        mButtonScaleUp.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                big();
+                scaleUp();
             }
         });
+    }
+
+    private Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                   int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    private static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                // because inSampleSize in BitmapFactory.Options has to be 2^n, not others
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     // 用户轻触触摸屏，由1个MotionEvent ACTION_DOWN触发
     @Override
     public boolean onDown(MotionEvent e) {
         // TODO Auto-generated method stub
-//      Toast.makeText(this, "onDown", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onDown", Toast.LENGTH_SHORT).show();
         Log.i(TAG, "onDown...");
-
         return false;
     }
 
@@ -104,7 +149,8 @@ public class MainActivity extends Activity implements View.OnTouchListener, Gest
      * velocityY：Y轴上的移动速度，像素/秒
      * 触发条件 ：
      * X轴的坐标位移大于FLING_MIN_DISTANCE，且移动速度大于FLING_MIN_VELOCITY个像素/秒
-     * @see android.view.GestureDetector$OnGestureListener#onFling(android.view.MotionEvent, android.view.MotionEvent, float, float)
+     * @see android.view.GestureDetector$OnGestureListener#onFling(android.view.MotionEvent,
+     * android.view.MotionEvent, float, float)
      */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
@@ -170,24 +216,24 @@ public class MainActivity extends Activity implements View.OnTouchListener, Gest
         Log.i(TAG, "onTouch...");
 
         // Set button visible
-        mButton01.setVisibility(View.VISIBLE);
-        mButton02.setVisibility(View.VISIBLE);
+        mButtonScaleDown.setVisibility(View.VISIBLE);
+        mButtonScaleUp.setVisibility(View.VISIBLE);
 
         return  mGestureDetector.onTouchEvent(event);
     }
 
-//  @Override
-//  public boolean onTouchEvent(MotionEvent event) {
-//      // TODO Auto-generated method stub
-//      super.onTouchEvent(event);
-//
-//      Log.i(TAG, "onTouchEvent");
-//      // Set button visible
-//      mButton01.setVisibility(View.VISIBLE);
-//      mButton02.setVisibility(View.VISIBLE);
-//
-//      return true;
-//  }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // TODO Auto-generated method stub
+        super.onTouchEvent(event);
+
+        Log.i(TAG, "onTouchEvent");
+        // Set button visible
+        mButtonScaleDown.setVisibility(View.VISIBLE);
+        mButtonScaleUp.setVisibility(View.VISIBLE);
+
+        return true;
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -196,39 +242,38 @@ public class MainActivity extends Activity implements View.OnTouchListener, Gest
 
         Log.i(TAG, "onKeyDown...");
         // Set button visible
-        mButton01.setVisibility(View.VISIBLE);
-        mButton02.setVisibility(View.VISIBLE);
+        mButtonScaleDown.setVisibility(View.VISIBLE);
+        mButtonScaleUp.setVisibility(View.VISIBLE);
 
         return true;
     }
 
-    /* 图片缩小的method */
-    private void small()    {
-        int bmpWidth=bmp.getWidth();
-        int bmpHeight=bmp.getHeight();
+    private void scaleDown()    {
+        int bmpWidth= bitmap.getWidth();
+        int bmpHeight= bitmap.getHeight();
 
         Log.i(TAG, "bmpWidth = " + bmpWidth + ", bmpHeight = " + bmpHeight);
 
-        /* 设置图片缩小的比例 */
+        // scale down ratio
         double scale=0.8;
-        /* 计算出这次要缩小的比例 */
+        // dimension after scale-down
         scaleWidth=(float) (scaleWidth*scale);
         scaleHeight=(float) (scaleHeight*scale);
-        /* 产生reSize后的Bitmap对象 */
+        // generate resized bitmap
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizeBmp = Bitmap.createBitmap(bmp,0,0,bmpWidth,
-                bmpHeight,matrix,true);
+        // convert from matrix to bmpWidth and bmpHeight
+        Bitmap resizeBmp = Bitmap.createBitmap(bitmap,0,0,bmpWidth,bmpHeight,matrix,true);
 
-        if(id==0)      {
-            /* 如果是第一次按，就删除原来默认的ImageView */
+        if (id==0) {
+            // delete the previous content of default imageView
             layoutImage.removeView(mImageView);
         } else {
-            /* 如果不是第一次按，就删除上次放大缩小所产生的ImageView */
+            // delete the previous-scaled imageView
             layoutImage.removeView((ImageView) findViewById(id));
         }
 
-        /* 产生新的ImageView，放入reSize的Bitmap对象，再放入Layout中 */
+        // generate scaled imageView，put it in resized bitmap，then put it in the layout
         id++;
         ImageView imageView = new ImageView(this);
         imageView.setId(id);
@@ -236,55 +281,54 @@ public class MainActivity extends Activity implements View.OnTouchListener, Gest
         layoutImage.addView(imageView);
         Log.i(TAG, "imageView.getWidth() = " + imageView.getWidth()
                 + ", imageView.getHeight() = " + imageView.getHeight());
-        setContentView(layout1);
-        /* 因为图片放到最大时放大按钮会disable，所以在缩小时把它重设为enable */
-        mButton02.setEnabled(true);
-        mButton02.setTextColor(Color.MAGENTA);
+        setContentView(layoutFrameLayout);
+        // enable scale-up bottom after reached the max size
+        mButtonScaleUp.setEnabled(true);
+        mButtonScaleUp.setTextColor(Color.MAGENTA);
     }
 
-    /* 图片放大的method */
-    private void big() {
-        int bmpWidth=bmp.getWidth();
-        int bmpHeight=bmp.getHeight();
+    private void scaleUp() {
+        int bmpWidth= bitmap.getWidth();
+        int bmpHeight= bitmap.getHeight();
 
         Log.i(TAG, "bmpWidth = " + bmpWidth + ", bmpHeight = " + bmpHeight);
 
-        /* 设置图片放大的比例 */
-        double scale=1.25;
-        /* 计算这次要放大的比例 */
+        // scale up ratio
+        double scale=1.25;  // = 0.8 for scale down
+        // dimension after scale-up
         scaleWidth=(float)(scaleWidth*scale);
         scaleHeight=(float)(scaleHeight*scale);
-        /* 产生reSize后的Bitmap对象 */
+        // generate resized bitmap
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizeBmp = Bitmap.createBitmap(bmp,0,0,bmpWidth,
+        Bitmap resizeBmp = Bitmap.createBitmap(bitmap,0,0,bmpWidth,
                 bmpHeight,matrix,true);
 
         if(id==0) {
-            /* 如果是第一次按，就删除原来设置的ImageView */
+            // delete the previous content of default imageView
             layoutImage.removeView(mImageView);
         } else {
-            /* 如果不是第一次按，就删除上次放大缩小所产生的ImageView */
+            // delete the previous-scaled imageView
             layoutImage.removeView((ImageView)findViewById(id));
         }
 
-        /* 产生新的ImageView，放入reSize的Bitmap对象，再放入Layout中 */
+        // generate scaled imageView，put it in resized bitmap，then put it in the layout
         id++;
         ImageView imageView = new ImageView(this);
         imageView.setId(id);
         imageView.setImageBitmap(resizeBmp);
         layoutImage.addView(imageView);
-        setContentView(layout1);
-        /* 如果再放大会超过屏幕大小，就把Button disable */
+        setContentView(layoutFrameLayout);
+        // if scaling-up over the boundary of the screen, disable the scale-up button
         if( scaleWidth * scale * bmpWidth > bmpWidth * 3 ||
                 scaleHeight * scale * bmpHeight > bmpWidth * 3 ||
                 scaleWidth * scale * bmpWidth > displayWidth * 5 ||
                 scaleHeight * scale * bmpHeight > displayHeight * 5) {
-            mButton02.setEnabled(false);
-            mButton02.setTextColor(Color.GRAY);
+            mButtonScaleUp.setEnabled(false);
+            mButtonScaleUp.setTextColor(Color.GRAY);
         } else {
-            mButton02.setEnabled(true);
-            mButton02.setTextColor(Color.MAGENTA);
+            mButtonScaleUp.setEnabled(true);
+            mButtonScaleUp.setTextColor(Color.MAGENTA);
         }
     }
 
