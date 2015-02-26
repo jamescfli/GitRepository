@@ -263,3 +263,23 @@
 </tr>
 </table>
     * usage of invalidate()
+
+50. BroadcastReceivertest03NetMonitor
+    * Monitor Wifi and Mobile network connectivity through BroadcastReceiver
+    * More specifically, WifiManager and ConnectivityManager
+    * remember to get use permission in manifest.xml
+<table sytle="border: 0px;">
+<tr>
+    <td><uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/></td>
+</tr>
+<tr>
+    <td><uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/></td>
+</tr>
+<tr>
+    <td><uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/></td>
+</tr>
+<tr>
+    <td><uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/></td>
+</tr>
+</table>
+    * [How to disable/enable Mobile Data on Android?](http://stackoverflow.com/questions/13171623/how-to-turn-on-3g-mobile-data-programmatically-in-android)
