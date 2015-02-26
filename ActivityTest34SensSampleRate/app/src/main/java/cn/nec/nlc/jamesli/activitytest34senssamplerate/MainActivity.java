@@ -17,9 +17,9 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
     // UI
     private RadioGroup radioGroupSensor;
-    private RadioButton radioBtnAcc;
-    private RadioButton radioBtnGyro;
-    private RadioButton radioBtnMag;
+//    private RadioButton radioBtnAcc;
+//    private RadioButton radioBtnGyro;
+//    private RadioButton radioBtnMag;
     private TextView textViewOutputSensorType;
     private TextView textViewOutputSamRate;
     // Sensor management
@@ -39,9 +39,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         radioGroupSensor = (RadioGroup) findViewById(R.id.radio_button_group_sensors);
-        radioBtnAcc = (RadioButton) findViewById(R.id.radio_button_acc);
-        radioBtnGyro = (RadioButton) findViewById(R.id.radio_button_gyro);
-        radioBtnMag = (RadioButton) findViewById(R.id.radio_button_mag);
+//        radioBtnAcc = (RadioButton) findViewById(R.id.radio_button_acc);
+//        radioBtnGyro = (RadioButton) findViewById(R.id.radio_button_gyro);
+//        radioBtnMag = (RadioButton) findViewById(R.id.radio_button_mag);
         textViewOutputSensorType = (TextView) findViewById(R.id.textView_output_sensor_type);
         textViewOutputSamRate = (TextView) findViewById(R.id.textView_output_sensor_rate);
     }

@@ -265,8 +265,8 @@
     * usage of invalidate()
 
 50. BroadcastReceivertest03NetMonitor
-    * Monitor Wifi and Mobile network connectivity through BroadcastReceiver
-    * More specifically, WifiManager and ConnectivityManager
+    * monitor Wifi and Mobile network connectivity through BroadcastReceiver
+    * more specifically, WifiManager and ConnectivityManager
     * remember to get use permission in manifest.xml
 <table sytle="border: 0px;">
 <tr>
@@ -283,3 +283,9 @@
 </tr>
 </table>
     * [How to disable/enable Mobile Data on Android?](http://stackoverflow.com/questions/13171623/how-to-turn-on-3g-mobile-data-programmatically-in-android)
+
+51. ActivityTest48SendToOtherActivity
+    * sendIntent.setAction(Intent.ACTION_SEND);
+    * sendIntent.putExtra(Intent.EXTRA_TEXT, messageSent);
+    * sendIntent.setType("text/plain");
+    * startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_text_to)));

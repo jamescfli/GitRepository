@@ -148,10 +148,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                     float thetaOverTwo = omegaMagnitude * dT / 2.0f;
                     float sinThetaOverTwo = sin(thetaOverTwo);
                     float cosThetaOverTwo = cos(thetaOverTwo);
-                    deltaRotationVector[0] = sinThetaOverTwo * axisX;
-                    deltaRotationVector[1] = sinThetaOverTwo * axisY;
-                    deltaRotationVector[2] = sinThetaOverTwo * axisZ;
-                    deltaRotationVector[3] = cosThetaOverTwo;
+                    // in Quaternions
+                    deltaRotationVector[0] = sinThetaOverTwo * axisX;   // x in quaternion
+                    deltaRotationVector[1] = sinThetaOverTwo * axisY;   // y in quaternion
+                    deltaRotationVector[2] = sinThetaOverTwo * axisZ;   // z in quaternion
+                    deltaRotationVector[3] = cosThetaOverTwo;   // w in quaternion
                 }
 
                 timestamp = sensorEvent.timestamp;
