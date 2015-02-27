@@ -289,3 +289,6 @@
     * sendIntent.putExtra(Intent.EXTRA_TEXT, messageSent);
     * sendIntent.setType("text/plain");
     * startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_text_to)));
+
+52. ActivityTest49ReceiveFromOtherActivity
+    * receive Intent.ACTION_SEND with text/plain and image/jpeg, or Intent.ACTION_SEND_MULTIPLE with multiple images image/*
