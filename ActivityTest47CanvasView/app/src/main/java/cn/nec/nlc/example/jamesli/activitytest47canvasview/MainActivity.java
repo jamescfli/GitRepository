@@ -30,7 +30,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     // variables required by gyroscope
     private static final float EPSILON = 0.000000001f;
     private static final float NS2S = 1.0f / 1000000000.0f;
-    private float timestamp;
+    // example code by Google: float timestamp
+    // this will cause some round-up problem when computing
+    //      dT = (sensorEvent.timestamp - timestamp) * NS2S
+    // in onSensorChanged for Smartisan T1 with Android 4.4, i.e. dT = 0.0
+    private long timestamp;
     private float[] gyro = new float[3];    // raw data from sensorEvent
     private final float[] deltaRotationVector = new float[4];
     private float[] deltaRotationMatrix = new float[9];
@@ -106,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 float angle = (float) computeGyroOrientationYaw();
                 textViewCurrentDirection.setText("Current Direction: "
                         + String.valueOf(Math.toDegrees(angle)));
-                textViewDiffBtwCurrentAndEst.setText("Diff btw Current and Estimated: " +
+                textViewDiffBtwCurrentAndEst.setText("Diff from Estimated: " +
                         String.valueOf(estimatedAngle - Math.toDegrees(angle)));
                 mCanvasView.myDraw(angle-(float)Math.toRadians(estimatedAngle));
                 break;
@@ -125,13 +129,13 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         return gyroOrientation[0];  // along Yaw direction, in radians
     }
 
-    public void computeGyro(float[] gyro,float eventtimestamp)
+    public void computeGyro(float[] gyro, long eventTimestamp)
     {
         // This timestep's delta rotation to be multiplied by the current rotation
         // after computing it from the gyro sample data.
         if (timestamp != 0)
         {
-            final float dT = (eventtimestamp - timestamp) * NS2S;
+            final float dT = (eventTimestamp - timestamp) * NS2S;
             // Axis of the rotation sample, not normalized yet.
             float axisX = gyro[0];
             float axisY = gyro[1];
@@ -160,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             deltaRotationVector[2] = sinThetaOverTwo * axisZ;
             deltaRotationVector[3] = cosThetaOverTwo;
         }
-        timestamp = eventtimestamp;
+        timestamp = eventTimestamp;
 
         SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaRotationVector);
         gyroMatrix = matrixMultiplication(gyroMatrix, deltaRotationMatrix);
