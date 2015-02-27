@@ -242,7 +242,8 @@
             - DCIM: /storage/sdcard/Android/data/cn.nec.nlc.example.jamesli.activitytest42storage/files/DCIM
 
 45. ActivityTest43Gyroscope
-    * Note: the app does not work with Smartisan T1 and its reason is unknown.
+    * Note: the app does not work with Smartisan T1 in Android 4.4, the reason is defing timestamp as float will lead a round-up problem in "dT = (sensorEvent.timestamp - timestamp) * NS2S" i.e. dT = 0.0, the solution is to define private *long* timestamp
+    * The same issue applies to ActivityTest47CanvasView
 
 46. ActivityTest44RequestFile
     * basesd on ActivityTest17PickImageWithIntent
