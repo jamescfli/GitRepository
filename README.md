@@ -294,3 +294,8 @@
 
 52. ActivityTest49ReceiveFromOtherActivity
     * receive Intent.ACTION_SEND with text/plain and image/jpeg, or Intent.ACTION_SEND_MULTIPLE with multiple images image/*
+
+53. ServiceTest05IntentService
+    * IntentService class provides a straightforward structure for running an operation on a single background thread, i.e. handling long-running operations without affecting your UI's responsiveness.
+    * Activity that sends work requests to the service uses an explicit Intent, so no intent-filter is needed in manifest.xml.
+    * unfinished!!

@@ -59,9 +59,16 @@ public class MainActivity extends Activity {
     }
 
     // Call to update the share intent
-    private void setShareIntent(Intent shareIntent) {
+    private void setShareIntent() {
         if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
+            String messageSent;
+            messageSent = editTextInputText.getText().toString();
+            if (messageSent != null || messageSent != "") {
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, messageSent);
+                sendIntent.setType("text/plain");
+                mShareActionProvider.setShareIntent(sendIntent);
+            }
         }
     }
 
@@ -73,21 +80,9 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.menu_item_share) {
-            String messageSent = editTextInputText.getText().toString();
-            if (messageSent != null || messageSent != "") {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, messageSent);
-                sendIntent.setType("text/plain");
-                setShareIntent(sendIntent);
-                startActivity(Intent.createChooser(sendIntent, getResources()
-                        .getText(R.string.send_text_to)));
-            }
-            return true;
+        if (id == R.id.menu_item_share) {
+            setShareIntent();
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 }
