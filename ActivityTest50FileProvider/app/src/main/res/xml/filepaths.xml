@@ -1,0 +1,8 @@
+<paths>
+    <files-path path="images/" name="myimages" />
+    <!--
+    content://cn.nec.nlc.example.jamesli.activitytest50fileprovider.fileprovider/myimages/<default_image>.jpg
+    <external-path>
+    <cache-path>
+    -->
+</paths>
