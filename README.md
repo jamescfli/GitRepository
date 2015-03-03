@@ -308,3 +308,6 @@
     * example from [Android Programming - Pushing the limits](http://atibook.ir/dl/en/Engineering/Computer%20Science/9781118717370_android_programming.pdf) by applying SpeechRecognizer
     * implement RecognitionListener and its methods, esp. onResults() and onPartialResults()
     * issue: it seems like a Chinese recognition on Smartisan T1
+
+56. Notes
+    * cloned from [XiaoMi notes](https://github.com/MiCode/Notes) open source code
