@@ -303,3 +303,8 @@
 54. ActivityTest50FileProvider
     * [Sharing Files](https://developer.android.com/training/secure-file-sharing/index.html)
     * untested and unverified
+
+55. ActivityTest51SpeechRecog
+    * example from [Android Programming - Pushing the limits](http://atibook.ir/dl/en/Engineering/Computer%20Science/9781118717370_android_programming.pdf) by applying SpeechRecognizer
+    * implement RecognitionListener and its methods, esp. onResults() and onPartialResults()
+    * issue: it seems like a Chinese recognition on Smartisan T1
