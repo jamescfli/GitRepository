@@ -311,3 +311,8 @@
 
 56. Notes
     * cloned from [XiaoMi notes](https://github.com/MiCode/Notes) open source code
+
+57. ServiceTest06SensorSampleRate
+    * use bind service to measure sampling rate of each sensor and update UI with several-second interval
+    * LocalBroadcastManager.getInstance(this).registerReceiver(BroadcastReceiver, IntentFilter) or unregisterReceiver(BroadcastReceiver)
+    * LocalBroadcastManager.getInstance(this).sendBroadcast()
