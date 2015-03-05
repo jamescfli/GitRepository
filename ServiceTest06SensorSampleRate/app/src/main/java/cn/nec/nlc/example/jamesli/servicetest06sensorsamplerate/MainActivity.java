@@ -35,14 +35,16 @@ public class MainActivity extends ActionBarActivity {
 
     // service related
     private SensorListenerService mSensorListenerService;
-    private boolean isServiceBound;
     private Intent mServiceIntent;
     private ServiceConnection mServiceConnection = new ServiceConnection() {
+        // Called when a connection to the Service has been established
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             Log.i("ServiceConnection", "onServiceConnected()");
+            // with the IBinder of the communication channel to the Service
             mSensorListenerService = ((SensorListenerService.LocalBinder) iBinder).getService();
         }
+        // Called when a connection to the Service has been lost
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.i("ServiceConnection", "onServiceDisconnected()");
@@ -99,7 +101,6 @@ public class MainActivity extends ActionBarActivity {
                     MainActivity.this.bindService(mServiceIntent, mServiceConnection,
                             Context.BIND_AUTO_CREATE);
                       // automatically create the service as long as the binding exists
-                    isServiceBound = true;
                     // register LocalBroadcastReceiver
                     LocalBroadcastManager.getInstance(MainActivity.this)
                             .registerReceiver(receiverSampleRateUpdates,
@@ -120,12 +121,13 @@ public class MainActivity extends ActionBarActivity {
                 sensorType = -1;
                 sensorSampleRateLevel = -1;
                 // unbind service
-                if (isServiceBound) {
+                if (mSensorListenerService != null) {
                     MainActivity.this.unbindService(mServiceConnection);
                 }
                 // unregister broadcast receiver through LocalBroadcastReceiver
                 LocalBroadcastManager.getInstance(MainActivity.this)
                         .unregisterReceiver(receiverSampleRateUpdates);
+                textViewSampleRate.setText("Sampling Rate: n.a.");  // set text back to default
             }
         });
     }
@@ -133,11 +135,27 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        buttonSensorOn.setEnabled(true);
+        buttonSensorOff.setEnabled(false);
+        // enable radio group selection
+        enableRadioButtons(true);
+        // provide info in status textView
+        textViewStatus.setText("Status: Sensor off");
+        // reset invalid value for sensorType and sensorSampleRateLevel
+        sensorType = -1;
+        sensorSampleRateLevel = -1;
+        textViewSampleRate.setText("Sampling Rate: n.a.");  // set text back to default
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if (mSensorListenerService != null) {
+            MainActivity.this.unbindService(mServiceConnection);
+        }
+        // unregister broadcast receiver through LocalBroadcastReceiver
+        LocalBroadcastManager.getInstance(MainActivity.this)
+                .unregisterReceiver(receiverSampleRateUpdates);
     }
 
     private boolean isSensorTypeAndRateSelected() {

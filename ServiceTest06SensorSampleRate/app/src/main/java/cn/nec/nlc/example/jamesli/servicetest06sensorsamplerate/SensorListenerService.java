@@ -24,6 +24,7 @@ public class SensorListenerService extends Service implements SensorEventListene
     // public signature, for ServiceConnection access
     public class LocalBinder extends Binder {
         SensorListenerService getService() {
+            Log.i("SensorListenerService", "LocalBinder.getService()");
             return SensorListenerService.this;
         }
     };
