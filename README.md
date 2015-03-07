@@ -316,3 +316,7 @@
     * use bind service to measure sampling rate of each sensor and update UI with several-second interval
     * LocalBroadcastManager.getInstance(this).registerReceiver(BroadcastReceiver, IntentFilter) or unregisterReceiver(BroadcastReceiver)
     * LocalBroadcastManager.getInstance(this).sendBroadcast()
+
+58. ServiceTest07EulerA2Method
+    * Compare diff btw Classical method and Euler A2 method
+    * intent.putExtra(TAG, floatArray[]); bundle.getFloatArray(TAG);

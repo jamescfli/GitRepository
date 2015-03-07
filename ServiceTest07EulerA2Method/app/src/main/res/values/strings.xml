@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ServiceTest07EulerA2Method</string>
+    <string name="introduction_words">Compare classical Android method and Euler Axis/Angle
+        method suggested by Pengfei ZHOU</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_start">Start</string>
+    <string name="button_stop">Stop</string>
+
+    <string name="result_class_y_default">ClassY</string>
+    <string name="result_class_p_default">ClassP</string>
+    <string name="result_class_r_default">ClassR</string>
+    <string name="result_euler_y_default">EulerY</string>
+    <string name="result_euler_p_default">EulerP</string>
+    <string name="result_euler_r_default">EulerR</string>
+    <string name="result_mark_y_default">MarkY</string>
+    <string name="result_mark_p_default">MarkP</string>
+    <string name="result_mark_r_default">MarkR</string>
+
+</resources>
