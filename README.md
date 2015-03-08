@@ -320,3 +320,7 @@
 58. ServiceTest07EulerA2Method
     * Compare diff btw Classical method and Euler A2 method
     * intent.putExtra(TAG, floatArray[]); bundle.getFloatArray(TAG);
+
+59. ActivityTest51Fragment
+    * Put titles of Shakespeare.TITLES in TitlesFragment and Shakespeare.DIALOGUE in DetailsFragment/DetailsActivity
+    * layout with both portrait and landscape display

@@ -1,0 +1,20 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        class="cn.nec.nlc.example.jamesli.activitytest52fragment.TitlesFragment"
+        android:id="@+id/titles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- if TitlesFragment is defined within FragmentLayout.java
+    <fragment
+    class="cn.nec.nlc.example.jamesli.activitytest52fragment.FragmentLayout$TitlesFragment"
+    android:id="@+id/titles"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+    -->
+
+</FrameLayout>
