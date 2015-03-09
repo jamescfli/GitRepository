@@ -11,6 +11,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // fragment_layout could be with portrait and landscape, defined in layout xml
         setContentView(R.layout.fragment_layout);
     }
 

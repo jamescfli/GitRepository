@@ -18,17 +18,20 @@ public class DetailsFragment extends Fragment {
         DetailsFragment f = new DetailsFragment();
 
         // Supply index input as an argument.
-        Bundle args = new Bundle();
-        args.putInt("index", index);
+        Bundle args = new Bundle();     // args is in terms of Bundle
+        args.putInt("index", index);    // the bundle has only one parameter - index
         f.setArguments(args);
 
         return f;
     }
 
+    // to check the corresponding detail is aligned with ListView selected index
     public int getShownIndex() {
+        // access the index by ..
         return getArguments().getInt("index", 0);
     }
 
+    // there is no other view, so we don't need onActivityCreated()
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,11 +47,11 @@ public class DetailsFragment extends Fragment {
         }
 
         ScrollView scroller = new ScrollView(getActivity());
-        TextView text = new TextView(getActivity());
+        TextView text = new TextView(getActivity());    // create TextView within Activity
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 4, getActivity().getResources().getDisplayMetrics());
         text.setPadding(padding, padding, padding, padding);
-        scroller.addView(text);
+        scroller.addView(text);     // embed TextView to ScrollView
         text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
         return scroller;
     }
