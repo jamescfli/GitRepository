@@ -85,38 +85,28 @@ public class GyroListenerService extends Service implements SensorEventListener{
                     }
                     // record current time from sensorEvent
                     timestampCurrent = sensorEvent.timestamp;
-                    float[] deltaRotationMatrix = new float[9];
-                    // helper function to convert a rotation vector to a rotation matrix
-                    SensorManager.getRotationMatrixFromVector(deltaRotationMatrix,
-                            rotationQuaternionClass);
-                    // User code should concatenate the delta rotation we computed with the current
-                    // rotation in order to get the updated rotation.
-                    // rotationCurrent = rotationCurrent * deltaRotationMatrix;
-                    updateAbsAngRotMatrix(absAngRotMatrixClass, deltaRotationMatrix);
-                    SensorManager.getOrientation(absAngRotMatrixClass, absEulerAngleClass);
+                    computeAbsEularAngleFromQuaternionClassMethod();
                     for (int i = 0; i < 3; i++) {
                         absEulerAngleEuler[i] = absEulerAngleClass[i];
                     }
+                    // feedback the result no matter what
                     publishResultToUi();
                     isFirstQuanternionCalFlag = false;
                 } else {    // not the first computation anymore
                     computeQuaternionEuler(sensorEvent);
                     // record current time from sensorEvent
                     timestampCurrent = sensorEvent.timestamp;
-                    float[] deltaRotationMatrix = new float[9];
-                    // helper function to convert a rotation vector to a rotation matrix
-                    SensorManager.getRotationMatrixFromVector(deltaRotationMatrix,
-                            rotationQuaternionClass);
-                    // User code should concatenate the delta rotation we computed with the current
-                    // rotation in order to get the updated rotation.
-                    // rotationCurrent = rotationCurrent * deltaRotationMatrix;
-                    updateAbsAngRotMatrix(absAngRotMatrixClass, deltaRotationMatrix);
-                    SensorManager.getOrientation(absAngRotMatrixClass, absEulerAngleClass);
+
+                    computeAbsEularAngleFromQuaternionClassMethod();
+                    computeAbsEularAngleFromQuaternionEulerMethod();
+
                     // publish the result through local broadcast manager if passing time interval
                     if (((timestampCurrent - timestampUiUpdateMark) * NS2S) > UI_UPDATE_INTERVAL) {
                         // send results through publishResultToUi() method
                         publishResultToUi();
-                    }   // o.w. keep update the rotation matrix and euler angles
+                        // update new timestampUiUpdateMark for further result publishing
+                        timestampUiUpdateMark = timestampCurrent;
+                    }   // o.w. keep updating the rotation matrix and euler angles
                 }
             } else {
                 timestampCurrent = sensorEvent.timestamp;
@@ -125,6 +115,30 @@ public class GyroListenerService extends Service implements SensorEventListener{
         } else {
             throw new IllegalArgumentException("Somehow, type of the sensor is not Gyroscope.");
         }
+    }
+
+    private void computeAbsEularAngleFromQuaternionClassMethod() {
+        float[] deltaRotationMatrix = new float[9];
+        // helper function to convert a rotation vector to a rotation matrix
+        SensorManager.getRotationMatrixFromVector(deltaRotationMatrix,
+                rotationQuaternionClass);
+        // User code should concatenate the delta rotation we computed with the current
+        // rotation in order to get the updated rotation.
+        // rotationCurrent = rotationCurrent * deltaRotationMatrix;
+        updateAbsAngRotMatrix(absAngRotMatrixClass, deltaRotationMatrix);
+        SensorManager.getOrientation(absAngRotMatrixClass, absEulerAngleClass);
+    }
+
+    private void computeAbsEularAngleFromQuaternionEulerMethod() {
+        float[] deltaRotationMatrix = new float[9];
+        // helper function to convert a rotation vector to a rotation matrix
+        SensorManager.getRotationMatrixFromVector(deltaRotationMatrix,
+                rotationQuaternionEuler);
+        // User code should concatenate the delta rotation we computed with the current
+        // rotation in order to get the updated rotation.
+        // rotationCurrent = rotationCurrent * deltaRotationMatrix;
+        updateAbsAngRotMatrix(absAngRotMatrixEuler, deltaRotationMatrix);
+        SensorManager.getOrientation(absAngRotMatrixEuler, absEulerAngleEuler);
     }
 
     private void computeQuaternionClass(SensorEvent sensorEvent) {
@@ -161,8 +175,51 @@ public class GyroListenerService extends Service implements SensorEventListener{
         rotationQuaternionClass[3] = cosThetaOverTwo;   // w in quaternion
     }
 
+    // Notice that we did not apply the exact Runge-Kutta method as suggested by the paper
+    // Instead, we substitute the q matrix on the right hand side of equation (6) with the
+    // previous Quaternion results and derive the variation of the Quaternion. The new q's are
+    // calculated by q + delta_q. The later one is derived from equation (6).
     private void computeQuaternionEuler(SensorEvent sensorEvent) {
-        // TODO: finish Euler Axis/Angle alg.
+        final float dT = (sensorEvent.timestamp - timestampCurrent) * NS2S; // in seconds
+        // axis of the rotation sample, not normalized yet
+        // rate or rotation in rad/s around a device's x, y, and z axis
+        float axisX = sensorEvent.values[0];
+        float axisY = sensorEvent.values[1];
+        float axisZ = sensorEvent.values[2];
+
+        // save the previous result of Quaternion
+        float[] rotationQuaternionEulerCopy = rotationQuaternionEuler.clone();
+
+        float[] dQdT = new float[4];
+        dQdT[0] = (rotationQuaternionEulerCopy[3]*axisX
+                - rotationQuaternionEulerCopy[2]*axisY
+                + rotationQuaternionEulerCopy[1]*axisZ)/2.0f;
+        dQdT[1] = (rotationQuaternionEulerCopy[2]*axisX
+                + rotationQuaternionEulerCopy[3]*axisY
+                - rotationQuaternionEulerCopy[0]*axisZ)/2.0f;
+        dQdT[2] = (- rotationQuaternionEulerCopy[1]*axisX
+                + rotationQuaternionEulerCopy[0]*axisY
+                + rotationQuaternionEulerCopy[3]*axisZ)/2.0f;
+        dQdT[3] = (- rotationQuaternionEulerCopy[0]*axisX
+                - rotationQuaternionEulerCopy[1]*axisY
+                - rotationQuaternionEulerCopy[2]*axisZ)/2.0f;
+//        float[] dQ = new float[4];
+        for (int i = 0; i < 4; i++) {
+//            dQ[i] = dT * dQdT[i];
+            rotationQuaternionEuler[i] = rotationQuaternionEuler[i] + dT * dQdT[i];
+        }
+
+        // normalize quaternion
+        float quaternionMagnitude = sqrt(rotationQuaternionEuler[0]*rotationQuaternionEuler[0]
+                + rotationQuaternionEuler[1]*rotationQuaternionEuler[1]
+                + rotationQuaternionEuler[2]*rotationQuaternionEuler[2]
+                + rotationQuaternionEuler[3]*rotationQuaternionEuler[3]);
+        if (quaternionMagnitude > EPSILON) {
+            rotationQuaternionEuler[0] /= quaternionMagnitude;
+            rotationQuaternionEuler[1] /= quaternionMagnitude;
+            rotationQuaternionEuler[2] /= quaternionMagnitude;
+            rotationQuaternionEuler[3] /= quaternionMagnitude;
+        }
     }
 
     @Override
