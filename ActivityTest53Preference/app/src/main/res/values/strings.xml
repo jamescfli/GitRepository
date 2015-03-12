@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ActivityTest53Preference</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="pref_sync">Preference Sync</string>
+    <string name="pref_sync_summary">Preference Sync Summary</string>
+    <string name="pref_syncConnectionType">Preference Sync Connection Type</string>
+    <string-array name="pref_syncConnectionTypes_entries">
+        <item name="Entry Type 1">Type 1</item>
+        <item name="Entry Type 2">Type 2</item>
+        <item name="Entry Type 3">Type 3</item>
+        <item name="Entry Type 4">Type 4</item>
+    </string-array>
+    <string-array name="pref_syncConnectionTypes_values">
+        <item name="Value 1">Value 1</item>
+        <item name="Value 2">Value 2</item>
+        <item name="Value 3">Value 3</item>
+        <item name="Value 4">Value 4</item>
+    </string-array>
+    <string name="pref_syncConnectionTypes_default">default value</string>
+
+    <!-- use Titles -->
+    <string name="pref_sms_storage_title">Storage</string>
+    <string name="pref_title_auto_delete">Delete old messages</string>
+    <string name="pref_summary_auto_delete">Delete old messages as limits are reached</string>
+    <string name="pref_title_sms_delete">Text message limit</string>
+    <string name="pref_summary_delete_limit">xxx messages per conversion</string>
+    <string name="pref_title_mms_delete">Multimedia message limit</string>
+
+    <!-- use SubScreens -->
+    <string name="voicemail">Voice mail</string>
+    <string name="voicemail_provider">Voice mail provider</string>
+    <string-array name="voicemail_provider_entries">
+        <item name="Entry Type 1">CMCC</item>
+        <item name="Entry Type 2">Unicom</item>
+        <item name="Entry Type 3">Telecom</item>
+        <item name="Entry Type 4">Tencent</item>
+    </string-array>
+    <string-array name="voicemail_provider_values">
+        <item name="Value 1">CMCC 1</item>
+        <item name="Value 2">Unicom 2</item>
+        <item name="Value 3">Telecom 3</item>
+        <item name="Value 4">Tencent 4</item>
+    </string-array>
+    <string name="voicemail_settings">Voice mail settings</string>
+    <string name="voicemail_ringtone_title">Ringtone</string>
+
+    <!-- open a different activity instead of a settings screen -->
+    <string name="prefs_web_page">to Baidu</string>
+
+</resources>

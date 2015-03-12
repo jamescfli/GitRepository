@@ -321,6 +321,11 @@
     * Compare diff btw Classical method and Euler A2 method
     * intent.putExtra(TAG, floatArray[]); bundle.getFloatArray(TAG);
 
-59. ActivityTest51Fragment
+59. ActivityTest52Fragment
     * Put titles of Shakespeare.TITLES in TitlesFragment and Shakespeare.DIALOGUE in DetailsFragment/DetailsActivity
     * layout with both portrait and landscape display
+
+60. ActivityTest53Preference
+    * use PreferenceActivity, ref: [Android Settings](http://developer.android.com/guide/topics/ui/settings.html#ReadingPrefs)
+    * ListPreference, CheckBoxPreference, Customized Preference, SeekBarPreference
+    * PreferenceCategory and PreferenceScreen to combine multiple Preferences are in preferences2.xml
