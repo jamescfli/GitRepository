@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ActivityTest54PrefHeader</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="inline_preferences">Inline Preferences</string>
+    <string name="title_checkbox_preference">Title Checkbox Preference</string>
+    <string name="summary_checkbox_preference">Summary Checkbox Preference</string>
+    <string name="dialog_based_preferences">Dialog Based Preferences</string>
+    <string name="title_edittext_preference">Title EditText Preference</string>
+    <string name="summary_edittext_preference">Summary EditText Preference</string>
+    <string name="dialog_title_edittext_preference">Dialog Title EditText Preference</string>
+    <string name="title_list_preference">Title List Preference</string>
+    <string name="summary_list_preference">Summary List Preferences</string>
+    <string-array name="entries_list_preference">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+    <string-array name="entryvalues_list_preference">
+        <item>Value 1</item>
+        <item>Value 2</item>
+        <item>Value 3</item>
+    </string-array>
+    <string name="dialog_title_list_preference">Dialog Title List Preference</string>
+    <string name="launch_preferences">Launch Preferences</string>
+    <string name="title_fragment_preference">Title Fragment Preferences</string>
+    <string name="summary_fragment_preference">Summary Fragment Preferences</string>
+    <string name="title_intent_preference">Title Intent Preference</string>
+    <string name="summary_intent_preference">Summary Intent Preference</string>
+    <string name="preference_attributes">Preference Attributes</string>
+    <string name="title_parent_preference">Title Parent Preference</string>
+    <string name="summary_parent_preference">Summary Parent Preference</string>
+    <string name="title_child_preference">Title Child Preference</string>
+    <string name="summary_child_preference">Summary Child Preference</string>
+
+
+</resources>

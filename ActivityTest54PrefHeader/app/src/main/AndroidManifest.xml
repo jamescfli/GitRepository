@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.nec.nlc.example.jamesli.activitytest53preference" >
+    package="cn.nec.nlc.example.jamesli.activitytest54prefheader" >
 
     <application
         android:allowBackup="true"
@@ -17,19 +17,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
-            android:label="Settings" >
+            android:name=".PreferenceWithHeaders"
+            android:label="Headers" >
         </activity>
-        <!--
-        This intent filter indicates to the system that this is the activity that controls your
-        application's data usage. Thus, when the user inspects how much data your app is using
-        from the system's Settings app, a View application settings button is available that
-        launches your PreferenceActivity so the user can refine how much data your app uses.
-        -->
-        <intent-filter>
-            <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

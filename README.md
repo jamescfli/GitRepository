@@ -330,3 +330,7 @@
     * ListPreference, CheckBoxPreference, Customized Preference, SeekBarPreference
     * PreferenceCategory and PreferenceScreen to combine multiple Preferences are in preferences2.xml
     * OnSharedPreferenceChangeListener (onSharedPreferenceChanged() method) interface and its registration in SettingsFragment
+
+61. ActivityTest54PrefHeader
+    * test Android Studio default PreferenceActivity
+    * test SeekBar Preference (customized)
