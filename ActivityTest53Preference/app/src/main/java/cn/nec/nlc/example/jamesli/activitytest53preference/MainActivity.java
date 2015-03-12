@@ -17,26 +17,31 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences1, false);
+          // if you set it to true, you will override any previous values with the defaults.
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        // from preferences1.xml
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-//        Boolean syncConnPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_SYNC_CONN, true);
-//        String syncConnPrefType = sharedPref.getString(SettingsActivity.KEY_PREF_SYNC_CONN_TYPE, "");
-//        ((TextView) findViewById(R.id.textViewHello)).setText("syncConnPref: " + syncConnPref
-//            + "\nsyncConnPrefType: " + syncConnPrefType);
-        // from preferences2.xml
+
+        // from preferences1.xml
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean prefKeyAutoDelete = sharedPref.getBoolean(SettingsActivity.PREF_KEY_AUTO_DELETE, false);
-        int prefKeySmsDeleteLimit = sharedPref.getInt(SettingsActivity.PREF_KEY_SMS_DELETE_LIMIT, 500);
-        int prefKeyMmsDeleteLimit = sharedPref.getInt(SettingsActivity.PREF_KEY_MMS_DELETE_LIMIT, 50);
-        ((TextView) findViewById(R.id.textViewHello)).setText
-                ("prefKeyAutoDelete: " + prefKeyAutoDelete
-                + "\nprefKeySmsDeleteLimit: " + prefKeySmsDeleteLimit
-                + "\nprefKeyMmsDeleteLimit: " + prefKeyMmsDeleteLimit);
+        Boolean syncConnPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_SYNC_CONN, true);
+        String syncConnPrefType = sharedPref.getString(SettingsActivity.KEY_PREF_SYNC_CONN_TYPE, "");
+        ((TextView) findViewById(R.id.textViewHello)).setText("syncConnPref: " + syncConnPref
+            + "\nsyncConnPrefType: " + syncConnPrefType);
+
+//        // from preferences2.xml
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+//        Boolean prefKeyAutoDelete = sharedPref.getBoolean(SettingsActivity.PREF_KEY_AUTO_DELETE, false);
+//        int prefKeySmsDeleteLimit = sharedPref.getInt(SettingsActivity.PREF_KEY_SMS_DELETE_LIMIT, 500);
+//        int prefKeyMmsDeleteLimit = sharedPref.getInt(SettingsActivity.PREF_KEY_MMS_DELETE_LIMIT, 50);
+//        ((TextView) findViewById(R.id.textViewHello)).setText
+//                ("prefKeyAutoDelete: " + prefKeyAutoDelete
+//                + "\nprefKeySmsDeleteLimit: " + prefKeySmsDeleteLimit
+//                + "\nprefKeyMmsDeleteLimit: " + prefKeyMmsDeleteLimit);
         Log.i("MainActivity", "onResume()");
     }
 

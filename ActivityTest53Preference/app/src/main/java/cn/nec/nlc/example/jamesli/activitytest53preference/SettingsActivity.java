@@ -3,6 +3,8 @@ package cn.nec.nlc.example.jamesli.activitytest53preference;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+// If you're developing your application for Android 3.0 and higher, you should instead
+// use PreferenceFragment.
 public class SettingsActivity extends PreferenceActivity {
     // for preferences1.xml
     public static final String KEY_PREF_SYNC_CONN = "pref_sync";
@@ -16,7 +18,10 @@ public class SettingsActivity extends PreferenceActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        addPreferencesFromResource(R.xml.preferences1);
-        addPreferencesFromResource(R.xml.preferences2);
+////        addPreferencesFromResource(R.xml.preferences1);
+//        addPreferencesFromResource(R.xml.preferences2);
+        // for Android 3.0 and higher
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment()).commit();
     }
 }
