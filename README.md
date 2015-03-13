@@ -334,3 +334,7 @@
 61. ActivityTest54PrefHeader
     * test Android Studio default PreferenceActivity
     * test SeekBar Preference (customized)
+
+62. ActivityTest55DialogFrag
+    * extends DialogFragment, DialogFragment.show(FragmentManager manager, String tag)
+    * AlertDialog.Builder, builder.setMessage().setPositiveButton().setNegativeButton(), builder.create()
