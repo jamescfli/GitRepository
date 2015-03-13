@@ -5,8 +5,17 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Yes-No -->
     <string name="dialog_fire_missiles">Fire missiles?</string>
     <string name="fire">Fire</string>
     <string name="cancel">Cancel</string>
+
+    <!-- Color selection -->
+    <string name="pick_color">Pick a color</string>
+    <string-array name="colors_array">
+        <item name="red">Red</item>
+        <item name="green">Green</item>
+        <item name="blue">Blue</item>
+    </string-array>
 
 </resources>
