@@ -1,5 +1,6 @@
 package cn.nec.nlc.example.jamesli.activitytest55dialogfrag;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -92,35 +93,91 @@ public class FireMissilesDialogFragment extends DialogFragment {
 //        return builder.create();
 //    }
 
-    // sign-in dialog with edittext views
+//    // sign-in dialog with edittext views
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        // get the layoutInflater
+//        final LayoutInflater inflater = getActivity().getLayoutInflater();
+//        // inflate and set the layout for the dialog
+//        // pass null as the parent view because it's going in the dialog layout
+//        builder.setView(inflater.inflate(R.layout.dialog_signin, null))
+//                // set action buttons
+//                .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // Retrieve any other views from the dialog by querying the dialogView
+//                        EditText editTextUn = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.username);
+//                        EditText editTextPw = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.password);
+//                        ((MainActivity) getActivity()).getDisplayTextView()
+//                                .setText("UN: " + editTextUn.getText()
+//                                        + "\nPW: " + editTextPw.getText());
+//                    }
+//                })
+//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        FireMissilesDialogFragment.this.getDialog().cancel();
+//                          // You can also cancel a dialog. This is a special event that indicates
+//                          // the user explicitly left the dialog without completing the task. This
+//                          // occurs if the user presses the Back button, touches the screen outside
+//                          // the dialog area, or if you explicitly call cancel() on the Dialog
+//                          // (such as in response to a "Cancel" button in the dialog).
+//                        ((MainActivity) getActivity()).getDisplayTextView()
+//                                .setText("Sign in was cancelled.");
+//                    }
+//                });
+//        return builder.create();
+//    }
+
+    // passing events back to the Dialog's Host
+    /* The activity that creates an instance of this dialog fragment must
+     * implement this interface in order to receive event callbacks.
+     * Each method passes the DialogFragment in case the host needs to query it. */
+    public interface FireMissilesDialogListener {
+        public void onDialogPositiveClick(DialogFragment dialogFragment);
+        public void onDialogNegativeClick(DialogFragment dialogFragment);
+    }
+
+    // use this instance of the interface to deliver action events
+    FireMissilesDialogListener mListener;
+
+    // override the Fragment.onAttach() method to instantiate the FireMissilesDialogListener
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // verify the host activity implements the callback interface
+        try {
+            // instantiate the FireMissilesDialogListener so we can send events to the host
+            mListener = (FireMissilesDialogListener) activity;
+        } catch (ClassCastException e) {
+            // activity does not implement the interface
+            throw new ClassCastException(activity.toString()
+                    + " must implement FireMissilesDialogListener");
+        }
+    }
+
+    // use Yes - No Dialog at the beginning without access to textView in MainActivity
+    // public Dialog onCreateDialog(Bundle savedInstanceState)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // get the layoutInflater
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
-        // inflate and set the layout for the dialog
-        // pass null as the parent view because it's going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_signin, null))
-                // set action buttons
-                .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Retrieve any other views from the dialog by querying the dialogView
-                        EditText editTextUn = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.username);
-                        EditText editTextPw = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.password);
-                        ((MainActivity) getActivity()).getDisplayTextView()
-                                .setText("UN: " + editTextUn.getText()
-                                        + "\nPW: " + editTextPw.getText());
+        builder.setMessage(R.string.dialog_fire_missiles)
+                .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // send the positive button event back to activity
+                        mListener.onDialogPositiveClick(FireMissilesDialogFragment.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        FireMissilesDialogFragment.this.getDialog().cancel();
-                        ((MainActivity) getActivity()).getDisplayTextView()
-                                .setText("Sign in was cancelled.");
+                    public void onClick(DialogInterface dialog, int id) {
+                        // send the negative button event back to activity
+                        mListener.onDialogNegativeClick(FireMissilesDialogFragment.this);
                     }
                 });
+        // one could setNeutralButton as well, at most three buttons
+        // Create the AlertDialog object and return it
         return builder.create();
     }
 }

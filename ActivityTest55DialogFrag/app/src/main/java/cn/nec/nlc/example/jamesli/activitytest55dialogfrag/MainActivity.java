@@ -1,6 +1,8 @@
 package cn.nec.nlc.example.jamesli.activitytest55dialogfrag;
 
+import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,7 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity
+        implements FireMissilesDialogFragment.FireMissilesDialogListener {
     private TextView textViewDisplay;
     private Button buttonStartDialog;
 
@@ -42,8 +45,24 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-    public TextView getDisplayTextView() {
-        return textViewDisplay;
+//    // not useful when we have Dialog callback listener
+//    public TextView getDisplayTextView() {
+//        return textViewDisplay;
+//    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // User touched the dialog's positive button
+        textViewDisplay.setText("FIRE ZE MISSILES!");
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // User touched the dialog's negative button
+        textViewDisplay.setText("User cancelled the dialog");
     }
 
     @Override
