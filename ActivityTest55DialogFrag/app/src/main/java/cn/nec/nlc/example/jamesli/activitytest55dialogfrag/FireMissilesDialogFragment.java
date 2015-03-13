@@ -6,6 +6,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class FireMissilesDialogFragment extends DialogFragment {
     public FireMissilesDialogFragment() {
         // empty constructor
@@ -34,16 +36,55 @@ public class FireMissilesDialogFragment extends DialogFragment {
 //        return builder.create();
 //    }
 
-    // List Dialog
+//    // List Dialog
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle(R.string.pick_color)
+//                .setItems(R.array.colors_array, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        String[] colors = getResources().getStringArray(R.array.colors_array);
+//                        ((MainActivity) getActivity()).getDisplayTextView().setText(colors[i] + " was selected.");
+//                    }
+//                });
+//        return builder.create();
+//    }
+
+    private ArrayList<Integer> mSelectedItems;
+    // Adding a persistent multiple-choice or single-choice list
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        mSelectedItems = new ArrayList<>();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.pick_color)
-                .setItems(R.array.colors_array, new DialogInterface.OnClickListener() {
+        // set title
+        builder.setTitle(R.string.pick_toppings)
+                // null means default with none selection
+                .setMultiChoiceItems(R.array.toppings, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+                        if (isChecked) {
+                            mSelectedItems.add(which);
+                        } else if (mSelectedItems.contains(which)) {
+                            mSelectedItems.remove(Integer.valueOf(which));
+                        }
+                    }
+                })
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String[] colors = getResources().getStringArray(R.array.colors_array);
-                        ((MainActivity) getActivity()).getDisplayTextView().setText(colors[i] + " was selected.");
+                        String[] toppings = getResources().getStringArray(R.array.toppings);
+                        StringBuilder selectedToppings = new StringBuilder();
+                        for (int j = 0, SIZE = mSelectedItems.size(); j < SIZE; j++) {
+                            selectedToppings.append(toppings[mSelectedItems.get(j)] + " ");
+                        }
+                        ((MainActivity) getActivity()).getDisplayTextView().setText(selectedToppings + "was(were) selected.");
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ((MainActivity) getActivity()).getDisplayTextView().setText("job cancelled");
                     }
                 });
         return builder.create();

@@ -18,4 +18,12 @@
         <item name="blue">Blue</item>
     </string-array>
 
+    <!-- Multiple selections -->
+    <string name="pick_toppings">Pick your toppings</string>
+    <string name="ok">OK</string>
+    <string-array name="toppings">
+        <item>Onion</item>
+        <item>Lettuce</item>
+        <item>Tomato</item>
+    </string-array>
 </resources>
