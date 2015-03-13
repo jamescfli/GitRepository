@@ -26,4 +26,10 @@
         <item>Lettuce</item>
         <item>Tomato</item>
     </string-array>
+    
+    <!-- Sign-in dialog -->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="signin">Sign in</string>
+
 </resources>

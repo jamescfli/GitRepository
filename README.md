@@ -338,3 +338,6 @@
 62. ActivityTest55DialogFrag
     * extends DialogFragment, DialogFragment.show(FragmentManager manager, String tag)
     * AlertDialog.Builder, builder.setMessage().setPositiveButton().setNegativeButton(), builder.create()
+    * set list dialog: builder.setTitle(), setItems(), getResources().getStringArray()
+    * set multiple selection list with builder.setMultiChoiceItems()
+    * customized sign-in dialog: access dialog views within onClick method, EditText editTextUn = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.username);
