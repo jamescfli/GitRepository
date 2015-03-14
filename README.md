@@ -342,3 +342,9 @@
     * set multiple selection list with builder.setMultiChoiceItems()
     * customized sign-in dialog: access dialog views within onClick method, EditText editTextUn = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.username);
     * use standard callback methods in DialogFragment such that results from Dialog can be passed to host activity, note to verify implementation of the callback method in host activity, try "mListener = (FireMissilesDialogListener) activity;"
+
+63. ActivityTest56Notification
+    * NotificationCompat.Builder
+    * TaskStackBuilder
+    * PendingIntent
+    * NotificationManager
