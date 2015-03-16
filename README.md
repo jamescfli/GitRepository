@@ -348,3 +348,8 @@
     * TaskStackBuilder
     * PendingIntent
     * NotificationManager
+
+64. ActivityTest57ToastCustomized
+    * Toast.setView(layout)
+    * new Toast(getApplicationContext()), note that getApplicationContext() is to get the application context, which is different from Activity.this (i.e. Activity's context). they have different lifecycle.
+    * toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);    // gravity, x-offset, y-offset, CENTER_VERTICAL is to place object in the vertical center of its container, not changing its size
