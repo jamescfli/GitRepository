@@ -27,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.custom_toast,
                         (ViewGroup) findViewById(R.id.toast_layout_root));
+                // textView can be found after layout was inflated.
                 TextView text = (TextView) layout.findViewById(R.id.text);
                 text.setText("This is a customized toast.");
 
