@@ -282,6 +282,7 @@ public class WorkingNote {
     }
 
     public void setWorkingText(String text) {
+        // if mContent == text, i.e. no change happens
         if (!TextUtils.equals(mContent, text)) {
             mContent = text;
             mNote.setTextData(DataColumns.CONTENT, mContent);

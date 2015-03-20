@@ -139,7 +139,7 @@ public class NotesListActivity extends Activity implements OnClickListener, OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_list);
-        initResources();
+        initResources();    // good practice
 
         /**
          * Insert an introduction when user firstly use this application
@@ -190,9 +190,13 @@ public class NotesListActivity extends Activity implements OnClickListener, OnIt
                 }
             }
 
+            // parameters: (Context context, long folderId, int widgetId, int widgetType,
+            // int defaultBgColorId)
             WorkingNote note = WorkingNote.createEmptyNote(this, Notes.ID_ROOT_FOLDER,
                     AppWidgetManager.INVALID_APPWIDGET_ID, Notes.TYPE_WIDGET_INVALIDE,
                     ResourceParser.RED);
+              // AppWidgetManager.INVALID_APPWIDGET_ID
+              // A sentinel value that the AppWidget manager will never return as a appWidgetId.
             note.setWorkingText(sb.toString());
             if (note.saveNote()) {
                 sp.edit().putBoolean(PREFERENCE_ADD_INTRODUCTION, true).commit();
