@@ -20,8 +20,8 @@ package name.bagi.levente.pedometer.speak;
 
 import java.util.ArrayList;
 
-import name.bagi.levente.pedometer.PedometerSettings;
-import name.bagi.levente.pedometer.StepListener;
+import name.bagi.levente.pedometer.preferences.PedometerSettings;
+import name.bagi.levente.pedometer.step.StepListener;
 
 /**
  * Call all listening objects repeatedly. 
@@ -30,11 +30,11 @@ import name.bagi.levente.pedometer.StepListener;
  */
 public class SpeakingTimer implements StepListener {
 
-    PedometerSettings mSettings;
-    SpeakingUtils mSpeakingUtils;   // for speaking
-    boolean mShouldSpeak;
-    float mInterval;
-    long mLastSpeakTime;
+    private PedometerSettings mSettings;
+    private SpeakingUtils mSpeakingUtils;   // for speaking
+    private boolean mShouldSpeak;
+    private float mInterval;
+    private long mLastSpeakTime;
     
     public SpeakingTimer(PedometerSettings settings, SpeakingUtils speakingUtils) {
         mLastSpeakTime = System.currentTimeMillis();    // initiate with current time
@@ -43,6 +43,7 @@ public class SpeakingTimer implements StepListener {
         reloadSettings();
     }
     public void reloadSettings() {
+        // load only related preferences
         mShouldSpeak = mSettings.shouldSpeak();
         mInterval = mSettings.getSpeakingInterval();
     }
@@ -71,7 +72,7 @@ public class SpeakingTimer implements StepListener {
         public void speak();    // implement in other class
     }
 
-    // multiple Listener to speak, e.g. steps, calories, distance
+    // multiple Listeners to speak, e.g. steps, calories, distance and etc.
     private ArrayList<Listener> mListeners = new ArrayList<Listener>();
 
     public void addListener(Listener l) {
@@ -85,11 +86,11 @@ public class SpeakingTimer implements StepListener {
         }
     }
 
-    //-----------------------------------------------------
-    // check whether it is in Speaking mode
-    
-    public boolean isSpeaking() {
-        return mSpeakingUtils.isSpeakingNow();
-    }
+//    //-----------------------------------------------------
+//    // check whether it is in Speaking mode
+//    // If it is the case, don't start another speaking action
+//    public boolean isSpeaking() {
+//        return mSpeakingUtils.isSpeakingNow();
+//    }
 }
 

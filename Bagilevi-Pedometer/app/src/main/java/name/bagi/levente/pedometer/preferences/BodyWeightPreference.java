@@ -39,7 +39,9 @@ public class BodyWeightPreference extends EditMeasurementPreference {
 		super(context, attr, defStyle);
 	}
 
+    @Override
 	protected void initPreferenceDetails() {
+        // protected field in EditMeasurementPreference
 		mTitleResource = R.string.body_weight_setting_title;
 		mMetricUnitsResource = R.string.kilograms;
 		mImperialUnitsResource = R.string.pounds;

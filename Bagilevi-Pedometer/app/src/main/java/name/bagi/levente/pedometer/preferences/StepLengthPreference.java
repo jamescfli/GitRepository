@@ -39,7 +39,9 @@ public class StepLengthPreference extends EditMeasurementPreference {
 		super(context, attr, defStyle);
 	}
 
+    @Override
 	protected void initPreferenceDetails() {
+        // protected field in EditMeasurementPreference
 		mTitleResource = R.string.step_length_setting_title;
 		mMetricUnitsResource = R.string.centimeters;
 		mImperialUnitsResource = R.string.inches;

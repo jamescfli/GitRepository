@@ -357,3 +357,7 @@
 65. ActivityTest58MaterialDesign
 
 66. ActivityTest59RecyclerView
+
+67. Bagilevi-Pedometer
+    * upload a simple Pedometer project forked from [Bagilevi Android Pedometer](https://github.com/bagilevi/android-pedometer)
+    * add comments after reading the code

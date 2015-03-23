@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.bagi.levente.pedometer;
+package name.bagi.levente.pedometer.step;
 
 import java.util.ArrayList;
 
@@ -63,6 +63,7 @@ public class StepDetector implements SensorEventListener
     }
     
     //public void onSensorChanged(int sensor, float[] values) {
+    @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor; 
         synchronized (this) {
@@ -112,7 +113,8 @@ public class StepDetector implements SensorEventListener
             }
         }
     }
-    
+
+    @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
     }

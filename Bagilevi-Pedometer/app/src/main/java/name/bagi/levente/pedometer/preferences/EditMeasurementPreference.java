@@ -15,7 +15,7 @@ import android.widget.EditText;
  * @author Levente Bagi
  */
 abstract public class EditMeasurementPreference extends EditTextPreference {
-	boolean mIsMetric;  // unit in metric
+	private boolean mIsMetric;  // unit in metric, friendly to private
 	
 	protected int mTitleResource;
 	protected int mMetricUnitsResource;
@@ -54,25 +54,32 @@ abstract public class EditMeasurementPreference extends EditTextPreference {
             Float.valueOf(getText());
         }
         catch (Exception e) {
-            setText("20");
+            setText(PedometerSettings.STEPSIZE_DEFAULT);
         }
         super.showDialog(state);
     }
 
+    // Adds the EditText widget of this preference to the dialog's view
     @Override
     protected void onAddEditTextToDialogView (View dialogView, EditText editText) {
         editText.setRawInputType(
                 InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+          // InputType.TYPE_CLASS_NUMBER: class for numeric text
+          // InputType.TYPE_NUMBER_FLAG_DECIMAL: flag of TYPE_CLASS_NUMBER: the number is decimal,
+          // allowing a decimal point to provide fractional values.
         super.onAddEditTextToDialogView(dialogView, editText);
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
+        // positiveResult	Whether the positive button was clicked (true),
+        // or the negative button was clicked or the dialog was canceled (false).
         if (positiveResult) {
             try {
                 Float.valueOf(((CharSequence)(getEditText().getText())).toString());
             }
             catch (NumberFormatException e) {
+                // invalid value was input
                 this.showDialog(null);
                 return;
             }

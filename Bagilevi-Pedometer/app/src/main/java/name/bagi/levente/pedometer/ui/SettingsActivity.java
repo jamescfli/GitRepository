@@ -16,15 +16,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.bagi.levente.pedometer;
+package name.bagi.levente.pedometer.ui;
+
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
 
 /**
- * Interface implemented by classes that can handle notifications about steps.
- * These classes can be passed to StepDetector.
+ * Activity for Pedometer settings.
+ * Started when the user click Settings from the main menu.
  * @author Levente Bagi
  */
-public interface StepListener {
-    public void onStep();   // no parameter type defined
-    public void passValue();
-}
+public class SettingsActivity extends PreferenceActivity {
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        // for Android 3.0 or higher
+        // addPreferencesFromResource was deprecated in PreferenceActivity
+        // so use PreferenceFragment instead
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment()).commit();
+    }
+}

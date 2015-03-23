@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.bagi.levente.pedometer;
+package name.bagi.levente.pedometer.ui;
 
 
 import android.app.Activity;
@@ -38,11 +38,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import name.bagi.levente.pedometer.R;
+import name.bagi.levente.pedometer.preferences.PedometerSettings;
+import name.bagi.levente.pedometer.service.StepService;
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
 
 
 public class PedometerActivity extends Activity {
-	private static final String TAG = "Pedometer";
+	private static final String TAG = "PedometerActivity";
     private SharedPreferences mSettings;
     private PedometerSettings mPedometerSettings;
     private SpeakingUtils mSpeakingUtils;
@@ -52,7 +55,7 @@ public class PedometerActivity extends Activity {
     private TextView mDistanceValueView;
     private TextView mSpeedValueView;
     private TextView mCaloriesValueView;
-    TextView mDesiredPaceView;
+    private TextView mDesiredPaceView;
     private int mStepValue;
     private int mPaceValue;
     private float mDistanceValue;
@@ -75,7 +78,8 @@ public class PedometerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "[ACTIVITY] onCreate");
         super.onCreate(savedInstanceState);
-        
+
+        // does not affected by onPause()
         mStepValue = 0;
         mPaceValue = 0;
         
@@ -138,27 +142,27 @@ public class PedometerActivity extends Activity {
                 mMaintain != PedometerSettings.M_NONE
                 ? View.VISIBLE
                 : View.GONE
-            );
+            );  // invisible if mMaintain == M_NONE
         if (mMaintain == PedometerSettings.M_PACE) {
-            mMaintainInc = 5f;
+            mMaintainInc = 5f;      // when press tuning button
             mDesiredPaceOrSpeed = (float)mPedometerSettings.getDesiredPace();
         }
         else 
         if (mMaintain == PedometerSettings.M_SPEED) {
             mDesiredPaceOrSpeed = mPedometerSettings.getDesiredSpeed();
-            mMaintainInc = 0.1f;
+            mMaintainInc = 0.1f;    // when press tuning button
         }
-        Button button1 = (Button) findViewById(R.id.button_desired_pace_lower);
-        button1.setOnClickListener(new View.OnClickListener() {
+        Button buttonLower = (Button) findViewById(R.id.button_desired_pace_lower);
+        buttonLower.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDesiredPaceOrSpeed -= mMaintainInc;
-                mDesiredPaceOrSpeed = Math.round(mDesiredPaceOrSpeed * 10) / 10f;
+                mDesiredPaceOrSpeed = Math.round(mDesiredPaceOrSpeed * 10) / 10f;   // one decimal
                 displayDesiredPaceOrSpeed();
                 setDesiredPaceOrSpeed(mDesiredPaceOrSpeed);
             }
         });
-        Button button2 = (Button) findViewById(R.id.button_desired_pace_raise);
-        button2.setOnClickListener(new View.OnClickListener() {
+        Button buttonHigher = (Button) findViewById(R.id.button_desired_pace_raise);
+        buttonHigher.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDesiredPaceOrSpeed += mMaintainInc;
                 mDesiredPaceOrSpeed = Math.round(mDesiredPaceOrSpeed * 10) / 10f;
@@ -189,14 +193,17 @@ public class PedometerActivity extends Activity {
     
     @Override
     protected void onPause() {
+        // TODO: test whether being initiated when screen_off
         Log.i(TAG, "[ACTIVITY] onPause");
         if (mIsRunning) {
             unbindStepService();
         }
         if (mQuitting) {
+            // quit from menu, don't save timestamp
             mPedometerSettings.saveServiceRunningWithNullTimestamp(mIsRunning);
         }
         else {
+            // quit from others, i.e. onPause(), onStop(), onDestroy(), save timestamp
             mPedometerSettings.saveServiceRunningWithTimestamp(mIsRunning);
         }
 
@@ -240,8 +247,8 @@ public class PedometerActivity extends Activity {
     
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
-            mService = ((StepService.StepBinder)service).getService();
-
+            mService = ((StepService.StepBinder) service).getService();
+            // whenever new bind connection is initiated
             mService.registerCallback(mCallback);
             mService.reloadSettings();
             
@@ -266,6 +273,8 @@ public class PedometerActivity extends Activity {
         Log.i(TAG, "[SERVICE] Bind");
         bindService(new Intent(PedometerActivity.this,
                 StepService.class), mConnection, Context.BIND_AUTO_CREATE + Context.BIND_DEBUG_UNBIND);
+          // BIND_AUTO_CREATE: automatically create the service as long as the binding exists
+          // BIND_DEBUG_UNBIND: include debugging help for mismatched calls to unbind
     }
 
     private void unbindStepService() {
@@ -282,7 +291,8 @@ public class PedometerActivity extends Activity {
         }
         mIsRunning = false;
     }
-    
+
+    // used in Menu item: reset and quit
     private void resetValues(boolean updateDisplay) {
         if (mService != null && mIsRunning) {
             mService.resetValues();                    
@@ -318,24 +328,24 @@ public class PedometerActivity extends Activity {
         menu.clear();
         if (mIsRunning) {
             menu.add(0, MENU_PAUSE, 0, R.string.pause)
-            .setIcon(android.R.drawable.ic_media_pause)
-            .setShortcut('1', 'p');
+                .setIcon(android.R.drawable.ic_media_pause)
+                .setShortcut('1', 'p');
         }
         else {
             menu.add(0, MENU_RESUME, 0, R.string.resume)
-            .setIcon(android.R.drawable.ic_media_play)
-            .setShortcut('1', 'p');
+                .setIcon(android.R.drawable.ic_media_play)
+                .setShortcut('1', 'p');
         }
         menu.add(0, MENU_RESET, 0, R.string.reset)
-        .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
-        .setShortcut('2', 'r');
+            .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
+            .setShortcut('2', 'r');
         menu.add(0, MENU_SETTINGS, 0, R.string.settings)
-        .setIcon(android.R.drawable.ic_menu_preferences)
-        .setShortcut('8', 's')
-        .setIntent(new Intent(this, SettingsActivity.class));
+            .setIcon(android.R.drawable.ic_menu_preferences)
+            .setShortcut('8', 's')
+            .setIntent(new Intent(this, SettingsActivity.class));
         menu.add(0, MENU_QUIT, 0, R.string.quit)
-        .setIcon(android.R.drawable.ic_lock_power_off)
-        .setShortcut('9', 'q');
+            .setIcon(android.R.drawable.ic_lock_power_off)
+            .setShortcut('9', 'q');
         return true;
     }
 

@@ -19,7 +19,7 @@
 package name.bagi.levente.pedometer.notifiers;
 
 
-import name.bagi.levente.pedometer.PedometerSettings;
+import name.bagi.levente.pedometer.preferences.PedometerSettings;
 import name.bagi.levente.pedometer.speak.SpeakingTimer;
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
 
@@ -39,21 +39,21 @@ public class SpeedNotifier implements PaceNotifier.Listener, SpeakingTimer.Liste
     }
     private Listener mListener;
     
-    int mCounter = 0;
-    float mSpeed = 0;
-    
-    boolean mIsMetric;
-    float mStepLength;
+//    private int mCounter = 0;
+    private float mSpeed = 0;
 
-    PedometerSettings mSettings;
-    SpeakingUtils mSpeakingUtils;
+    private boolean mIsMetric;
+    private float mStepLength;
+
+    private PedometerSettings mSettings;
+    private SpeakingUtils mSpeakingUtils;
 
     /** Desired speed, adjusted by the user */
-    float mDesiredSpeed;
+    private float mDesiredSpeed;
     
     /** Should we speak? */
-    boolean mShouldTellFasterslower;
-    boolean mShouldTellSpeed;
+    private boolean mShouldTellFasterslower;
+    private boolean mShouldTellSpeed;
     
     /** When did the TTS speak last time */
     private long mSpokenAt = 0;
@@ -75,7 +75,7 @@ public class SpeedNotifier implements PaceNotifier.Listener, SpeakingTimer.Liste
         mShouldTellSpeed = mSettings.shouldTellSpeed();
         mShouldTellFasterslower = 
             mSettings.shouldTellFasterslower()
-            && mSettings.getMaintainOption() == PedometerSettings.M_SPEED;
+            && (mSettings.getMaintainOption() == PedometerSettings.M_SPEED);
         notifyListener();
     }
     public void setDesiredSpeed(float desiredSpeed) {
@@ -85,7 +85,8 @@ public class SpeedNotifier implements PaceNotifier.Listener, SpeakingTimer.Liste
     private void notifyListener() {
         mListener.valueChanged(mSpeed);
     }
-    
+
+    @Override
     public void paceChanged(int value) {
         if (mIsMetric) {
             mSpeed = // kilometers / hour
@@ -145,11 +146,13 @@ public class SpeedNotifier implements PaceNotifier.Listener, SpeakingTimer.Liste
             }
         }
     }
-    
+
+    @Override
     public void passValue() {
         // Not used
     }
 
+    @Override
     public void speak() {
         if (mSettings.shouldTellSpeed()) {
             if (mSpeed >= .01f) {

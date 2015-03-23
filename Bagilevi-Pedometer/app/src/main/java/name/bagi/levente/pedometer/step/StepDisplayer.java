@@ -16,10 +16,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.bagi.levente.pedometer;
+package name.bagi.levente.pedometer.step;
 
 import java.util.ArrayList;
 
+import name.bagi.levente.pedometer.preferences.PedometerSettings;
 import name.bagi.levente.pedometer.speak.SpeakingTimer;
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
 
@@ -30,15 +31,15 @@ import name.bagi.levente.pedometer.speak.SpeakingUtils;
 public class StepDisplayer implements StepListener, SpeakingTimer.Listener {
 
     private int mCount = 0;
-    PedometerSettings mSettings;
-    SpeakingUtils mSpeakingUtils;
+    private PedometerSettings mSettings;
+    private SpeakingUtils mSpeakingUtils;
 
     public StepDisplayer(PedometerSettings settings, SpeakingUtils speakingUtils) {
         mSpeakingUtils = speakingUtils;
         mSettings = settings;
         notifyListener();
     }
-    public void setUtils(SpeakingUtils speakingUtils) {
+    public void setSpeakingUtils(SpeakingUtils speakingUtils) {
         mSpeakingUtils = speakingUtils;
     }
 
@@ -46,6 +47,8 @@ public class StepDisplayer implements StepListener, SpeakingTimer.Listener {
         mCount = steps;
         notifyListener();
     }
+
+    @Override
     public void onStep() {
         mCount ++;
         notifyListener();
@@ -53,6 +56,8 @@ public class StepDisplayer implements StepListener, SpeakingTimer.Listener {
     public void reloadSettings() {
         notifyListener();
     }
+
+    @Override
     public void passValue() {
     }
     
@@ -82,7 +87,7 @@ public class StepDisplayer implements StepListener, SpeakingTimer.Listener {
     public void speak() {
         if (mSettings.shouldTellSteps()) { 
             if (mCount > 0) {
-                mSpeakingUtils.say("" + mCount + " steps");
+                mSpeakingUtils.say("" + mCount + " steps conducted");
             }
         }
     }

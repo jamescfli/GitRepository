@@ -16,24 +16,31 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.bagi.levente.pedometer;
+package name.bagi.levente.pedometer.preferences;
 
 import android.content.SharedPreferences;
 
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
 
 /**
- * Wrapper for {@link SharedPreferences}, handles preferences-related tasks.
+ * Wrapper for {@link SharedPreferences}, handles preferences-related tasks:
+ *  1) access states
+ *  2) read saved/default values
+ *  3) clear flag
+ *  4) save values
  * @author Levente Bagi
  * UI is in Settings.java
  */
 public class PedometerSettings {
+    public static final String STEPSIZE_DEFAULT = "50";
+    public static final String BODYWEIGHT_DEFAULT = "70";
 
-    SharedPreferences mSettings;
-    
+    // remind the pace / speed / nothing, in terms of slower / faster
     public static final int M_NONE = 1;
     public static final int M_PACE = 2;
     public static final int M_SPEED = 3;
+
+    private SharedPreferences mSettings;
     
     public PedometerSettings(SharedPreferences settings) {
         // input PreferenceManager.getDefaultSharedPreferences(this)
@@ -47,20 +54,20 @@ public class PedometerSettings {
     
     public float getStepLength() {
         try {
-            // get the spaces off by trim()
-            return Float.valueOf(mSettings.getString("step_length", "20").trim());
+            // get the spaces off by trim(), it is safe to do so before Float.valueOf()
+            return Float.valueOf(mSettings.getString("step_length", STEPSIZE_DEFAULT).trim());
         }
         catch (NumberFormatException e) {
             // TODO: reset value, & notify user somehow
             return 0f;
         }
 //        // for simple float numbers, it is better to reserved as String
-//        return mSettings.getFloat("step_length", 20);
+//        return mSettings.getFloat("step_length", EditMeasurementPreference.STEPSIZE_DEFAULT);
     }
     
     public float getBodyWeight() {
         try {
-            return Float.valueOf(mSettings.getString("body_weight", "50").trim());
+            return Float.valueOf(mSettings.getString("body_weight", BODYWEIGHT_DEFAULT).trim());
         }
         catch (NumberFormatException e) {
             // TODO: reset value, & notify user somehow
@@ -69,7 +76,7 @@ public class PedometerSettings {
     }
 
     public boolean isRunning() {
-        // "walking" otherwise
+        // "walking" otherwise, TODO: handle other values
         return mSettings.getString("exercise_type", "running").equals("running");
     }
 
@@ -169,7 +176,7 @@ public class PedometerSettings {
     public void saveServiceRunningWithNullTimestamp(boolean running) {
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putBoolean("service_running", running);
-        editor.putLong("last_seen", 0);
+        editor.putLong("last_seen", 0); // NullTimestmp
         editor.commit();
     }
 

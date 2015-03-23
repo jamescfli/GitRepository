@@ -9,15 +9,19 @@ import android.util.Log;
 
 public class SpeakingUtils implements TextToSpeech.OnInitListener {
     private static final String TAG = "Utils";
-    private static final String UTTERANCE_ID = "Speak ID";  // applied for API 21 to speak
+//    private static final String UTTERANCE_ID = "Speak ID";  // for API 21 to TextToSpeech.speak()
     private Service mService;
 
     private static SpeakingUtils instance = null;
 
+    // singleton mode to privatize the constructor
     private SpeakingUtils() {
+        // n.a.
     }
-     
+
+    // getInstance() has to be static method for Class SpeakingUtils
     public static SpeakingUtils getInstance() {
+        // only one object at once
         if (instance == null) {
             instance = new SpeakingUtils();
         }
@@ -42,6 +46,7 @@ public class SpeakingUtils implements TextToSpeech.OnInitListener {
             this  // TextToSpeech.OnInitListener
             );
     }
+    // used in Service#onDestroy()
     public void shutdownTTS() {
         Log.i(TAG, "Shutting Down TextToSpeech...");
 
@@ -52,9 +57,11 @@ public class SpeakingUtils implements TextToSpeech.OnInitListener {
     }
     public void say(String text) {
         if (mSpeak && mSpeakingEngineAvailable) {
+            // add UTTERANCE_ID for API 21
             mTts.speak(text,
                     TextToSpeech.QUEUE_ADD,  // Drop all pending entries in the playback queue.
                     null);
+            // TODO: try to speak Chinese over here
         }
     }
 
@@ -63,7 +70,8 @@ public class SpeakingUtils implements TextToSpeech.OnInitListener {
     public void onInit(int status) {
         // status can be either TextToSpeech.SUCCESS or TextToSpeech.ERROR.
         if (status == TextToSpeech.SUCCESS) {
-            int result = mTts.setLanguage(Locale.US);   // Locale.CHINA or CHINESE
+            int result = mTts.setLanguage(Locale.US);
+            // TODO: Locale.CHINA or CHINESE
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                     result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 // Language data is missing or the language is not supported.
@@ -91,6 +99,7 @@ public class SpeakingUtils implements TextToSpeech.OnInitListener {
     }
 
     public void ding() {
+        // n.a.
     }
     
     /********** Time **********/
@@ -99,5 +108,6 @@ public class SpeakingUtils implements TextToSpeech.OnInitListener {
         Time time = new Time();
         time.setToNow();
         return time.toMillis(false);
+          // others:  toString() = in YYYYMMDDTHHMMSS format
     }
 }

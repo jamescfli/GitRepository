@@ -19,9 +19,9 @@
 package name.bagi.levente.pedometer.notifiers;
 
 
-import name.bagi.levente.pedometer.PedometerSettings;
+import name.bagi.levente.pedometer.preferences.PedometerSettings;
 import name.bagi.levente.pedometer.speak.SpeakingTimer;
-import name.bagi.levente.pedometer.StepListener;
+import name.bagi.levente.pedometer.step.StepListener;
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
 
 /**
@@ -36,13 +36,13 @@ public class DistanceNotifier implements StepListener, SpeakingTimer.Listener {
     }
     private Listener mListener;
     
-    float mDistance = 0;
-    
-    PedometerSettings mSettings;
-    SpeakingUtils mSpeakingUtils;
-    
-    boolean mIsMetric;
-    float mStepLength;
+    private float mDistance = 0;
+
+    private PedometerSettings mSettings;
+    private SpeakingUtils mSpeakingUtils;
+
+    private boolean mIsMetric;
+    private float mStepLength;
 
     public DistanceNotifier(Listener listener, PedometerSettings settings, SpeakingUtils speakingUtils) {
         mListener = listener;
@@ -87,15 +87,16 @@ public class DistanceNotifier implements StepListener, SpeakingTimer.Listener {
         // Callback of StepListener - Not implemented
     }
 
+    @Override
     public void speak() {
         if (mSettings.shouldTellDistance()) {
-            if (mDistance >= .001f) {   // started to move
+            if (mDistance >= .001f) {   // started to move, skip saying anything
                 mSpeakingUtils.say(("" + (mDistance + 0.000001f)).substring(0, 4) + (mIsMetric ? " kilometers" : " miles"));
                 // TODO: format numbers (no "." at the end)
+                // TODO: in Chinese
             }
         }
     }
-    
 
 }
 

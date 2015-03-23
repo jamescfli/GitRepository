@@ -19,9 +19,9 @@
 package name.bagi.levente.pedometer.notifiers;
 
 
-import name.bagi.levente.pedometer.PedometerSettings;
+import name.bagi.levente.pedometer.preferences.PedometerSettings;
 import name.bagi.levente.pedometer.speak.SpeakingTimer;
-import name.bagi.levente.pedometer.StepListener;
+import name.bagi.levente.pedometer.step.StepListener;
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
 
 /**
@@ -35,25 +35,25 @@ public class CaloriesNotifier implements StepListener, SpeakingTimer.Listener {
         public void passValue();
     }
     private Listener mListener;
-    
-    private static double METRIC_RUNNING_FACTOR = 1.02784823;   // 40% higher than walking
+
+    private static double METRIC_RUNNING_FACTOR = 1.02784823;   // 45% higher than walking
     private static double IMPERIAL_RUNNING_FACTOR = 0.75031498;
 
     private static double METRIC_WALKING_FACTOR = 0.708;
     private static double IMPERIAL_WALKING_FACTOR = 0.517;
 
-    private double mCalories = 0;
+    private float mCalories = 0;    // changed from double to float
     
-    PedometerSettings mSettings;
-    SpeakingUtils mSpeakingUtils;
+    private PedometerSettings mSettings;
+    private SpeakingUtils mSpeakingUtils;
     
-    boolean mIsMetric;
-    boolean mIsRunning;
-    float mStepLength;
-    float mBodyWeight;
+    private boolean mIsMetric;
+    private boolean mIsRunning;
+    private float mStepLength;
+    private float mBodyWeight;
 
     public CaloriesNotifier(Listener listener, PedometerSettings settings, SpeakingUtils speakingUtils) {
-        mListener = listener;
+        mListener = listener;   // implementation of valueChanged(float value)
         mSpeakingUtils = speakingUtils;
         mSettings = settings;
         reloadSettings();
@@ -79,7 +79,9 @@ public class CaloriesNotifier implements StepListener, SpeakingTimer.Listener {
     public void setStepLength(float stepLength) {
         mStepLength = stepLength;
     }
-    
+
+    // StepListener callback function
+    @Override
     public void onStep() {
         if (mIsMetric) {
             mCalories += 
@@ -95,22 +97,26 @@ public class CaloriesNotifier implements StepListener, SpeakingTimer.Listener {
                 * mStepLength // inches
                 / 63360.0; // inches/mile            
         }
-        
         notifyListener();
     }
     
     private void notifyListener() {
-        mListener.valueChanged((float)mCalories);
+        // call the callback function in StepService
+        mListener.valueChanged(mCalories);
     }
-    
+
+    @Override
     public void passValue() {
         // n.a.
     }
-    
+
+    @Override
     public void speak() {
         if (mSettings.shouldTellCalories()) {
             if (mCalories > 0) {
+                // in English
                 mSpeakingUtils.say("" + (int)mCalories + " calories burned");
+                // TODO: in Chinese
             }
         }
         

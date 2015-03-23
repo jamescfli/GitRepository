@@ -16,14 +16,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.bagi.levente.pedometer;
+package name.bagi.levente.pedometer.step;
 
 import android.content.Context;
 import android.os.Vibrator;
 
 /**
  * Vibrates whenever a step is detected.
- * Normally, this is not attached, used for debugging purposes.
+ * Normally, this is not attached, used for **debugging purposes**.
  * @author Levente Bagi
  */
 public class StepBuzzer implements StepListener {
@@ -35,15 +35,16 @@ public class StepBuzzer implements StepListener {
         mContext = context;
         mVibrator = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
     }
-    
+
+    @Override
     public void onStep() {
         buzz();
     }
-    
-    public void passValue() {
-        
-    }
-    
+
+    @Override
+    public void passValue() {}
+
+    // very smart to work as a debugging method
     private void buzz() {
         mVibrator.vibrate(50);
     }

@@ -20,9 +20,9 @@ package name.bagi.levente.pedometer.notifiers;
 
 import java.util.ArrayList;
 
-import name.bagi.levente.pedometer.PedometerSettings;
+import name.bagi.levente.pedometer.preferences.PedometerSettings;
 import name.bagi.levente.pedometer.speak.SpeakingTimer;
-import name.bagi.levente.pedometer.StepListener;
+import name.bagi.levente.pedometer.step.StepListener;
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
 
 /**
@@ -37,22 +37,22 @@ public class PaceNotifier implements StepListener, SpeakingTimer.Listener {
         public void passValue();
     }
     private ArrayList<Listener> mListeners = new ArrayList<Listener>();
-    
-    int mCounter = 0;
+
+    private int mCounter = 0;   // original no private signature
     
     private long mLastStepTime = 0;
     private long[] mLastStepDeltas = {-1, -1, -1, -1};
     private int mLastStepDeltasIndex = 0;
     private long mPace = 0;
-    
-    PedometerSettings mSettings;
-    SpeakingUtils mSpeakingUtils;
+
+    private PedometerSettings mSettings;
+    private SpeakingUtils mSpeakingUtils;
 
     /** Desired pace, adjusted by the user */
-    int mDesiredPace;
+    private int mDesiredPace;
 
     /** Should we speak? */
-    boolean mShouldTellFasterslower;
+    private boolean mShouldTellFasterslower;
 
     /** When did the TTS speak last time */
     private long mSpokenAt = 0;
@@ -65,7 +65,7 @@ public class PaceNotifier implements StepListener, SpeakingTimer.Listener {
     }
     public void setPace(int pace) {
         mPace = pace;
-        int avg = (int)(60*1000.0 / mPace);
+        int avg = (int)(60*1000.0 / mPace);     // microseconds consumed by one step
         for (int i = 0; i < mLastStepDeltas.length; i++) {
             mLastStepDeltas[i] = avg;
         }
@@ -74,7 +74,7 @@ public class PaceNotifier implements StepListener, SpeakingTimer.Listener {
     public void reloadSettings() {
         mShouldTellFasterslower = 
             mSettings.shouldTellFasterslower()
-            && mSettings.getMaintainOption() == PedometerSettings.M_PACE;
+            && (mSettings.getMaintainOption() == PedometerSettings.M_PACE);
         notifyListener();
     }
     
@@ -86,6 +86,7 @@ public class PaceNotifier implements StepListener, SpeakingTimer.Listener {
         mDesiredPace = desiredPace;
     }
 
+    @Override
     public void onStep() {
         long thisStepTime = System.currentTimeMillis();
         mCounter ++;
@@ -95,6 +96,7 @@ public class PaceNotifier implements StepListener, SpeakingTimer.Listener {
             long delta = thisStepTime - mLastStepTime;
             
             mLastStepDeltas[mLastStepDeltasIndex] = delta;
+            // memorize last step in a rotated fashion
             mLastStepDeltasIndex = (mLastStepDeltasIndex + 1) % mLastStepDeltas.length;
             
             long sum = 0;
@@ -163,14 +165,15 @@ public class PaceNotifier implements StepListener, SpeakingTimer.Listener {
             listener.paceChanged((int)mPace);
         }
     }
-    
+
+    @Override
     public void passValue() {
         // Not used
     }
 
     //-----------------------------------------------------
     // Speaking
-    
+    @Override
     public void speak() {
         if (mSettings.shouldTellPace()) {
             if (mPace > 0) {
