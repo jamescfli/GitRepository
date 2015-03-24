@@ -361,3 +361,10 @@
 67. Bagilevi-Pedometer
     * upload a simple Pedometer project forked from [Bagilevi Android Pedometer](https://github.com/bagilevi/android-pedometer)
     * add comments after reading the code
+
+68. ActivityTest60SpeakChinese
+    * try TextToSpeech class
+    * in init() test whether the language is supported or not int result = ttsEnglish.setLanguage(Locale.US); if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
+    * set volume through AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE); int amStreamMusicMaxVol = am.getStreamMaxVolume(am.STREAM_MUSIC); am.setStreamVolume(am.STREAM_MUSIC, amStreamMusicMaxVol, 0);
+    * speak ttsEnglish.speak(TEXT_TO_SPEAK_ENG, TextToSpeech.QUEUE_FLUSH, null);
+    * last but not least release the resource: ttsEnglish.shutdown();
