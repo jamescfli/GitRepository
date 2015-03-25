@@ -33,4 +33,13 @@
         android:layout_marginLeft="25dp"
         android:onClick="onClickResetButton" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Android Pedo Counter: "
+        android:id="@+id/textViewDisplayAndroidPedo"
+        android:layout_below="@+id/buttonStart"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="35dp" />
+
 </RelativeLayout>

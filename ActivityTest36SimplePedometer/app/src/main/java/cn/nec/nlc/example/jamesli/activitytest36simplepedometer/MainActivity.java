@@ -16,10 +16,12 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener {
     private TextView textViewStepCounter;
+    private TextView textViewDisplayAndroidPedo;
     private SensorManager sensorManager;
 
     private float[] accResultVector;
-    private int stepCounter;
+    private int stepCounterPeakDetection;
+    private int stepCounterAndroidNative;
     private AccValuesOnZaxis accValuesOnZaxis;
 
     @Override
@@ -27,6 +29,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textViewStepCounter = (TextView) findViewById(R.id.textViewStepCounter);
+        textViewDisplayAndroidPedo = (TextView) findViewById(R.id.textViewDisplayAndroidPedo);
 
         //initiate sensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -36,13 +39,15 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onResume() {
         super.onResume();
-        stepCounter = 0;    // set to null
+        stepCounterPeakDetection = 0;
+        stepCounterAndroidNative = 0;
         int smaListLength = 15;     // smoothing factor, empirical value
         int peakListLength = 7;     // peak detecting samples, empirical value
         float peakDetectThreshold = 3;  // acc has to be significant enough, empirical value
         accValuesOnZaxis = new AccValuesOnZaxis(smaListLength, peakListLength,
                 peakDetectThreshold);
-        textViewStepCounter.setText(R.string.textview_stepcounter_initial);
+        textViewStepCounter.setText(getText(R.string.textview_stepcounter_initial));
+        textViewDisplayAndroidPedo.setText(getText(R.string.textview_stepcounter_initial));
     }
 
     @Override
@@ -83,10 +88,14 @@ public class MainActivity extends Activity implements SensorEventListener {
                 accValuesOnZaxis.addNewDataToRawList(accResultVector[2]);   // consider Z-axis only
                 // check whether peak has appeared
                 if (accValuesOnZaxis.findPeak()) {
-                    stepCounter++;
+                    stepCounterPeakDetection++;
                     // renew textView
-                    textViewStepCounter.setText("Step Conducted: " + stepCounter);
+                    textViewStepCounter.setText("Step Conducted: " + stepCounterPeakDetection);
                 } // otherwise, wait for the next sensor updates
+                break;
+            case Sensor.TYPE_STEP_DETECTOR:
+                stepCounterAndroidNative++;
+                textViewDisplayAndroidPedo.setText("Step Conducted: " + stepCounterAndroidNative);
                 break;
             default:
                 Toast.makeText(this, "Unknown sensor type event", Toast.LENGTH_SHORT).show();
@@ -101,6 +110,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onClickStartButton(View view) {
         Sensor linearAccSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorManager.registerListener(this, linearAccSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
         // notify the user the counting has started
         Toast.makeText(this, "Step counter started", Toast.LENGTH_LONG).show();
     }
@@ -109,8 +120,10 @@ public class MainActivity extends Activity implements SensorEventListener {
         // unregister sensor
         sensorManager.unregisterListener(this);
         // reset textView to original one with 0 step
-        textViewStepCounter.setText(R.string.textview_stepcounter_initial);
-        stepCounter = 0;    // null step counter
+        textViewStepCounter.setText(getText(R.string.textview_stepcounter_initial));
+        textViewDisplayAndroidPedo.setText(getText(R.string.textview_stepcounter_initial));
+        stepCounterPeakDetection = 0;
+        stepCounterAndroidNative = 0;
         accValuesOnZaxis.clearSavedAccData();   // clear saved list
     }
 }
