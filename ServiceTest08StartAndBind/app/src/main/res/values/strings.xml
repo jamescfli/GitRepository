@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ServiceTest08StartAndBind</string>
+    <string name="hello">Hi there!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="BindService">Bind Service</string>
+    <string name="Start">Start</string>
+    <string name="StopService">Stop Service</string>
+    <string name="Skip">Skip</string>
+    <string name="UnbindService">Unbind Service</string>
+
+</resources>

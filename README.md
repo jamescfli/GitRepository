@@ -368,3 +368,8 @@
     * set volume through AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE); int amStreamMusicMaxVol = am.getStreamMaxVolume(am.STREAM_MUSIC); am.setStreamVolume(am.STREAM_MUSIC, amStreamMusicMaxVol, 0);
     * speak ttsEnglish.speak(TEXT_TO_SPEAK_ENG, TextToSpeech.QUEUE_FLUSH, null);
     * last but not least release the resource: ttsEnglish.shutdown();
+
+69. ServiceTest08StartAndBind
+    * test the difference between startService() and bindService()
+    * lifecycles of Service and Activity, and what happens when using the two methods together
+    * details can be found in [here](https://www.lucidchart.com/publicSegments/view/551513ee-91c4-4cdf-941b-73080a004940/image.pdf)
