@@ -16,13 +16,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.bagi.levente.pedometer.step;
+package name.bagi.levente.pedometer.notifiers;
 
 import java.util.ArrayList;
 
 import name.bagi.levente.pedometer.preferences.PedometerSettings;
 import name.bagi.levente.pedometer.speak.SpeakingTimer;
 import name.bagi.levente.pedometer.speak.SpeakingUtils;
+import name.bagi.levente.pedometer.step.StepListener;
 
 /**
  * Counts steps provided by StepDetector and passes the current
@@ -83,7 +84,7 @@ public class StepDisplayer implements StepListener, SpeakingTimer.Listener {
     
     //-----------------------------------------------------
     // Speaking
-    
+    @Override
     public void speak() {
         if (mSettings.shouldTellSteps()) { 
             if (mCount > 0) {

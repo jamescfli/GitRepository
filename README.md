@@ -361,6 +361,7 @@
 67. Bagilevi-Pedometer
     * upload a simple Pedometer project forked from [Bagilevi Android Pedometer](https://github.com/bagilevi/android-pedometer)
     * add comments after reading the code
+    * Listener declaration and implementation has been described in this [graph](https://www.lucidchart.com/documents/view/fd333791-ded7-4b29-b25d-1a5bfe591005)
 
 68. ActivityTest60SpeakChinese
     * try TextToSpeech class

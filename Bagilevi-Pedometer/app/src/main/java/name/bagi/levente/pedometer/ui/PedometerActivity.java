@@ -100,7 +100,7 @@ public class PedometerActivity extends Activity {
         super.onResume();
         
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
-        mPedometerSettings = new PedometerSettings(mSettings);
+        mPedometerSettings = new PedometerSettings(mSettings);  // for easy access on settings
         
         mSpeakingUtils.setSpeak(mSettings.getBoolean("speak", false));
         
@@ -111,12 +111,11 @@ public class PedometerActivity extends Activity {
         if (!mIsRunning && mPedometerSettings.isNewStart()) {
             startStepService();
             bindStepService();
-        }
-        else if (mIsRunning) {
+        } else if (mIsRunning) {
             bindStepService();
         }
         
-        mPedometerSettings.clearServiceRunning();
+        mPedometerSettings.clearServiceRunning();   // TODO: ??
 
         mStepValueView     = (TextView) findViewById(R.id.step_value);
         mPaceValueView     = (TextView) findViewById(R.id.pace_value);
@@ -147,8 +146,7 @@ public class PedometerActivity extends Activity {
             mMaintainInc = 5f;      // when press tuning button
             mDesiredPaceOrSpeed = (float)mPedometerSettings.getDesiredPace();
         }
-        else 
-        if (mMaintain == PedometerSettings.M_SPEED) {
+        else if (mMaintain == PedometerSettings.M_SPEED) {
             mDesiredPaceOrSpeed = mPedometerSettings.getDesiredSpeed();
             mMaintainInc = 0.1f;    // when press tuning button
         }
@@ -177,9 +175,7 @@ public class PedometerActivity extends Activity {
                     : R.string.desired_speed
             );
         }
-        
-        
-        displayDesiredPaceOrSpeed();
+        displayDesiredPaceOrSpeed();   // according to the settings
     }
     
     private void displayDesiredPaceOrSpeed() {
@@ -224,16 +220,16 @@ public class PedometerActivity extends Activity {
     
     protected void onRestart() {
         Log.i(TAG, "[ACTIVITY] onRestart");
-        super.onDestroy();
+        super.onRestart();      // onDestroy() typo here in original
     }
 
     private void setDesiredPaceOrSpeed(float desiredPaceOrSpeed) {
-        if (mService != null) {
+        // revise the desiredPaceOrSpeed in Service whenever received from button press event
+        if (mService != null) { // service is still bind
             if (mMaintain == PedometerSettings.M_PACE) {
                 mService.setDesiredPace((int)desiredPaceOrSpeed);
             }
-            else
-            if (mMaintain == PedometerSettings.M_SPEED) {
+            else if (mMaintain == PedometerSettings.M_SPEED) {
                 mService.setDesiredSpeed(desiredPaceOrSpeed);
             }
         }
@@ -246,22 +242,24 @@ public class PedometerActivity extends Activity {
     private StepService mService;
     
     private ServiceConnection mConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            mService = ((StepService.StepBinder) service).getService();
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder iBinder) {
+            Log.i(TAG, "[ServiceConnection] onServiceConnected");
+            mService = ((StepService.StepBinder) iBinder).getService();
             // whenever new bind connection is initiated
             mService.registerCallback(mCallback);
             mService.reloadSettings();
-            
         }
-
+        @Override
         public void onServiceDisconnected(ComponentName className) {
+            Log.i(TAG, "[ServiceConnection] onServiceDisconnected");
             mService = null;
         }
     };
     
 
     private void startStepService() {
-        if (! mIsRunning) {
+        if (!mIsRunning) {
             Log.i(TAG, "[SERVICE] Start");
             mIsRunning = true;
             startService(new Intent(PedometerActivity.this,
@@ -296,8 +294,7 @@ public class PedometerActivity extends Activity {
     private void resetValues(boolean updateDisplay) {
         if (mService != null && mIsRunning) {
             mService.resetValues();                    
-        }
-        else {
+        } else {
             mStepValueView.setText("0");
             mPaceValueView.setText("0");
             mDistanceValueView.setText("0");
@@ -373,34 +370,47 @@ public class PedometerActivity extends Activity {
         }
         return false;
     }
- 
-    // TODO: unite all into 1 type of message
-    private StepService.ICallback mCallback = new StepService.ICallback() {
-        public void stepsChanged(int value) {
-            mHandler.sendMessage(mHandler.obtainMessage(STEPS_MSG, value, 0));
-        }
-        public void paceChanged(int value) {
-            mHandler.sendMessage(mHandler.obtainMessage(PACE_MSG, value, 0));
-        }
-        public void distanceChanged(float value) {
-            mHandler.sendMessage(mHandler.obtainMessage(DISTANCE_MSG, (int)(value*1000), 0));
-        }
-        public void speedChanged(float value) {
-            mHandler.sendMessage(mHandler.obtainMessage(SPEED_MSG, (int)(value*1000), 0));
-        }
-        public void caloriesChanged(float value) {
-            mHandler.sendMessage(mHandler.obtainMessage(CALORIES_MSG, (int)(value), 0));
-        }
-    };
-    
+
     private static final int STEPS_MSG = 1;
     private static final int PACE_MSG = 2;
     private static final int DISTANCE_MSG = 3;
     private static final int SPEED_MSG = 4;
     private static final int CALORIES_MSG = 5;
-    
+
+    // interface ICallback in StepService, unite to one Callback class
+    // registered when onServiceConnected()
+    // TODO: unite all into 1 type of message
+    private StepService.ICallback mCallback = new StepService.ICallback() {
+        @Override
+        public void stepsChanged(int value) {
+            mHandler.sendMessage(mHandler.obtainMessage(STEPS_MSG, value, 0));
+//            // the above seems unnecessary since we can directly manipulate textView here, as follows
+//            mStepValue = value;
+//            mStepValueView.setText("" + mStepValue);
+        }
+        @Override
+        public void paceChanged(int value) {
+            mHandler.sendMessage(mHandler.obtainMessage(PACE_MSG, value, 0));
+        }
+        @Override
+        public void distanceChanged(float value) {
+            mHandler.sendMessage(mHandler.obtainMessage(DISTANCE_MSG, (int)(value*1000), 0));
+        }
+        @Override
+        public void speedChanged(float value) {
+            mHandler.sendMessage(mHandler.obtainMessage(SPEED_MSG, (int)(value*1000), 0));
+        }
+        @Override
+        public void caloriesChanged(float value) {
+            mHandler.sendMessage(mHandler.obtainMessage(CALORIES_MSG, (int)(value), 0));
+        }
+    };
+
+
+    // seems not necessary, and redundant
     private Handler mHandler = new Handler() {
-        @Override public void handleMessage(Message msg) {
+        @Override
+        public void handleMessage(Message msg) {
             switch (msg.what) {
                 case STEPS_MSG:
                     mStepValue = (int)msg.arg1;
@@ -452,6 +462,5 @@ public class PedometerActivity extends Activity {
         }
         
     };
-    
 
 }

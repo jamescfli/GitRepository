@@ -19,6 +19,7 @@
 package name.bagi.levente.pedometer.step;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -34,7 +35,7 @@ import android.util.Log;
 public class StepDetector implements SensorEventListener
 {
     private final static String TAG = "StepDetector";
-    private float   mLimit = 10;
+    private float   mLimit = 10;    // default value for normal sensitivity
     private float   mLastValues[] = new float[3*2];
     private float   mScale[] = new float[2];
     private float   mYOffset;
@@ -45,6 +46,7 @@ public class StepDetector implements SensorEventListener
     private int     mLastMatch = -1;
     
     private ArrayList<StepListener> mStepListeners = new ArrayList<StepListener>();
+    private StepListener stepListenerUseAndroidApi;
     
     public StepDetector() {
         int h = 480; // TODO: remove this constant
@@ -61,55 +63,88 @@ public class StepDetector implements SensorEventListener
     public void addStepListener(StepListener sl) {
         mStepListeners.add(sl);
     }
+
+//    public void setStepListenerUseAndroidApi(StepListener sl) {
+//        stepListenerUseAndroidApi = sl;
+//    }
     
     //public void onSensorChanged(int sensor, float[] values) {
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor; 
         synchronized (this) {
-            if (sensor.getType() == Sensor.TYPE_ORIENTATION) {
-            }
-            else {
-                // j for mScale[j] usage
-                int j = (sensor.getType() == Sensor.TYPE_ACCELEROMETER) ? 1 : 0;
-                if (j == 1) {
-                    float vSum = 0;
-                    for (int i=0 ; i<3 ; i++) {
-                        final float v = mYOffset + event.values[i] * mScale[j];
-                        vSum += v;
-                    }
-                    int k = 0;
-                    float v = vSum / 3;
-                    
-                    float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
-                    if (direction == - mLastDirections[k]) {
-                        // Direction changed
-                        int extType = (direction > 0 ? 0 : 1); // minimum or maximum?
-                        mLastExtremes[extType][k] = mLastValues[k];
-                        float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
+            stepDetectorByBagilevi(event, sensor);
+//            // test Android native step counter
+//            if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+//                stepListenerUseAndroidApi.onStep();
+//            }
+        }
+    }
 
-                        if (diff > mLimit) {
-                            
-                            boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k]*2/3);
-                            boolean isPreviousLargeEnough = mLastDiff[k] > (diff/3);
-                            boolean isNotContra = (mLastMatch != 1 - extType);
-                            
-                            if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                                Log.i(TAG, "step");
-                                for (StepListener stepListener : mStepListeners) {
-                                    stepListener.onStep();
-                                }
-                                mLastMatch = extType;
-                            }
-                            else {
-                                mLastMatch = -1;
-                            }
-                        }
-                        mLastDiff[k] = diff;
-                    }
-                    mLastDirections[k] = direction;
-                    mLastValues[k] = v;
+    private void stepDetectorByBagilevi(SensorEvent event, Sensor sensor) {
+        if (sensor.getType() == Sensor.TYPE_ORIENTATION) {
+            // not in use, could be in the future for opportunistic calibration
+        }
+        else {
+            // j for mScale[j] usage
+            int j = (sensor.getType() == Sensor.TYPE_ACCELEROMETER) ? 1 : 0;
+              // j = 0 case has not been considered
+            if (j == 1) {
+                float vSum = 0;
+                for (int i=0 ; i<3 ; i++) {
+                    // TODO: figure out why use mScale[1] Magnetic Field to scale Acc values
+                    final float v = mYOffset + event.values[i] * mScale[j];
+                    vSum += v;
                 }
+                // TODO: only k = 0 is used in arrays, k = 1~5 is for further extension
+                int k = 0;
+                float v = vSum / 3;
+
+                float direction = (v > mLastValues[k] ? 1 : (v < mLastValues[k] ? -1 : 0));
+                if (direction == - mLastDirections[k]) {
+                    // Direction changed
+                    int extType = (direction > 0 ? 0 : 1); // minimum or maximum?
+                    mLastExtremes[extType][k] = mLastValues[k];
+                    float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
+
+                    if (diff > mLimit) {
+
+                        boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k]*2/3);
+                        boolean isPreviousLargeEnough = mLastDiff[k] > (diff/3);
+                        boolean isNotContra = (mLastMatch != 1 - extType);
+
+                        // for debug
+//                            Log.i(TAG, "mLimit = " + mLimit);
+//                            Log.i(TAG, "mScale[] = " + Arrays.toString(mScale));
+//                            Log.i(TAG, "mYOffset = " + mYOffset);
+                        Log.i(TAG, "mLastDiff[] = " + Arrays.toString(mLastDiff));
+                        Log.i(TAG, "mLastDirections[] = " + Arrays.toString(mLastDirections));
+                        Log.i(TAG, "mLastValues[] = " + Arrays.toString(mLastValues));
+
+                        Log.i(TAG, "mLastExtremes[0] = " + Arrays.toString(mLastExtremes[0]));
+                        Log.i(TAG, "mLastExtremes[1] = " + Arrays.toString(mLastExtremes[1]));
+
+                        Log.i(TAG, "mLastMatch = " + mLastMatch);
+                        Log.i(TAG, "extType = " + extType);
+                        Log.i(TAG, "diff > mLimit " + diff + " > " + mLimit);
+                        Log.i(TAG, "current!! v = " + v);
+
+                        if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
+                            Log.i(TAG, "step");
+                            for (StepListener stepListener : mStepListeners) {
+                                // tell everyone, step is conducted
+                                stepListener.onStep();
+                            }
+                            mLastMatch = extType;
+                        }
+                        else {
+                            mLastMatch = -1;
+                        }
+                    }
+                    mLastDiff[k] = diff;
+                }
+                mLastDirections[k] = direction;
+                mLastValues[k] = v;
             }
         }
     }

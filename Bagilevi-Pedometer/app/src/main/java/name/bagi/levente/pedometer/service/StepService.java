@@ -41,7 +41,7 @@ import android.widget.Toast;
 import name.bagi.levente.pedometer.ui.PedometerActivity;
 import name.bagi.levente.pedometer.R;
 import name.bagi.levente.pedometer.step.StepDetector;
-import name.bagi.levente.pedometer.step.StepDisplayer;
+import name.bagi.levente.pedometer.notifiers.StepDisplayer;
 import name.bagi.levente.pedometer.notifiers.CaloriesNotifier;
 import name.bagi.levente.pedometer.notifiers.DistanceNotifier;
 import name.bagi.levente.pedometer.notifiers.PaceNotifier;
@@ -95,6 +95,7 @@ public class StepService extends Service {
      * Class for clients to access.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with
      * IPC.
+     * Normally, ServiceConnection#onServiceConnected() would like to the the service.
      */
     public class StepBinder extends Binder {
         // set for public if main activity is in another package (.service.StepService)
