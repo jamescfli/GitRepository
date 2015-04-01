@@ -38,8 +38,16 @@ public class LocalService extends Service {
     }
 
     @Override
+    public void onRebind(Intent intent) {
+        Log.i(TAG, "[Service] onRebind()");
+        super.onRebind(intent);
+    }
+
+    @Override
     public boolean onUnbind(Intent intent) {
-        Log.i(TAG, "[Service] onUnbind()");
+//        boolean returnResult = false;     // false then go for onBind()
+//        boolean returnResult = true;        // true then go for onRebind()
+        Log.i(TAG, "[Service] onUnbind() returns " + super.onUnbind(intent));
         return super.onUnbind(intent);
     }
 

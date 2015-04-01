@@ -20,6 +20,8 @@ public class MainActivity extends Activity {
     private Button buttonBind;
     private Button buttonUnbind;
 
+    private boolean isServiceBound = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(MainActivity.this, LocalService.class);
                 bindService(intent, mConnection, Context.BIND_AUTO_CREATE + Context.BIND_DEBUG_UNBIND);
                   // + Context.BIND_DEBUG_UNBIND is from Bagilevi-Pedometer
+                isServiceBound = true;
             }
         });
         buttonUnbind = (Button) findViewById(R.id.buttonUnbind);
@@ -60,8 +63,15 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Log.i(TAG, "[Button] UnBind pressed");
                 unbindService(mConnection);
+                isServiceBound = false;
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i(TAG, "[Activity] onStart()");
+        super.onStart();
     }
 
     @Override
@@ -86,6 +96,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         Log.i(TAG, "[Activity] onDestroy()");
+        // IMPORTANT! prevent from leaking ServiceConnection
+        if (isServiceBound) {
+            unbindService(mConnection);
+        }
         super.onDestroy();
     }
 
