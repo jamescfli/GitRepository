@@ -380,3 +380,8 @@
 </tr>
 </table>
     * remember to unbindService in onDestroy() otherwise the app will leak ServiceConnection out (potential accumulated memory leakage)
+<pre><code>
+if (isServiceBound) {
+    unbindService(mConnection);
+}
+</pre></code>
