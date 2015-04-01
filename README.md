@@ -376,7 +376,7 @@
     * details can be found in [here](https://www.lucidchart.com/publicSegments/view/551bb1e4-d1b8-48a1-b38b-40a20a00560a/image.png)
 <table sytle="border: 0px;">
 <tr>
-<td><img width="800px" href="https://www.lucidchart.com/publicSegments/view/551bb1e4-d1b8-48a1-b38b-40a20a00560a/image.png" /></td>
+<td><img width="800px" src="https://www.lucidchart.com/publicSegments/view/551bb1e4-d1b8-48a1-b38b-40a20a00560a/image.png" /></td>
 </tr>
 </table>
     * remember to unbindService in onDestroy() otherwise the app will leak ServiceConnection out (potential accumulated memory leakage)
