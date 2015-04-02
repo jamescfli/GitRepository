@@ -380,8 +380,10 @@
 </tr>
 </table>
     * remember to unbindService in onDestroy() otherwise the app will leak ServiceConnection out (potential accumulated memory leakage)
-<pre><code>
-if (isServiceBound) {
-    unbindService(mConnection);
-}
-</pre></code>
+
+        <pre><code>
+        if (localService != null) {
+            unbindService(mConnection);
+        }
+        </pre></code>
+after all tests, the best practice is still to check whether localService (initiated in onServiceConnected() with localService = myBinderLocalService.getService()) is null or not

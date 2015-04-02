@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
     private Button buttonBind;
     private Button buttonUnbind;
 
-    private boolean isServiceBound = false;
+    LocalService.MyBinder myBinderLocalService;
 
 
     @Override
@@ -54,7 +54,6 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(MainActivity.this, LocalService.class);
                 bindService(intent, mConnection, Context.BIND_AUTO_CREATE + Context.BIND_DEBUG_UNBIND);
                   // + Context.BIND_DEBUG_UNBIND is from Bagilevi-Pedometer
-                isServiceBound = true;
             }
         });
         buttonUnbind = (Button) findViewById(R.id.buttonUnbind);
@@ -62,8 +61,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "[Button] UnBind pressed");
-                unbindService(mConnection);
-                isServiceBound = false;
+                if (localService != null) {
+                    unbindService(mConnection);
+                }
             }
         });
     }
@@ -97,7 +97,15 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         Log.i(TAG, "[Activity] onDestroy()");
         // IMPORTANT! prevent from leaking ServiceConnection
-        if (isServiceBound) {
+//        if (isServiceBound) {
+//            unbindService(mConnection);
+//        }
+//        // pingBinder() does not work since it always returns true if the service is local one
+//        if (myBinderLocalService.pingBinder()) {
+//            unbindService(mConnection);
+//        }
+        // check the service in the first place
+        if (localService != null) {
             unbindService(mConnection);
         }
         super.onDestroy();
@@ -106,14 +114,15 @@ public class MainActivity extends Activity {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
             Log.i(TAG, "[ServiceConnection] onServiceConnected()");
-            LocalService.MyBinder b = (LocalService.MyBinder) binder;
-            localService = b.getService();
+            myBinderLocalService = (LocalService.MyBinder) binder;
+            localService = myBinderLocalService.getService();
         }
         // onServiceDisconnected() is called when remote service crash (or killed by the System).
         // So, if a service running in a different process than your client fails on some exception,
         // you lose the connection and get the callback.
         public void onServiceDisconnected(ComponentName className) {
             Log.i(TAG, "[ServiceConnection] onServiceDisconnected()");
+            myBinderLocalService = null;
             localService = null;
         }
     };
