@@ -387,3 +387,11 @@
         }
         </pre></code>
 after all tests, the best practice is still to check whether localService (initiated in onServiceConnected() with localService = myBinderLocalService.getService()) is null or not
+* in [Android document](http://developer.android.com/guide/components/bound-services.html) however, bound flag is suggested:
+        <pre><code>
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+        </pre></code>
