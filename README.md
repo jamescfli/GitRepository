@@ -397,4 +397,5 @@ after all tests, the best practice is still to check whether localService (initi
         }
         </pre></code>
 
-70.
+70. ActivityTest61SensorList
+    * SensorManager.getSensorList(Sensor.TYPE_ALL) returns List<Sensor>
