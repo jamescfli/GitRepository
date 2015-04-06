@@ -29,6 +29,10 @@ public class MainActivity extends ActionBarActivity {
         List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         StringBuilder outputMessage = new StringBuilder();
         for (Sensor sensor: sensorList) {
+            outputMessage.append(sensor.getType());
+            outputMessage.append(". ");
+            outputMessage.append(sensor.getResolution());
+            outputMessage.append(".. ");
             outputMessage.append(sensor.getName());
             outputMessage.append("\n");
         }
