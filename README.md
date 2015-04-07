@@ -399,3 +399,10 @@ after all tests, the best practice is still to check whether localService (initi
 
 70. ActivityTest61SensorList
     * SensorManager.getSensorList(Sensor.TYPE_ALL) returns List<Sensor>
+
+71. ActivityTest62RotationVector
+    * derive rotation vector (Euler Angles) by 
+        - Gyroscope based Sensor Sensor.TYPE_ROTATION_VECTOR
+        - Magnetic field based Sensor Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR
+        - and derived Magnetic field RV with getRotationMatrix() method
+    * it seems Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR does not work since sensorEvent.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR was never TRUE in run time
