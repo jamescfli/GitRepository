@@ -64,26 +64,26 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="RV w Gyro" />
+            android:text="RV w Trv" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Yaw"
-            android:id="@+id/textViewRvGyroYaw"
+            android:id="@+id/textViewRvTrvYaw"
             android:layout_weight="1" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Pitch"
-            android:id="@+id/textViewRvGyroPitch"
+            android:id="@+id/textViewRvTrvPitch"
             android:layout_weight="1" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Roll"
-            android:id="@+id/textViewRvGyroRoll"
+            android:id="@+id/textViewRvTrvRoll"
             android:layout_weight="1" />
     </LinearLayout>
 
@@ -146,6 +146,37 @@
             android:layout_height="wrap_content"
             android:text="Roll"
             android:id="@+id/textViewRvRmRoll"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="RV w Gyro" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Yaw"
+            android:id="@+id/textViewRvGyroYaw"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Pitch"
+            android:id="@+id/textViewRvGyroPitch"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Roll"
+            android:id="@+id/textViewRvGyroRoll"
             android:layout_weight="1" />
     </LinearLayout>
 
