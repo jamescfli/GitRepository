@@ -415,3 +415,8 @@ after all tests, the best practice is still to check whether localService (initi
 <tr>
 <td><img width="400px" src="activitytest63xyplot.png" /></td>
 </tr>
+
+73. ActivityTest64Animation
+    * some animation examples to a textview
+    * source from the [CSDN link](http://blog.csdn.net/guolin_blog/article/details/43536355)
+    * effects are Opacity/Alpha, Rotation, Move Out, Combo, Add AnimatorListenerAdapter, and finally Animation through xml file.
