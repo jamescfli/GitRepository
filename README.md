@@ -420,3 +420,15 @@ after all tests, the best practice is still to check whether localService (initi
     * some animation examples to a textview
     * source from the [CSDN link](http://blog.csdn.net/guolin_blog/article/details/43536355)
     * effects are Opacity/Alpha, Rotation, Move Out, Combo, Add AnimatorListenerAdapter, and finally Animation through xml file.
+
+74. ActivityTest65
+    * SIM card reader for phone number and serial number
+
+75. ActivityTest66
+    * Display multiple images through LruCache
+    * Andriod Example: [description](http://developer.android.com/training/displaying-bitmaps/index.html) and [code](http://developer.android.com/downloads/samples/DisplayingBitmaps.zip)
+
+76. ActivityTest67AIDLServer + ActivityTest67AIDLClient
+
+77. AidlServer + AidlClient
+    * cloned from [manishkpr/Android-AIDL-Example](https://github.com/manishkpr/Android-AIDL-Example)
