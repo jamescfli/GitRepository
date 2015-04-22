@@ -412,13 +412,14 @@ after all tests, the best practice is still to check whether localService (initi
     * some further decoration to the plot
     * result:
 <table sytle="border: 0px;">
-<tr>
-<td><img width="400px" src="activitytest63xyplot.png" /></td>
-</tr>
+    <tr>
+        <td><img width="400px" src="activitytest63xyplot.png" /></td>
+    </tr>
+</table>
 
 73. ActivityTest64Animation
     * some animation examples to a textview
-    * source from the [CSDN link](http://blog.csdn.net/guolin_blog/article/details/43536355)
+    * source from the [CSDN instruction](http://blog.csdn.net/guolin_blog/article/details/43536355)
     * effects are Opacity/Alpha, Rotation, Move Out, Combo, Add AnimatorListenerAdapter, and finally Animation through xml file.
 
 74. ActivityTest65
@@ -432,3 +433,6 @@ after all tests, the best practice is still to check whether localService (initi
 
 77. AidlServer + AidlClient
     * cloned from [manishkpr/Android-AIDL-Example](https://github.com/manishkpr/Android-AIDL-Example)
+
+78. ActivityTest68DisplayBitmaps
+    * show image according to requested width and height
