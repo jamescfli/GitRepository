@@ -436,3 +436,5 @@ after all tests, the best practice is still to check whether localService (initi
 
 78. ActivityTest68DisplayBitmaps
     * show image according to requested width and height
+    * load images off the UI thread
+    * solve the concurrency issue if using listview / gridview

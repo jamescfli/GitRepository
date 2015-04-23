@@ -1,8 +1,7 @@
 package cn.nec.nlc.jamesli.tools.at68displaybitamps;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,10 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-
 public class MainActivity extends ActionBarActivity {
     private Button buttonLoadImage;
     private ImageView mImageView;
+    private Bitmap mBitmap;     // mPlaceHolderBitmap in loadBitmap() method
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +23,54 @@ public class MainActivity extends ActionBarActivity {
         buttonLoadImage = (Button) findViewById(R.id.buttonLoadImage);
         mImageView = (ImageView) findViewById(R.id.imageView);
 
-
-
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadBitmap(R.drawable.myimage, mImageView);
+                loadBitmap(R.drawable.myimage, mBitmap, mImageView);
             }
         });
     }
 
-    public void loadBitmap(int resId, ImageView imageView) {
-        BitmapWorkerTask task = new BitmapWorkerTask(this, imageView);
-        task.execute(resId);
+    public void loadBitmap(int resId, Bitmap mPlaceHolderBitmap, ImageView imageView) {
+//        BitmapWorkerTask task = new BitmapWorkerTask(this, imageView);
+//        task.execute(resId);
+        if (cancelPotentialWork(resId, imageView)) {
+            final BitmapWorkerTask task = new BitmapWorkerTask(this, imageView);
+            final AsyncDrawable asyncDrawable =
+                    new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
+            imageView.setImageDrawable(asyncDrawable);
+            task.execute(resId);
+        }
+    }
+
+    public static boolean cancelPotentialWork(int data, ImageView imageView) {
+        final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
+
+        if (bitmapWorkerTask != null) {
+            final int bitmapData = bitmapWorkerTask.data;
+            // If bitmapData is not yet set or it differs from the new data
+            if (bitmapData == 0 || bitmapData != data) {
+                // Cancel previous task
+                bitmapWorkerTask.cancel(true);
+            } else {
+                // The same work is already in progress
+                return false;
+            }
+        }
+        // No task associated with the ImageView, or an existing task was cancelled
+        return true;
+    }
+
+    // A helper method is used above to retrieve the task associated with a particular ImageView.
+    private static BitmapWorkerTask getBitmapWorkerTask(ImageView imageView) {
+        if (imageView != null) {
+            final Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof AsyncDrawable) {
+                final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+                return asyncDrawable.getBitmapWorkerTask();
+            }
+        }
+        return null;
     }
 
     @Override

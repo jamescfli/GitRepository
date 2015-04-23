@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
@@ -11,8 +12,10 @@ import java.lang.ref.WeakReference;
 
 class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     private Context mContext;
+    // The WeakReference to the ImageView ensures that the AsyncTask does not prevent the
+    // ImageView and anything it references from being garbage collected.
     private final WeakReference<ImageView> imageViewReference;
-    private int data = 0;
+    public int data = 0;    // originally was private, but referred in
     private int reqWidth;
     private int reqHeight;
 
@@ -34,15 +37,35 @@ class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     // Once complete, see if ImageView is still around and set bitmap.
     @Override
     protected void onPostExecute(Bitmap bitmap) {
+        if (isCancelled()) {
+            bitmap = null;
+        }
+        // There’s no guarantee the ImageView is still around when the task finishes,
+        // so you must also check the reference in onPostExecute().
         if (imageViewReference != null && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
-            if (imageView != null) {
+            final BitmapWorkerTask bitmapWorkerTask =
+                    getBitmapWorkerTask(imageView);
+            if (this == bitmapWorkerTask && imageView != null) {
                 imageView.setImageBitmap(bitmap);
             }
         }
+
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private BitmapWorkerTask getBitmapWorkerTask(ImageView imageView) {
+        if (imageView != null) {
+            final Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof AsyncDrawable) {
+                final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+                return asyncDrawable.getBitmapWorkerTask();
+            }
+        }
+        return null;
+    }
+
+    public static int calculateInSampleSize
+            (BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of images
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -63,7 +86,8 @@ class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
+    public static Bitmap decodeSampledBitmapFromResource
+            (Resources res, int resId, int reqWidth, int reqHeight) {
         // First decode with inJustDecodeBounds = true to check dimensions without actually
         // decoding the bitmap
         final BitmapFactory.Options options = new BitmapFactory.Options();
