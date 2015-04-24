@@ -15,14 +15,16 @@ class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     // The WeakReference to the ImageView ensures that the AsyncTask does not prevent the
     // ImageView and anything it references from being garbage collected.
     private final WeakReference<ImageView> imageViewReference;
-    public int data = 0;    // originally was private, but referred in
+    private BitmapCache mBitmapCache;
+    public int data = 0; // originally was private, but referred in MainActivity#cancelPotentialWork()
     private int reqWidth;
     private int reqHeight;
 
-    public BitmapWorkerTask(Context context, ImageView imageView) {
+    public BitmapWorkerTask(Context context, ImageView imageView, BitmapCache bitmapCache) {
         mContext = context;
         // Use a WeakReference to ensure the ImageView can be garbage collected
         imageViewReference = new WeakReference<ImageView>(imageView);
+        mBitmapCache = bitmapCache;
         reqWidth = imageViewReference.get().getWidth();
         reqHeight = imageViewReference.get().getHeight();
     }
@@ -31,7 +33,12 @@ class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Integer... params) {
         data = params[0];
-        return decodeSampledBitmapFromResource(mContext.getResources(), data, reqWidth, reqHeight);
+        final Bitmap bitmap = decodeSampledBitmapFromResource
+                (mContext.getResources(), data, reqWidth, reqHeight);
+        if (mBitmapCache != null) {
+            mBitmapCache.addBitmapToMemoryCache(String.valueOf(data), bitmap);
+        }
+        return bitmap;
     }
 
     // Once complete, see if ImageView is still around and set bitmap.

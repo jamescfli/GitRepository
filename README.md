@@ -438,3 +438,6 @@ after all tests, the best practice is still to check whether localService (initi
     * show image according to requested width and height
     * load images off the UI thread
     * solve the concurrency issue if using listview / gridview
+    * reference project could be [marbarfa/ML-Example1](https://github.com/marbarfa/ML-Example1)
+    * note the unit of 'cacheSize' for LruCache<String, Bitmap> is in Bytes rather than KB or MB
+    * It is better to use ActivityManager#getMemoryClass() to get the memeory size of the activity in MB rather than Runtime

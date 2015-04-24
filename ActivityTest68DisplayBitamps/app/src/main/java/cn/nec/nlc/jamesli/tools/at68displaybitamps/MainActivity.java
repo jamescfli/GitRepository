@@ -1,6 +1,7 @@
 package cn.nec.nlc.jamesli.tools.at68displaybitamps;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ public class MainActivity extends ActionBarActivity {
     private Button buttonLoadImage;
     private ImageView mImageView;
     private Bitmap mBitmap;     // mPlaceHolderBitmap in loadBitmap() method
+    private BitmapCache mBitmapCache;
+//    private BitmapWorkerTask mTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +25,15 @@ public class MainActivity extends ActionBarActivity {
 
         buttonLoadImage = (Button) findViewById(R.id.buttonLoadImage);
         mImageView = (ImageView) findViewById(R.id.imageView);
-
+        // set the default image
+//        mImageView.setImageResource(R.drawable.placeholder);    // 25K, 500*350px
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.placeholder);
+        mBitmapCache = new BitmapCache();
+//        mTask = new BitmapWorkerTask(this, mImageView, mBitmapCache);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadBitmap(R.drawable.myimage, mBitmap, mImageView);
+                loadBitmap(R.drawable.jaguars_logo, mBitmap, mImageView);
             }
         });
     }
@@ -34,12 +41,27 @@ public class MainActivity extends ActionBarActivity {
     public void loadBitmap(int resId, Bitmap mPlaceHolderBitmap, ImageView imageView) {
 //        BitmapWorkerTask task = new BitmapWorkerTask(this, imageView);
 //        task.execute(resId);
-        if (cancelPotentialWork(resId, imageView)) {
-            final BitmapWorkerTask task = new BitmapWorkerTask(this, imageView);
-            final AsyncDrawable asyncDrawable =
-                    new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
-            imageView.setImageDrawable(asyncDrawable);
-            task.execute(resId);
+//        if (cancelPotentialWork(resId, imageView)) {
+//            final BitmapWorkerTask task = new BitmapWorkerTask(this, imageView, mBitmapCache);
+//            final AsyncDrawable asyncDrawable =
+//                    new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
+//            imageView.setImageDrawable(asyncDrawable);
+//            task.execute(resId);
+//        }
+
+        final String imageKey = String.valueOf(resId);
+        final Bitmap bitmap = mBitmapCache.getBitmapFromMemCache(imageKey);
+        if (bitmap != null) {
+            // already has the bitmap in cache
+            mImageView.setImageBitmap(bitmap);
+        } else {
+            if (cancelPotentialWork(resId, imageView)) {
+                final BitmapWorkerTask task = new BitmapWorkerTask(this, imageView, mBitmapCache);
+                final AsyncDrawable asyncDrawable =
+                        new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
+                imageView.setImageDrawable(asyncDrawable);
+                task.execute(resId);
+            }
         }
     }
 

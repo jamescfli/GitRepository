@@ -26,4 +26,11 @@
         android:layout_below="@+id/buttonLoadImage"
         android:layout_alignParentStart="true" />
 
+    <GridView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/gridView"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
