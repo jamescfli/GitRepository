@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
         // set the default image
 //        mImageView.setImageResource(R.drawable.placeholder);    // 25K, 500*350px
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.placeholder);
-        mBitmapCache = new BitmapCache();
+        mBitmapCache = new BitmapCache(this);
 //        mTask = new BitmapWorkerTask(this, mImageView, mBitmapCache);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
             @Override
