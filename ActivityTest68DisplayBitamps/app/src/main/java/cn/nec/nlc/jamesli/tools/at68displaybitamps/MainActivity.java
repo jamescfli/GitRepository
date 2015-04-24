@@ -16,7 +16,7 @@ public class MainActivity extends ActionBarActivity {
     private ImageView mImageView;
     private Bitmap mBitmap;     // mPlaceHolderBitmap in loadBitmap() method
     private BitmapCache mBitmapCache;
-//    private BitmapWorkerTask mTask;
+    private BitmapDiskCache mBitmapDiskCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
 //        mImageView.setImageResource(R.drawable.placeholder);    // 25K, 500*350px
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.placeholder);
         mBitmapCache = new BitmapCache(this);
-//        mTask = new BitmapWorkerTask(this, mImageView, mBitmapCache);
+        mBitmapDiskCache = new BitmapDiskCache(this);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,16 +39,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void loadBitmap(int resId, Bitmap mPlaceHolderBitmap, ImageView imageView) {
-//        BitmapWorkerTask task = new BitmapWorkerTask(this, imageView);
-//        task.execute(resId);
-//        if (cancelPotentialWork(resId, imageView)) {
-//            final BitmapWorkerTask task = new BitmapWorkerTask(this, imageView, mBitmapCache);
-//            final AsyncDrawable asyncDrawable =
-//                    new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
-//            imageView.setImageDrawable(asyncDrawable);
-//            task.execute(resId);
-//        }
-
         final String imageKey = String.valueOf(resId);
         final Bitmap bitmap = mBitmapCache.getBitmapFromMemCache(imageKey);
         if (bitmap != null) {
@@ -56,7 +46,8 @@ public class MainActivity extends ActionBarActivity {
             mImageView.setImageBitmap(bitmap);
         } else {
             if (cancelPotentialWork(resId, imageView)) {
-                final BitmapWorkerTask task = new BitmapWorkerTask(this, imageView, mBitmapCache);
+                final BitmapWorkerTask task = new BitmapWorkerTask(this, imageView,
+                        mBitmapCache, mBitmapDiskCache);
                 final AsyncDrawable asyncDrawable =
                         new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
                 imageView.setImageDrawable(asyncDrawable);

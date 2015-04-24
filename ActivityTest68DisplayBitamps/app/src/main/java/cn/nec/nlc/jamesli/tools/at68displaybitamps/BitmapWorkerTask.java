@@ -16,15 +16,18 @@ class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     // ImageView and anything it references from being garbage collected.
     private final WeakReference<ImageView> imageViewReference;
     private BitmapCache mBitmapCache;
+    private BitmapDiskCache mBitmapDiskCache;
     public int data = 0; // originally was private, but referred in MainActivity#cancelPotentialWork()
     private int reqWidth;
     private int reqHeight;
 
-    public BitmapWorkerTask(Context context, ImageView imageView, BitmapCache bitmapCache) {
+    public BitmapWorkerTask(Context context, ImageView imageView,
+                            BitmapCache bitmapCache, BitmapDiskCache bitmapDiskCache) {
         mContext = context;
         // Use a WeakReference to ensure the ImageView can be garbage collected
         imageViewReference = new WeakReference<ImageView>(imageView);
         mBitmapCache = bitmapCache;
+        mBitmapDiskCache = bitmapDiskCache;
         reqWidth = imageViewReference.get().getWidth();
         reqHeight = imageViewReference.get().getHeight();
     }
@@ -33,13 +36,22 @@ class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Integer... params) {
         data = params[0];
-        final Bitmap bitmap = decodeSampledBitmapFromResource
-                (mContext.getResources(), data, reqWidth, reqHeight);
-        if (mBitmapCache != null) {
-            mBitmapCache.addBitmapToMemoryCache(String.valueOf(data), bitmap);
+        // this time, check the disk cache first, but still in background
+        Bitmap bitmap = mBitmapDiskCache.getBitmapFromDiskCache(String.valueOf(data));
+        if (bitmap == null) {   // not found in disk cache
+            bitmap = decodeSampledBitmapFromResource
+                    (mContext.getResources(), data, reqWidth, reqHeight);
         }
+        // for the test, temporarily null memory cache
+//        if (mBitmapCache != null) {
+//            mBitmapCache.addBitmapToMemoryCache(String.valueOf(data), bitmap);
+//        }
+        // Add final bitmap to caches
+        mBitmapDiskCache.addBitmapToCache(String.valueOf(data), bitmap);
         return bitmap;
     }
+
+
 
     // Once complete, see if ImageView is still around and set bitmap.
     @Override
