@@ -441,3 +441,9 @@ after all tests, the best practice is still to check whether localService (initi
     * reference project could be [marbarfa/ML-Example1](https://github.com/marbarfa/ML-Example1)
     * note the unit of 'cacheSize' for LruCache<String, Bitmap> is in Bytes rather than KB or MB
     * It is better to use ActivityManager#getMemoryClass() to get the memeory size of the activity in MB rather than Runtime
+    * Cache on disk was unfinished on 2015/04/24
+
+79. ActivityTest69UITest
+    * Layout test
+    * onepage/twopanes
+    * UIs
