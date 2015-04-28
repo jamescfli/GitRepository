@@ -16,6 +16,7 @@
 
 <!-- BEGIN_INCLUDE(all) -->
 <resources>
+    <!-- screens classified as large (for example, 7" tablets and above) -->
     <item name="main_layout" type="layout">@layout/twopanes</item>
     <bool name="has_two_panes">true</bool>
 </resources>

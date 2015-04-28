@@ -32,6 +32,8 @@ import android.app.FragmentTransaction;
  * This class should only be instanced and used on Android platforms that support the Action Bar,
  * that is, SDK level 11 and above.
  */
+
+// Both listeners deprecated in API level 21.
 public class CompatActionBarNavHandler implements TabListener, OnNavigationListener {
     // The listener that we notify of navigation events
     CompatActionBarNavListener mNavListener;

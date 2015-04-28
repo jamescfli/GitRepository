@@ -22,7 +22,7 @@ package cn.nec.nlc.jamesli.tools.at69uitest;
  * This singleton functions as the repository for the news we display.
  */
 public class NewsSource {
-    // the instance
+    // the instance, singleton, static: make sure it would not generate new cats and articles
     static NewsSource instance = null;
 
     // the category names
@@ -33,7 +33,7 @@ public class NewsSource {
 
     /** Returns the singleton instance of this class. */
     public static NewsSource getInstance() {
-        if (instance == null) {
+        if (instance == null) {     // singleton mode
             instance = new NewsSource();
         }
         return instance;

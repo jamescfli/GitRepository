@@ -16,7 +16,6 @@
 
 package cn.nec.nlc.jamesli.tools.at69uitest;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -44,20 +43,23 @@ public class ArticleActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCatIndex = getIntent().getExtras().getInt("catIndex", 0);
+        mCatIndex = getIntent().getExtras().getInt("catIndex", 0);  // default is 0
         mArtIndex = getIntent().getExtras().getInt("artIndex", 0);
 
         // If we are in two-pane layout mode, this activity is no longer necessary
-        if (getResources().getBoolean(R.bool.has_two_panes)) {
+        // detect that the orientation changed to landscape and react appropriately by ending the
+        // activity and return to the main activity so the content can display in the two-pane layout
+        if (getResources().getBoolean(R.bool.has_two_panes)) {  // defined in values/layouts.xml
             finish();
             return;
         }
 
         // Place an ArticleFragment as our content pane
         ArticleFragment f = new ArticleFragment();
+        // Fragment activity method getSupportFragmentManager()
         getSupportFragmentManager().beginTransaction().add(android.R.id.content, f).commit();
 
-        // Display the correct news article on the fragment
+        // Display the correct news article on the fragment, singleton mode NewsSource
         NewsArticle article = NewsSource.getInstance().getCategory(mCatIndex).getArticle(mArtIndex);
         f.displayArticle(article);
     }

@@ -73,7 +73,6 @@ public class NewsReaderActivity extends FragmentActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.main_layout);
         setContentView(R.layout.main_layout);
 
         // find our fragments
@@ -141,6 +140,7 @@ public class NewsReaderActivity extends FragmentActivity
         // Set up a CompatActionBarNavHandler to deliver us the Action Bar nagivation events
         CompatActionBarNavHandler handler = new CompatActionBarNavHandler(this);
         if (showTabs) {
+            // in tabs
             actionBar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_TABS);
             int i;
             for (i = 0; i < CATEGORIES.length; i++) {
@@ -149,6 +149,7 @@ public class NewsReaderActivity extends FragmentActivity
             actionBar.setSelectedNavigationItem(selTab);
         }
         else {
+            // Drop-down list
             actionBar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_LIST);
             SpinnerAdapter adap = new ArrayAdapter<String>(this, R.layout.actionbar_list_item,
                     CATEGORIES);
@@ -235,7 +236,7 @@ public class NewsReaderActivity extends FragmentActivity
 
     /** Called when news category button is clicked.
      *
-     * This is the button that we display on UIs that don't have an action bar. This button
+     * This is the button that we display on UIs that DON'T have an action bar. This button
      * calls up a list of news categories and switches to the given category.
      */
     @Override

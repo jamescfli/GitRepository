@@ -45,6 +45,10 @@ public class HeadlinesFragment extends ListFragment implements OnItemClickListen
 
     /**
      * Represents a listener that will be notified of headline selections.
+     * One very important point to keep in mind when designing your fragments is to
+     * not create a strong coupling to a specific activity. You can usually do that
+     * by defining an interface that abstracts all the ways in which the fragment needs
+     * to interact with its host activity, and then the host activity implements that interface
      */
     public interface OnHeadlineSelectedListener {
         /**
@@ -66,7 +70,7 @@ public class HeadlinesFragment extends ListFragment implements OnItemClickListen
         super.onStart();
         setListAdapter(mListAdapter);
         getListView().setOnItemClickListener(this);
-        loadCategory(0);
+        loadCategory(0);    // default value
     }
 
     @Override
@@ -116,9 +120,11 @@ public class HeadlinesFragment extends ListFragment implements OnItemClickListen
      */
     public void setSelectable(boolean selectable) {
         if (selectable) {
+            // CHOICE_MODE_SINGLE: The list allows up to one choice
             getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         }
         else {
+            // CHOICE_MODE_NONE: Normal list that does not indicate choices
             getListView().setChoiceMode(ListView.CHOICE_MODE_NONE);
         }
     }

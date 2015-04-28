@@ -18,6 +18,7 @@ package cn.nec.nlc.jamesli.tools.at69uitest;
 
 /**
  * A news category (collection of articles).
+ * category -> article -> headline + body (-> paragraph -> word -> character)
  */
 public class NewsCategory {
     // how many articles?

@@ -30,7 +30,8 @@ public class NewsArticle {
     final int PARAGRAPHS_PER_ARTICLE = 5;
 
     // Headline and body
-    String mHeadline, mBody;
+    String mHeadline;
+    String mBody;   // in simple html for WebView
 
     /**
      * Create a news article with randomly generated text.
@@ -51,7 +52,7 @@ public class NewsArticle {
         mBody = sb.toString();
     }
 
-    /** Returns the headline. */
+    /** Returns the headline (String). */
     public String getHeadline() {
         return mHeadline;
     }

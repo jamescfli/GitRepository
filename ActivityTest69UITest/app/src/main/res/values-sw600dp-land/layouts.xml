@@ -16,6 +16,7 @@
 
 <!-- BEGIN_INCLUDE(all) -->
 <resources>
+    <!-- use sw600dp to indicate the two-pane layout is for screens on which the smallest-width is 600 dp -->
     <item name="main_layout" type="layout">@layout/twopanes</item>
     <bool name="has_two_panes">true</bool>
 </resources>

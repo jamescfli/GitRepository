@@ -43,6 +43,7 @@ public class ArticleFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // WebKit. A View that displays web pages. The article is in html format.
         mWebView = new WebView(getActivity());
         loadWebView();
         return mWebView;
@@ -66,6 +67,7 @@ public class ArticleFragment extends Fragment {
      */
     void loadWebView() {
         if (mWebView != null) {
+            // loadData(String data, String mimeType, String encoding)
             mWebView.loadData(mNewsArticle == null ? "" : mNewsArticle.getBody(), "text/html",
                         "utf-8");
         }
