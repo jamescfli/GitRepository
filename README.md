@@ -447,3 +447,10 @@ after all tests, the best practice is still to check whether localService (initi
     * Layout test
     * onepage/twopanes
     * UIs
+
+80. ActivityTest70CustomView
+
+81. ActivityTest71MaterialDesign
+    * test RecyclerView + CardView
+    * vector drawable
+    * legacy API support
