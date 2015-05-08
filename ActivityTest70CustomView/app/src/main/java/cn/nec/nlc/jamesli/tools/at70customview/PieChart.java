@@ -641,7 +641,7 @@ public class PieChart extends ViewGroup {
     private void init() {
         // Force the background to software rendering because otherwise the Blur
         // filter won't work.
-        setLayerToSW(this);
+        setLayerToSW(this);     // PieChart
 
         // Set up the paint for the label text
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
