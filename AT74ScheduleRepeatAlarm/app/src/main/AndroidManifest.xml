@@ -21,15 +21,16 @@
             </intent-filter>
         </activity>
 
+        <!--  android:enabled="false" means have to be called in explicit fashion -->
         <receiver
             android:name=".MyWakefulReceiver"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="false" >
         </receiver>
 
         <service
             android:name=".MyIntentService"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="false" >
         </service>
     </application>
