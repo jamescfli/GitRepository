@@ -454,3 +454,8 @@ after all tests, the best practice is still to check whether localService (initi
     * test RecyclerView + CardView
     * vector drawable
     * legacy API support
+
+82. AT74ScheduleRepeatAlarm
+    * test getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); or clearFlags()
+    * use WakeLock to programmatically keep or release your CPU
+    * test MyWakefulReceiver to keep your CPU on when handling through IntentService
