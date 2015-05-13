@@ -33,6 +33,17 @@
             android:enabled="false"
             android:exported="false" >
         </service>
+
+        <receiver android:name=".SampleAlarmReceiver"></receiver>
+
+        <receiver android:name=".SampleBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+        <service android:name=".SampleSchedulingService" />
+
     </application>
 
 </manifest>

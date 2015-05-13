@@ -459,3 +459,7 @@ after all tests, the best practice is still to check whether localService (initi
     * test getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); or clearFlags()
     * use WakeLock to programmatically keep or release your CPU
     * test MyWakefulReceiver to keep your CPU on when handling through IntentService
+    * test SampleAlarmReceiver to test scheduled alarm which starts service on scheduled time
+    * implant SampleBootReceiver to the current package such that the alarm will be reactivated after reboot
+    * wrap BootReceiver in ComponentName before adding to pacakge manager
+    * use WakefulBroadcastReceiver to start wakefulService to prevent CPU from sleeping
