@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">AT75MapLocationContact</string>
+
+    <string name="find_address_string">Find Address</string>
+    <string name="action_settings">Settings</string>
+</resources>
