@@ -466,3 +466,4 @@ after all tests, the best practice is still to check whether localService (initi
 
 83. AT75MapLocationContact
     * example from Coursera to test startActivityForResult()
+    * test proguard from bundle.gradle minifyEnabled true
