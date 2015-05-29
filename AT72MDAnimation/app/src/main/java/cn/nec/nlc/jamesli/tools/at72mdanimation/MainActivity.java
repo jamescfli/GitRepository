@@ -31,9 +31,15 @@ public class MainActivity extends Activity {
 
     public void revealSurfaceView(View view) {
         View myView = findViewById(R.id.surfaceView);
-        int cx = (myView.getLeft() + myView.getRight()) / 2;    // left 48, right 948, cx = 498
-        int cy = (myView.getTop() + myView.getBottom()) / 2;    // top 192, bottom 792, cy = 492
-        int finalRadius = Math.max(myView.getWidth(), myView.getHeight()); // width 900, height 600
+        int cx = (myView.getLeft() + myView.getRight()) / 2 - myView.getLeft();
+            // emulator: left 48, right 948, cx = 450
+            // moto G: left 32, right 632, cx = 300
+        int cy = (myView.getTop() + myView.getBottom()) / 2 - myView.getTop();
+            // emulator: top 192, bottom 792, cy = 300
+            // moto G: top 128, right 528, cx = 200
+        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+            // emulator: width 900, height 600
+            // moto G: width 600, height 400
         // Added in API Level 21
         Animator anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
         myView.setVisibility(View.VISIBLE);
@@ -42,8 +48,8 @@ public class MainActivity extends Activity {
 
     public void hideSurfaceView(View view) {
         final View myView = findViewById(R.id.surfaceView);
-        int cx = (myView.getLeft() + myView.getRight()) / 2;    // left 48, right 948, cx = 498
-        int cy = (myView.getTop() + myView.getBottom()) / 2;    // top 192, bottom 792, cy = 492
+        int cx = (myView.getLeft() + myView.getRight()) / 2 - myView.getLeft();    // left 48, right 948, cx = 450
+        int cy = (myView.getTop() + myView.getBottom()) / 2 - myView.getTop();    // top 192, bottom 792, cy = 300
         int initialRadius = myView.getWidth(); // width 900, height 600
         Animator anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, 0);
         anim.addListener(new AnimatorListenerAdapter() {
