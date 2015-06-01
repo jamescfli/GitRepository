@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="220dp"
+    android:layout_height="160dp"
+    android:gravity="center_vertical|center_horizontal"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:background="#6666FF"
+    android:id="@+id/custome_dialog"
+    >
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="240dp"
+        android:layout_height="120dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#6666FF"
+        android:text="@string/dialog_text"
+        android:textColor="#ffffff"
+        />
+
+    <Button
+        android:id="@+id/btnVisitMoma"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/textView"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="0dp"
+        android:text="@string/button_text_view_moma"
+        android:textSize="12sp"
+        android:background="#6666FF"
+        android:textColor="#ffffff"
+        />
+
+    <Button
+        android:id="@+id/btnNotNow"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="0dp"
+        android:text="@string/button_text_not_now"
+        android:textSize="12sp"
+        android:background="#6666FF"
+        android:textColor="#ffffff"
+        />
+</RelativeLayout>
