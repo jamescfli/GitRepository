@@ -470,3 +470,4 @@ after all tests, the best practice is still to check whether localService (initi
 
 84. ModernArtUI
     * Coursera Android Part I, miniproject, Modern Art UI
+    * getBackgroundColor of a View by ((ColorDrawable) aView.getBackground()).getColor();

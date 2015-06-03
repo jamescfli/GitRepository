@@ -41,8 +41,8 @@ public class MainActivity extends Activity implements
 
 	}
 
-	// If there is no fragment_container ID, then the application is in
-	// two-pane mode
+	// If there is no fragment_container ID, which is equivalent to say layout-large is loaded
+	// then the application is in two-pane mode
 
 	private boolean isInTwoPaneMode() {
 

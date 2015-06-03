@@ -20,13 +20,9 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
     private static final int VIEWS_NUMBER = 6;
     private ArrayList<View> mViews;
-    private static final int COLOR_SCALE = 0;
-    private static final int GREY_SCALE = 1;
-//    private View mViewRed, mViewWhite, mViewBlue, mViewGreenYellow, mViewPurple, mViewOrange;
     private int[] mViewsActualBgColors = new int[VIEWS_NUMBER];
     private int[] mViewsBaseBgColors = new int[VIEWS_NUMBER];
     private SeekBar seekBarForColorChange;
-    private int seekBarValue;
 
 
 
@@ -59,12 +55,12 @@ public class MainActivity extends Activity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
+                // N.A.
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
+                // N.A.
             }
         });
     }

@@ -66,7 +66,7 @@ public class FeedFragmentData {
 				Log.i(TAG, "JSONException");
 			}
 
-			mFeeds.put(id, procFeed(feed));
+			mFeeds.put(id, procFeed(feed)); // hash: id -> String
 		
 		}
 	}
