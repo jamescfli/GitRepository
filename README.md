@@ -471,3 +471,9 @@ after all tests, the best practice is still to check whether localService (initi
 84. ModernArtUI
     * Coursera Android Part I, miniproject, Modern Art UI
     * getBackgroundColor of a View by ((ColorDrawable) aView.getBackground()).getColor();
+
+85. AT77DisplayBitmaps
+    * one of the Android examples
+
+86. AT78PlayActionBar
+    * let action bar listens to scrolling event and automatically hide itself if scrolling down, like Zhihu.com
