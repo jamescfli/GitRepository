@@ -477,3 +477,10 @@ after all tests, the best practice is still to check whether localService (initi
 
 86. AT78PlayActionBar
     * let action bar listens to scrolling event and automatically hide itself if scrolling down, like Zhihu.com
+    * view tree observer is used to register listeners that can be notified of global changes in the view tree, e.g. 'scrollView.getViewTreeObserver().addOnScrollChangedListener'
+
+87. ReadSMS project
+    * com.sonyericsson.readsms from one of Erik Hellman's reflection examples
+    * revise the method of fetching cursor by managedQuery, to apply LoaderManager with multiple callbacks, introduced by [Understanding the LoaderManager - Alex Lockwood](http://www.androiddesignpatterns.com/2012/07/understanding-loadermanager.html)
+
+88.
