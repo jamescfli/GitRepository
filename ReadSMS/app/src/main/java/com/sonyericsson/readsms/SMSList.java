@@ -28,6 +28,7 @@ public class SMSList extends ListActivity implements
 
     /**
      * Copied from Telephony.java in frameworks/base
+     * comment template: content://authority/optionalPath/optionalId
      */
     public static final Uri SMS_INBOX_CONTENT_URI = Uri.parse("content://sms/inbox");
 

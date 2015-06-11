@@ -483,4 +483,5 @@ after all tests, the best practice is still to check whether localService (initi
     * com.sonyericsson.readsms from one of Erik Hellman's reflection examples
     * revise the method of fetching cursor by managedQuery, to apply LoaderManager with multiple callbacks, introduced by [Understanding the LoaderManager - Alex Lockwood](http://www.androiddesignpatterns.com/2012/07/understanding-loadermanager.html)
 
-88.
+88. AT80ContentResolver
+    * to test ContentResolver (a wrapper for ContentProvider) and ContentValues for insert
