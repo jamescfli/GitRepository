@@ -485,3 +485,6 @@ after all tests, the best practice is still to check whether localService (initi
 
 88. AT80ContentResolver
     * to test ContentResolver (a wrapper for ContentProvider) and ContentValues for insert
+
+89. CPT06ImageSample (CPT06LentItemMemo)
+    * test ContentProivder (DbSchema, OpenHelper), ImageLoader, Fragment with ActionBar, Spanned, IntentService and etc.
