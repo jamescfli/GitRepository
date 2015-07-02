@@ -488,3 +488,17 @@ after all tests, the best practice is still to check whether localService (initi
 
 89. CPT06ImageSample (CPT06LentItemMemo)
     * test ContentProivder (DbSchema, OpenHelper), ImageLoader, Fragment with ActionBar, Spanned, IntentService and etc.
+
+90. AT81ImageLoader
+    * GridFragment, ListFragment, GalleryFragment, and PagerFragment
+    * Complex combination of Grid and List in ViewPagers
+    * Universa Image Loader from [GitHub](https://github.com/nostra13/Android-Universal-Image-Loader)
+    * ViewPager.setAdapter(new FragmentPagerAdapter(FragmentManager))
+    * Scrolling, Fling pause for uploading in Menu options
+
+91. AT82EventBusDemo
+    * gradle for EventBus and Apache StringUtils
+        - compile "org.apache.commons:commons-lang3:3.3.2"
+        - compile 'de.greenrobot:eventbus:2.4.0'
+    * EventBus.getDefault().register(this); in onStart(), EventBus.getDefault().unregister(this) in onStop()
+    * EventBus.getDefault().post(some message);
