@@ -14,9 +14,9 @@ public class MainActivity extends BaseActivity {
 
     private Button sendSimplestEventBtn;
 //    private Button sendEventSelfDefinedBtn;
-//    private Button diffThreadModeBtn;
+    private Button diffThreadModeBtn;
 //    private Button sendOrderedEventBtn;
-//    private Button sendStickyEventBtn;
+    private Button sendStickyEventBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,33 +43,33 @@ public class MainActivity extends BaseActivity {
 //                startActivity(new Intent(context, SendSelfDefinedEventActivity.class));
 //            }
 //        });
-//
-//        diffThreadModeBtn = (Button)findViewById(R.id.diff_thread_mode);
-//        diffThreadModeBtn.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(context, DiffThreadModeActivity.class));
-//            }
-//        });
-//
+
+        diffThreadModeBtn = (Button)findViewById(R.id.diff_thread_mode);
+        diffThreadModeBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, DiffThreadModeActivity.class));
+            }
+        });
+
 //        sendOrderedEventBtn = (Button)findViewById(R.id.send_ordered_event);
-//        sendOrderedEventBtn.setOnClickListener(new OnClickListener() {
+//        sendOrderedEventBtn.setOnClickListener(new View.OnClickListener() {
 //
 //            @Override
 //            public void onClick(View v) {
 //                startActivity(new Intent(context, ViewPagerDemo.class));
 //            }
 //        });
-//
-//        sendStickyEventBtn = (Button)findViewById(R.id.send_sticky_event);
-//        sendStickyEventBtn.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(context, SendStickyEventActivity.class));
-//            }
-//        });
+
+        sendStickyEventBtn = (Button)findViewById(R.id.send_sticky_event);
+        sendStickyEventBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, SendStickyEventActivity.class));
+            }
+        });
     }
 
 }

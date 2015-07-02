@@ -502,3 +502,4 @@ after all tests, the best practice is still to check whether localService (initi
         - compile 'de.greenrobot:eventbus:2.4.0'
     * EventBus.getDefault().register(this); in onStart(), EventBus.getDefault().unregister(this) in onStop()
     * EventBus.getDefault().post(some message);
+    * EventBus.getDefault().postSticky(some message), registerSticky(this), and unregister(this)
