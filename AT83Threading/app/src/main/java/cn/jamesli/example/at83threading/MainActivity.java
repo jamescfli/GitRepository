@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,47 +12,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends Activity {
-    private final static int SET_PROGRESS_BAR_VISIBILITY = 0;
-    private final static int PROGRESS_UPDATE = 1;
-    private final static int SET_BITMAP = 2;
-
     private ImageView mImageView;
     private ProgressBar mProgressBar;
-//    private Bitmap mBitmap;
     private int mDelay = 500;
-//    private final Handler handler = new Handler();  // Handler in the MainActivity
 
-    static class UIHandler extends Handler {
-        WeakReference<MainActivity> mParent;
-
-        public UIHandler(WeakReference<MainActivity> parent) {
-            mParent = parent;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            MainActivity parent = mParent.get(); // Returns the referent of the reference object
-            if (null != parent) {
-                switch (msg.what) {
-                    case SET_PROGRESS_BAR_VISIBILITY: {
-                        parent.getProgressBar().setVisibility((Integer) msg.obj);
-                        break;
-                    }
-                    case PROGRESS_UPDATE: {
-                        parent.getProgressBar().setProgress((Integer) msg.obj);
-                        break;
-                    }
-                    case SET_BITMAP: {
-                        parent.getImageView().setImageBitmap((Bitmap) msg.obj);
-                    }
-                }
-            }
-        }
-    }
-    private Handler handler = new UIHandler(new WeakReference<MainActivity>(this));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +32,7 @@ public class MainActivity extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new LoadIconTask(R.drawable.painter, handler)).start();
+                new Thread(new LoadIconTask(R.drawable.painter)).start();
             }
         });
 
@@ -82,35 +46,59 @@ public class MainActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    // event can be run in different threads, e.g. onEvent, onEventBackgroundThread, onEventAsync
+    // and onEventMainThread. since we need to update UI, the callbacks should be run in main UI
+    // thread, so onEventMainThread is taken.
+    public void onEventMainThread(ProgressBarVisibilityEvent event) {
+        if (event.isVisible()) {
+            mProgressBar.setVisibility(ProgressBar.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+        }
+    }
+
+    public void onEventMainThread(ProgressBarUpdateEvent event) {
+        mProgressBar.setProgress(event.getProgress());
+    }
+
+    public void onEventMainThread(Bitmap bitmap) {
+        mImageView.setImageBitmap(bitmap);
+    }
+
     private class LoadIconTask implements Runnable {
         private final int resId;
-        private final Handler handler;
 
         // Runnable can come with parameters through constructor as follows, resId is a parameter
-        LoadIconTask(int resId, Handler handler) {
+        LoadIconTask(int resId) {
             this.resId = resId;
-            this.handler = handler;
         }
 
         public void run() {
             // set progressBar visible
-            Message msg = handler.obtainMessage(SET_PROGRESS_BAR_VISIBILITY, ProgressBar.VISIBLE);
-            handler.sendMessage(msg);
+            EventBus.getDefault().post(new ProgressBarVisibilityEvent(ProgressBar.VISIBLE));
 
             // load bitmap, update progressBar in the meantime
             final Bitmap tmp = BitmapFactory.decodeResource(getResources(), resId);
             for (int i = 1; i < 11; i++) {
                 sleep();
-                msg = handler.obtainMessage(PROGRESS_UPDATE, i*10);
-                handler.sendMessage(msg);
+                EventBus.getDefault().post(new ProgressBarUpdateEvent(i*10));
             }
-            msg = handler.obtainMessage(SET_BITMAP, tmp);
-            handler.sendMessage(msg);
+            EventBus.getDefault().post(tmp);
 
             // set progressBar invisible
-            msg = handler.obtainMessage(SET_PROGRESS_BAR_VISIBILITY,
-                    ProgressBar.INVISIBLE);
-            handler.sendMessage(msg);
+            EventBus.getDefault().post(new ProgressBarVisibilityEvent(ProgressBar.INVISIBLE));
         }
 
         private void sleep() {
@@ -120,14 +108,6 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
             }
         }
-    }
-
-    public ImageView getImageView() {
-        return mImageView;
-    }
-
-    public ProgressBar getProgressBar() {
-        return mProgressBar;
     }
 
     @Override

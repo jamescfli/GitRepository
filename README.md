@@ -509,3 +509,4 @@ after all tests, the best practice is still to check whether localService (initi
     * post Runnable through main UI thread's handler
     * coursera Android course examples in [here](https://github.com/aporter/coursera-android/blob/master/Examples/ThreadingHandlerMessages/src/course/examples/threading/threadinghandlermessages/HandlerMessagesActivity.java)
     * send UI updates through handler messages to UI thread
+    * revise the message passing mechanism by EventBus in AT82EventBusDemo
