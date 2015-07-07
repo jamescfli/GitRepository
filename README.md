@@ -503,3 +503,7 @@ after all tests, the best practice is still to check whether localService (initi
     * EventBus.getDefault().register(this); in onStart(), EventBus.getDefault().unregister(this) in onStop()
     * EventBus.getDefault().post(some message);
     * EventBus.getDefault().postSticky(some message), registerSticky(this), and unregister(this)
+
+92. AT83Threading
+    * coursera Android course examples in [here](https://github.com/aporter/coursera-android/tree/master/Examples/ThreadingHandlerRunnable)
+    * post Runnable through main UI thread's handler

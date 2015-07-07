@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AT83Threading</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="load_icon_string">Load Icon</string>
+    <string name="other_button_string">Other Button</string>
+    <string name="image_desc_string">image</string>
+</resources>
