@@ -507,3 +507,5 @@ after all tests, the best practice is still to check whether localService (initi
 92. AT83Threading
     * coursera Android course examples in [here](https://github.com/aporter/coursera-android/tree/master/Examples/ThreadingHandlerRunnable)
     * post Runnable through main UI thread's handler
+    * coursera Android course examples in [here](https://github.com/aporter/coursera-android/blob/master/Examples/ThreadingHandlerMessages/src/course/examples/threading/threadinghandlermessages/HandlerMessagesActivity.java)
+    * send UI updates through handler messages to UI thread
