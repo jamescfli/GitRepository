@@ -520,4 +520,6 @@ after all tests, the best practice is still to check whether localService (initi
         - <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     * Problem solved: does not turn WiFi or other internet connection on :p
 
-94.
+94. AT85Notification
+    * test customized notification bar
+    * Problem: the sound "alarm_rooster.mp3" does not work properly

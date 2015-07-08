@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AT85Notification</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="notify_string">Notify</string>
+    <string name="intent_received_string">Got The Intent</string>
+</resources>
