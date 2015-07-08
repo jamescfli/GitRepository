@@ -518,5 +518,6 @@ after all tests, the best practice is still to check whether localService (initi
     * Permission has been granted
         - <uses-permission android:name="android.permission.INTERNET" />
         - <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    * Problem solved: does not turn WiFi or other internet connection on :p
 
 94.
