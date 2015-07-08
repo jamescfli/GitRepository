@@ -510,3 +510,13 @@ after all tests, the best practice is still to check whether localService (initi
     * coursera Android course examples in [here](https://github.com/aporter/coursera-android/blob/master/Examples/ThreadingHandlerMessages/src/course/examples/threading/threadinghandlermessages/HandlerMessagesActivity.java)
     * send UI updates through handler messages to UI thread
     * revise the message passing mechanism by EventBus in AT82EventBusDemo
+
+93. AT84Network
+    * project does not work since
+        - Unable to resolve host "api.geonames.org"
+        - on line: socket = new Socket(HOST, 80)
+    * Permission has been granted
+        - <uses-permission android:name="android.permission.INTERNET" />
+        - <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+94.
