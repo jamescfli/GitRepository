@@ -523,3 +523,11 @@ after all tests, the best practice is still to check whether localService (initi
 94. AT85Notification
     * test customized notification bar
     * Problem: the sound "alarm_rooster.mp3" does not work properly
+
+
+95. AT86
+
+96. AT87CompassBySensor
+    * apply onSizeChanged in custom view to control the position mParentCenterX/Y and
+    * shrink Bitmap size by Bitmap.createScaledBitmap (Bitmap src, int dstWidth, int dstHeight, boolean filter)
+    * fix screen orientation by android:screenOrientation="portrait" in manifest.xml activity
