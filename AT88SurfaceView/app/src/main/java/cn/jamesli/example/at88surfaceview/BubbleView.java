@@ -49,8 +49,6 @@ public class BubbleView extends SurfaceView implements SurfaceHolder.Callback {
         // random position within the screen, keep the center within the surfaceView range
         mX = (float) r.nextInt(mDisplayWidth - mBitmapHeightAndWidth);  // MOTO G: w720*h1184 (1280-ActionBar)
         mY = (float) r.nextInt(mDisplayHeight - mBitmapHeightAndWidth);
-//        mX = 100.0f;
-//        mY = 100.0f;
         mDx = (float) r.nextInt(mDisplayWidth) / mDisplayWidth;
         mDx *= r.nextInt(2) == 1 ? MOVE_STEP : -1 * MOVE_STEP;      // move to left/right
         mDy = (float) r.nextInt(mDisplayHeight) / mDisplayHeight;
@@ -69,13 +67,6 @@ public class BubbleView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.rotate(mRotation, mX + mBitmapHeightAndWidthAdj, mY + mBitmapHeightAndWidthAdj);
         canvas.drawBitmap(mBitmap, mX, mY, mPainter);
     }
-
-//    private void drawBubble(Canvas canvas, float mXInput, float mYInput) {
-//        canvas.drawColor(Color.DKGRAY);
-//        mRotation += ROT_STEP;  // in degrees
-//        canvas.rotate(mRotation, mXInput + mBitmapHeightAndWidthAdj, mYInput + mBitmapHeightAndWidthAdj);
-//        canvas.drawBitmap(mBitmap, mXInput, mYInput, mPainter);
-//    }
 
     private boolean move() {
         mX += mDx;
@@ -125,6 +116,8 @@ public class BubbleView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+//    // This does not work since UI is updated in mDrawingThread thread, not the main UI
+//    // i.e. mX and mY in mDrawingThread do not change accordingly
 //    public void resetToCenter() {
 //        Log.i(TAG, "resetToCenter() is called.");
 //        mX = ((float) mDisplayWidth) / 2;

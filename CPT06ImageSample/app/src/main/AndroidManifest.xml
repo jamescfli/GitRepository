@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.jamesli.example.cpt06lentitemmemo" >
+
+    <permission
+        android:name="cn.jamesli.example.cpt06lentitemmemo.lentitems.READ"
+        android:description="@string/cpsample_desc_permission_lentitems_READ"
+        android:label="@string/cpsample_label_permission_lentitems_READ"
+        android:protectionLevel="normal" />
+
+    <permission
+        android:name="cn.jamesli.example.cpt06lentitemmemo.lentitems.WRITE"
+        android:description="@string/cpsample_desc_permission_lentitems_WRITE"
+        android:label="@string/cpsample_label_permission_lentitems_WRITE"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name="cn.jamesli.example.cpt06lentitemmemo.CPSampleApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/DemoAppTheme" >
+        <activity
+            android:name="cn.jamesli.example.cpt06lentitemmemo.lentitems.CPSampleActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.grokkingandroid.sampleapp.ACTION_START" />
+
+                <data
+                    android:host="grokkingandroid.com"
+                    android:path="/samples/cpsample"
+                    android:scheme="app" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cn.jamesli.example.cpt06lentitemmemo.description.DescriptionActivity"
+            android:label="@string/cpsample_title_activity_description"
+            android:exported="false" />
+
+        <provider
+            android:authorities="cn.jamesli.example.cpt06lentitemmemo.lentitems"
+            android:name="cn.jamesli.example.cpt06lentitemmemo.provider.LentItemsProvider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:label="LentItemsProvider"
+            android:readPermission="cn.jamesli.example.cpt06lentitemmemo.lentitems.READ"
+            android:writePermission="cn.jamesli.example.cpt06lentitemmemo.lentitems.WRITE" >
+        </provider>
+
+        <service
+            android:name="cn.jamesli.example.cpt06lentitemmemo.lentitems.LentItemService"
+            android:exported="false" />
+    </application>
+
+</manifest>

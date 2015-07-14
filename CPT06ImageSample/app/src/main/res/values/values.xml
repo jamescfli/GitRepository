@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="showDescription">false</bool>
+    <bool name="twoPane">false</bool>
+    <!-- one can change twoPane value to true if in values.xml in v21 or large or lands folder -->
+</resources>

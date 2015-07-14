@@ -535,3 +535,4 @@ after all tests, the best practice is still to check whether localService (initi
 97. AT88SurfaceView
     * test SurfaceHolder.Callback
     * start new thread to update SurfaceView
+    * reset the whole BubbleView in reset menu, BubbleView thread would not be simultaneously reset from the main thread

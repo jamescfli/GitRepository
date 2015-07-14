@@ -10,6 +10,9 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity extends Activity {
+
+    private static RelativeLayout relativeLayout;
+    private static DisplayMetrics displayMetrics;
     private static BubbleView bubbleView;
 
     @Override
@@ -17,9 +20,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.frame);
+        relativeLayout = (RelativeLayout) findViewById(R.id.frame);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+        displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         bubbleView = new BubbleView(getApplicationContext(),
                 BitmapFactory.decodeResource(getResources(), R.drawable.b128), displayMetrics);
@@ -44,6 +47,10 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_reset) {
+            relativeLayout.removeView(bubbleView);
+            bubbleView = new BubbleView(getApplicationContext(),
+                    BitmapFactory.decodeResource(getResources(), R.drawable.b128), displayMetrics);
+            relativeLayout.addView(bubbleView);
             return true;
         }
 
