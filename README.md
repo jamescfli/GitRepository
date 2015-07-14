@@ -531,3 +531,7 @@ after all tests, the best practice is still to check whether localService (initi
     * apply onSizeChanged in custom view to control the position mParentCenterX/Y and
     * shrink Bitmap size by Bitmap.createScaledBitmap (Bitmap src, int dstWidth, int dstHeight, boolean filter)
     * fix screen orientation by android:screenOrientation="portrait" in manifest.xml activity
+
+97. AT88SurfaceView
+    * test SurfaceHolder.Callback
+    * start new thread to update SurfaceView

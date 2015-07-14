@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
@@ -31,7 +32,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     private float mRotationInDegrees;
 
     // View, showing compass arrow
-    private CompassArrowView mCompassArrow;
+//    private CompassArrowView mCompassArrow;
+    private CompassArrowSurfaceView mCompassArrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,15 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         mFrame = (RelativeLayout) findViewById(R.id.frame);
 
-        mCompassArrow = new CompassArrowView(getApplicationContext());
+//        mCompassArrow = new CompassArrowView(getApplicationContext());
+//        mFrame.addView(mCompassArrow);
 
-        mFrame.addView(mCompassArrow);
+        // try to use SurfaceView instead, to avoid blocking UI thread by frequently updating view
+//        mCompassArrow = new CompassArrowSurfaceView(getApplicationContext());
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        mCompassArrow.setDisplayDimension(displayMetrics);  // MOTO G w720*h1184
+        mCompassArrow = new CompassArrowSurfaceView(getApplicationContext(), displayMetrics);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
@@ -133,7 +141,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
                 // Request redraw
                 mCompassArrow.setDirectionInDegrees(mRotationInDegrees);
-                mCompassArrow.invalidate();
+                mCompassArrow.invalidate();   // when applying CompassArrowView
 
                 // Reset sensor event data arrays
                 mGravity = mGeomagnetic = null;
@@ -144,6 +152,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        // n.a.
     }
 }
