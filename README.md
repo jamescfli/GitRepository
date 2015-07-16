@@ -536,3 +536,11 @@ after all tests, the best practice is still to check whether localService (initi
     * test SurfaceHolder.Callback
     * start new thread to update SurfaceView
     * reset the whole BubbleView in reset menu, BubbleView thread would not be simultaneously reset from the main thread
+
+98. AT89GreenDaoTest
+    * test the example from [Github GreenDAO](https://github.com/greenrobot/greenDAO/tree/master/DaoExample)
+    * Subsittute SimpleCursorAdapter with LoaderManager with a CursorLoader
+    * Substitute cursor.requery() with new requery
+    * test some SQLite3 command, database saved on /data/data/cn.jamesli.example.at89greendaotest/databases/. which is not accessible by users connected through adb to a handset device (but it works on emulator-5554)
+
+99.

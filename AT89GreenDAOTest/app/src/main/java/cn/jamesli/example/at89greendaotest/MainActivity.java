@@ -58,11 +58,11 @@ public class MainActivity extends ListActivity {
         String[] from = { textColumn, NoteDao.Properties.Comment.columnName };
         int[] to = { android.R.id.text1, android.R.id.text2 };  // Res ID in simple_list_item_2
 
-        // This constant was deprecated in API level 11.
+        // TODO This constant was deprecated in API level 11.
         // This option is discouraged, as it results in Cursor queries being performed
         // on the application's UI thread and thus can cause poor responsiveness or
-        // even Application Not Responding errors.
-        // As an alternative, use LoaderManager with a CursorLoader.
+        // even Application Not Responding errors. As an alternative, use LoaderManager
+        // with a CursorLoader.
         adapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_2, cursor, from, to);
         setListAdapter(adapter);
@@ -119,7 +119,7 @@ public class MainActivity extends ListActivity {
         mNoteDao.insert(note);
         Log.d("DaoExample", "Inserted new note, ID: " + note.getId());
 
-        // requery() method was deprecated in API level 11
+        // TODO requery() method was deprecated in API level 11
         // Reason: huge data lead to long reading/writing time to block the UI thread.
         // but so far, it perfectly works with ListView and its updates
         cursor.requery();
@@ -138,6 +138,7 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         mNoteDao.deleteByKey(id);
         Log.d("DaoExample", "Deleted note, ID: " + id);
+        // TODO requery() method was deprecated
         cursor.requery();
 //        requeryCursorUpdateListview();
     }

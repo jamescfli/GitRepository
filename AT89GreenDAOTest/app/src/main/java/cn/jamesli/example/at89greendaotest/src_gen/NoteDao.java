@@ -51,7 +51,7 @@ public class NoteDao extends AbstractDao<Note, Long> {
         db.execSQL(sql);
     }
 
-    /** @inheritdoc */
+    /** @inheritdoc, used in base AbstractDao */
     @Override
     protected void bindValues(SQLiteStatement stmt, Note entity) {
         stmt.clearBindings();

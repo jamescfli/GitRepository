@@ -17,15 +17,15 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         NoteDao.createTable(db, ifNotExists);
-        CustomerDao.createTable(db, ifNotExists);
-        OrderDao.createTable(db, ifNotExists);
+//        CustomerDao.createTable(db, ifNotExists);
+//        OrderDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         NoteDao.dropTable(db, ifExists);
-        CustomerDao.dropTable(db, ifExists);
-        OrderDao.dropTable(db, ifExists);
+//        CustomerDao.dropTable(db, ifExists);
+//        OrderDao.dropTable(db, ifExists);
     }
 
     public static abstract class OpenHelper extends SQLiteOpenHelper {
@@ -49,17 +49,24 @@ public class DaoMaster extends AbstractDaoMaster {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
+            Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to "
+                    + newVersion + " by dropping all tables");
             dropAllTables(db, true);
             onCreate(db);
+        }
+
+        @Override
+        public SQLiteDatabase getWritableDatabase() {
+            // TODO potential revision on changing db saving directory, save db to external storage
+            return super.getWritableDatabase();
         }
     }
 
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(NoteDao.class);
-        registerDaoClass(CustomerDao.class);
-        registerDaoClass(OrderDao.class);
+//        registerDaoClass(CustomerDao.class);
+//        registerDaoClass(OrderDao.class);
     }
 
     public DaoSession newSession() {
