@@ -1,6 +1,8 @@
 package cn.jamesli.example.at89greendaotest;
 
 import android.app.ListActivity;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,8 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -26,18 +26,19 @@ import cn.jamesli.example.at89greendaotest.src_gen.Note;
 import cn.jamesli.example.at89greendaotest.src_gen.NoteDao;
 
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private SQLiteDatabase db;
+    private static final int LOADER_ID = 1;
 
     private EditText mEditText;
 
+    private static SQLiteDatabase db;
+    private DaoMaster.DevOpenHelper helper;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
-    private NoteDao mNoteDao;
+    private static NoteDao mNoteDao;
 
-    private Cursor cursor;
-    private SimpleCursorAdapter adapter;
+    private SimpleCursorAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,27 +46,25 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         // DevOpenHelper(context, name, cursorFactory)
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "notes-db", null);
+        helper = new DaoMaster.DevOpenHelper(this, "notes-db", null);
         db = helper.getWritableDatabase();
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
         mNoteDao = mDaoSession.getNoteDao();
 
-        String textColumn = NoteDao.Properties.Text.columnName;
-        String orderBy = textColumn + " COLLATE LOCALIZED ASC";
-        cursor = db.query(mNoteDao.getTablename(), mNoteDao.getAllColumns(), null, null,
-                null, null, orderBy);
-        String[] from = { textColumn, NoteDao.Properties.Comment.columnName };
+//        String orderBy = NoteDao.Properties.Text.columnName + " COLLATE LOCALIZED ASC";
+//        mCursor = db.query(mNoteDao.getTablename(), mNoteDao.getAllColumns(), null, null,
+//                null, null, orderBy);
+
+        String[] from = { NoteDao.Properties.Text.columnName, NoteDao.Properties.Comment.columnName };
         int[] to = { android.R.id.text1, android.R.id.text2 };  // Res ID in simple_list_item_2
 
-        // TODO This constant was deprecated in API level 11.
-        // This option is discouraged, as it results in Cursor queries being performed
-        // on the application's UI thread and thus can cause poor responsiveness or
-        // even Application Not Responding errors. As an alternative, use LoaderManager
-        // with a CursorLoader.
-        adapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_2, cursor, from, to);
-        setListAdapter(adapter);
+        // set cursor or null in the first place and update later by onLoadFinished()
+        mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, null,
+                from, to, 0);   // cursor = null and will be loaded later, flags = 0
+        setListAdapter(mAdapter);   // the only place to set ListAdapter
+
+        getLoaderManager().initLoader(LOADER_ID, null, this);
 
         mEditText = (EditText) findViewById(R.id.editTextNote);
         addUiListeners();
@@ -118,51 +117,35 @@ public class MainActivity extends ListActivity {
         Note note = new Note(null, noteText, comment, new Date());
         mNoteDao.insert(note);
         Log.d("DaoExample", "Inserted new note, ID: " + note.getId());
-
-        // TODO requery() method was deprecated in API level 11
-        // Reason: huge data lead to long reading/writing time to block the UI thread.
-        // but so far, it perfectly works with ListView and its updates
-        cursor.requery();
-//        requeryCursorUpdateListview();    // not automatically update ListView, only renew after reboot + onCreate
+        // Ensure ListView will be updated accordingly
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
-
-//    private void requeryCursorUpdateListview() {
-//        String orderBy = NoteDao.Properties.Text.columnName + " COLLATE LOCALIZED ASC";
-//        cursor = db.query(mNoteDao.getTablename(), mNoteDao.getAllColumns(), null, null,
-//                null, null, orderBy);
-//        // with bug, ListView does not update as originally did by cursor.requery()
-//        adapter.notifyDataSetChanged();
-//    }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         mNoteDao.deleteByKey(id);
         Log.d("DaoExample", "Deleted note, ID: " + id);
-        // TODO requery() method was deprecated
-        cursor.requery();
-//        requeryCursorUpdateListview();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        // Ensure ListView will be updated accordingly
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new NoteCursorLoader(getApplicationContext(), db, helper, mDaoMaster, mDaoSession, mNoteDao);
     }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);  // CursorAdapter method
+        // Swap in a new Cursor, returning the old Cursor. Unlike changeCursor(Cursor), the returned old Cursor is not closed.
+//        mAdapter.changeCursor(data);  // Change the underlying cursor to a new cursor.
+        // Difference: swap -> old cursor will be returned, change -> return void, old cursor is closed.
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
+
+
 }
