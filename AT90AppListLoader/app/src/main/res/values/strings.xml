@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AT90AppListLoader</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_configure_locale">Change language</string>
+</resources>

@@ -543,4 +543,5 @@ after all tests, the best practice is still to check whether localService (initi
     * Substitute cursor.requery() with new requery
     * test some SQLite3 command, database saved on /data/data/cn.jamesli.example.at89greendaotest/databases/. which is not accessible by users connected through adb to a handset device (but it works on emulator-5554)
 
-99.
+99. AT90AppListLoader
+    * test [AppListLoader project](https://github.com/alexjlockwood/AppListLoader)
