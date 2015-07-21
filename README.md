@@ -548,3 +548,10 @@ after all tests, the best practice is still to check whether localService (initi
 
 99. AT90AppListLoader
     * test [AppListLoader project](https://github.com/alexjlockwood/AppListLoader)
+
+100. AT91HttpRequest
+    * test [OkHttp](http://square.github.io/okhttp/)
+        - compile 'com.squareup.okhttp:okhttp:2.4.0'
+        - compile 'com.squareup.okio:okio:1.5.0' (required at runtime)
+        - not run in the main thread
+    * test [Android Asynchronous Http Client](http://loopj.com/android-async-http/)
