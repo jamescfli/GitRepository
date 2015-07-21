@@ -2,6 +2,7 @@ package cn.jamesli.example.at89greendaotest;
 
 import android.content.Context;
 import android.content.CursorLoader;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -13,13 +14,18 @@ import cn.jamesli.example.at89greendaotest.src_gen.DaoSession;
 import cn.jamesli.example.at89greendaotest.src_gen.Note;
 import cn.jamesli.example.at89greendaotest.src_gen.NoteDao;
 
-// TODO unfinished
+// A CursorLoader runs an asynchronous query in the background against a ContentProvider
+// This allows the Activity or FragmentActivity to continue to interact with the user while the query is ongoing.
 public class NoteCursorLoader extends CursorLoader {
+
     private DaoMaster.DevOpenHelper helper;
     private SQLiteDatabase db;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
     private static NoteDao mNoteDao;
+
+    // Hold a reference to the loader's data
+    private Cursor mNoteCursor;
 
     public NoteCursorLoader(Context context) {
         super(context);
@@ -28,6 +34,22 @@ public class NoteCursorLoader extends CursorLoader {
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
         mNoteDao = mDaoSession.getNoteDao();
+    }
+
+    @Override
+    public Cursor loadInBackground() {
+        mNoteCursor = loadCursor();
+        if (mNoteCursor != null) {
+            // ensure that the content window is filled
+            mNoteCursor.getCount();
+        }
+        return mNoteCursor;
+    }
+
+    private Cursor loadCursor() {
+        String orderBy = NoteDao.Properties.Text.columnName + " COLLATE LOCALIZED ASC";
+        return db.query(mNoteDao.getTablename(), mNoteDao.getAllColumns(), null, null,
+                null, null, orderBy);
     }
 
     public void insert(String noteText) {

@@ -542,6 +542,9 @@ after all tests, the best practice is still to check whether localService (initi
     * Subsittute SimpleCursorAdapter with LoaderManager with a CursorLoader
     * Substitute cursor.requery() with new requery
     * test some SQLite3 command, database saved on /data/data/cn.jamesli.example.at89greendaotest/databases/. which is not accessible by users connected through adb to a handset device (but it works on emulator-5554)
+    * Revise ListView adapter by Loader and LoaderManager such that all database access operation (time-consuming) will be run in the background (not in the UI thread)
+    * Put DAO into loader
+    * Apply CursorLoader to make the loader even simpler
 
 99. AT90AppListLoader
     * test [AppListLoader project](https://github.com/alexjlockwood/AppListLoader)

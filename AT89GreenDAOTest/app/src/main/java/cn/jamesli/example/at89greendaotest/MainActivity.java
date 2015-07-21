@@ -24,7 +24,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
     private EditText mEditText;
 
-    private NoteAsyncTaskLoader mNoteAsyncTaskLoader;
+//    private NoteAsyncTaskLoader mNoteAsyncTaskLoader;
+    private NoteCursorLoader mNoteCursorLoader;
 
     private SimpleCursorAdapter mAdapter;
 
@@ -89,22 +90,25 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         String noteText = mEditText.getText().toString();
         mEditText.setText("");
 
-        mNoteAsyncTaskLoader.insert(noteText);
+        mNoteCursorLoader.insert(noteText);
+//        mNoteAsyncTaskLoader.insert(noteText);
         // Ensure ListView will be updated accordingly
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        mNoteAsyncTaskLoader.deleteByKey(id);
+        mNoteCursorLoader.deleteByKey(id);
+//        mNoteAsyncTaskLoader.deleteByKey(id);
         // Ensure ListView will be updated accordingly
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        mNoteAsyncTaskLoader = new NoteAsyncTaskLoader(getApplicationContext());
-        return mNoteAsyncTaskLoader;
+//        mNoteAsyncTaskLoader = new NoteAsyncTaskLoader(getApplicationContext());
+        mNoteCursorLoader = new NoteCursorLoader(getApplicationContext());
+        return mNoteCursorLoader;
     }
 
     @Override
