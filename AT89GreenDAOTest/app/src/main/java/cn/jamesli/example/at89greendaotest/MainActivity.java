@@ -4,11 +4,9 @@ import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,12 +15,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.util.Date;
-
-import cn.jamesli.example.at89greendaotest.src_gen.DaoMaster;
-import cn.jamesli.example.at89greendaotest.src_gen.DaoSession;
-import cn.jamesli.example.at89greendaotest.src_gen.Note;
 import cn.jamesli.example.at89greendaotest.src_gen.NoteDao;
 
 
@@ -32,11 +24,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
     private EditText mEditText;
 
-    private static SQLiteDatabase db;
-    private DaoMaster.DevOpenHelper helper;
-    private DaoMaster mDaoMaster;
-    private DaoSession mDaoSession;
-    private static NoteDao mNoteDao;
+    private NoteAsyncTaskLoader mNoteAsyncTaskLoader;
 
     private SimpleCursorAdapter mAdapter;
 
@@ -44,17 +32,6 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // DevOpenHelper(context, name, cursorFactory)
-        helper = new DaoMaster.DevOpenHelper(this, "notes-db", null);
-        db = helper.getWritableDatabase();
-        mDaoMaster = new DaoMaster(db);
-        mDaoSession = mDaoMaster.newSession();
-        mNoteDao = mDaoSession.getNoteDao();
-
-//        String orderBy = NoteDao.Properties.Text.columnName + " COLLATE LOCALIZED ASC";
-//        mCursor = db.query(mNoteDao.getTablename(), mNoteDao.getAllColumns(), null, null,
-//                null, null, orderBy);
 
         String[] from = { NoteDao.Properties.Text.columnName, NoteDao.Properties.Comment.columnName };
         int[] to = { android.R.id.text1, android.R.id.text2 };  // Res ID in simple_list_item_2
@@ -112,40 +89,32 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         String noteText = mEditText.getText().toString();
         mEditText.setText("");
 
-        final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-        String comment = "Added on " + df.format(new Date());
-        Note note = new Note(null, noteText, comment, new Date());
-        mNoteDao.insert(note);
-        Log.d("DaoExample", "Inserted new note, ID: " + note.getId());
+        mNoteAsyncTaskLoader.insert(noteText);
         // Ensure ListView will be updated accordingly
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        mNoteDao.deleteByKey(id);
-        Log.d("DaoExample", "Deleted note, ID: " + id);
+        mNoteAsyncTaskLoader.deleteByKey(id);
         // Ensure ListView will be updated accordingly
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new NoteCursorLoader(getApplicationContext(), db, helper, mDaoMaster, mDaoSession, mNoteDao);
+        mNoteAsyncTaskLoader = new NoteAsyncTaskLoader(getApplicationContext());
+        return mNoteAsyncTaskLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);  // CursorAdapter method
-        // Swap in a new Cursor, returning the old Cursor. Unlike changeCursor(Cursor), the returned old Cursor is not closed.
-//        mAdapter.changeCursor(data);  // Change the underlying cursor to a new cursor.
-        // Difference: swap -> old cursor will be returned, change -> return void, old cursor is closed.
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
-
 
 }
