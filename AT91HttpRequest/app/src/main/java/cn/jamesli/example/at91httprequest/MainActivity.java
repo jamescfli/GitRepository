@@ -9,24 +9,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
 public class MainActivity extends Activity {
-    private static final String URL = "https://raw.github.com/square/okhttp/master/README.md";
+    private static final String URL_REQUEST = "https://raw.github.com/square/okhttp/master/README.md";
+    private static final String URL_POST = "http://www.roundsapp.com/post";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((Button) findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.buttonRequest)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new OkHttpRequestAsyncTask().execute(URL);
+                new OkHttpRequestAsyncTask().execute(URL_REQUEST);
+            }
+        });
+
+        ((Button) findViewById(R.id.buttonPost)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new OkHttpPostAsyncTask().execute(URL_POST, "Jesse", "Jake");
             }
         });
     }
@@ -58,8 +68,60 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            ((TextView) findViewById(R.id.textView)).setText(result);
+            if (null != exception) {
+                ((TextView) findViewById(R.id.textView)).setText(exception.toString());
+            } else {
+                ((TextView) findViewById(R.id.textView)).setText(result);
+            }
         }
+    }
+
+    class OkHttpPostAsyncTask extends AsyncTask<String, Void, String> {
+        private Exception exception;
+        private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+        @Override
+        protected String doInBackground(String... params) {
+            OkHttpClient client = new OkHttpClient();
+
+            String json = bowlingJson(params[1], params[2]);
+
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(params[0])
+                    .post(body)
+                    .build();
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();   // failed to connect due to GFW
+                return response.body().string();
+            } catch (IOException e) {
+                exception = e;
+                return null;
+            }
+        }
+
+        private String bowlingJson(String player1, String player2) {
+            return "{'winCondition':'HIGH_SCORE',"
+                    + "'name':'Bowling',"
+                    + "'round':4,"
+                    + "'lastSaved':1367702411696,"
+                    + "'dateStarted':1367702378785,"
+                    + "'players':["
+                    + "{'name':'" + player1 + "','history':[10,8,6,7,8],'color':-13388315,'total':39},"
+                    + "{'name':'" + player2 + "','history':[6,10,5,10,10],'color':-48060,'total':41}"
+                    + "]}";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (null != exception) {
+                ((TextView) findViewById(R.id.textView)).setText(exception.toString());
+            } else {
+                ((TextView) findViewById(R.id.textView)).setText(result);
+            }
+        }
+
     }
 
     @Override
