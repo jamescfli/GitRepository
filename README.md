@@ -556,3 +556,4 @@ after all tests, the best practice is still to check whether localService (initi
         - not run in the main thread
     * test POST method by OkHttp
     * test [Android Asynchronous Http Client](http://loopj.com/android-async-http/)
+    * Solve problem of TextView content change when screen rotates from portrait to landscape

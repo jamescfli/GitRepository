@@ -23,4 +23,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 //    compile 'com.squareup.okhttp:okhttp:2.4.0'
 //    compile 'com.squareup.okio:okio:1.5.0'        // Okio started as a component of OkHttp
+//    compile 'com.loopj.android:android-async-http:1.4.8'
 }
