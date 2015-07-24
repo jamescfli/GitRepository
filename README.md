@@ -557,3 +557,15 @@ after all tests, the best practice is still to check whether localService (initi
     * test POST method by OkHttp
     * test [Android Asynchronous Http Client](http://loopj.com/android-async-http/)
     * Solve problem of TextView content change when screen rotates from portrait to landscape
+
+101. AT92BaiduMapTest
+    * in BitBucket repository due to API key in Gradle
+
+102. AT93RoboGuiceTest
+    * import jars as indicated by [Downloading and Installing](https://github.com/roboguice/roboguice/wiki/Installation)
+        - compile 'org.roboguice:roboguice:3.+'
+        - provided 'org.roboguice:roboblender:3.+'
+        - compile 'com.google.code.findbugs:jsr305:1.3.9' for the optional Nullable annotation
+    *
+
+103.
