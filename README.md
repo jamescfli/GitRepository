@@ -566,6 +566,12 @@ after all tests, the best practice is still to check whether localService (initi
         - compile 'org.roboguice:roboguice:3.+'
         - provided 'org.roboguice:roboblender:3.+'
         - compile 'com.google.code.findbugs:jsr305:1.3.9' for the optional Nullable annotation
-    *
+    * still not solved, but identify the problem to the compiling library by reverting the problem to one single injection
 
-103.
+103. AT94CustomizedAlertDialog
+    * Simple Dialog
+    * Customized xml Dialog
+    * Date Picker Dialog
+    * Notice Dialog by extending DialogFragment
+
+104.

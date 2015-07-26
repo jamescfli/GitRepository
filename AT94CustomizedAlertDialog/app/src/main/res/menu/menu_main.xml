@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_show_simple_dialog"
+        android:title="@string/action_show_simple_dialog"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_show_customized_dialog"
+        android:title="@string/action_show_customized_dialog"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_show_datepicker_dialog"
+        android:title="@string/action_show_datepicker_dialog"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_show_notice_dialog"
+        android:title="@string/action_show_notice_dialog"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+</menu>

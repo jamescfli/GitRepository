@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">AT94CustomizedAlertDialog</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_show_simple_dialog">Show Simple Dialog</string>
+    <string name="action_show_customized_dialog">Show Customized Dialog</string>
+    <string name="action_show_datepicker_dialog">Show Date Picker Dialog</string>
+    <string name="action_show_notice_dialog">Show Notice Dialog</string>
+    <string name="custom_dialog">Custom Dialog</string>
+    <string name="visit_website">Visit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>
