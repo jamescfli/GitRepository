@@ -1,6 +1,5 @@
 package cn.jamesli.example.at93roboguicetest.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -16,19 +15,19 @@ import com.google.inject.Inject;
 
 import cn.jamesli.example.at93roboguicetest.R;
 import cn.jamesli.example.at93roboguicetest.controller.AstroboyRemoteControl;
+import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.astroboy_activity_main)
-public class AstroboyMasterConsoleActivity extends Activity {
+public class AstroboyMasterConsoleActivity extends RoboActivity {
 
     @InjectView(R.id.self_destruct) Button selfDestructButton;
-    @InjectView(R.id.say_text) EditText sayText;
-    @InjectView(R.id.brush_teeth) Button brushTeethButton;
-    @InjectView(tag="fightevil") Button fightEvilButton;    // can also use tags if needed
+    @InjectView(R.id.say_text)      EditText sayText;
+    @InjectView(R.id.brush_teeth)   Button brushTeethButton;
+    @InjectView(tag="fightevil")    Button fightEvilButton;    // can also use tags if needed
 
-    @Inject
-    AstroboyRemoteControl remoteControl;
+    @Inject AstroboyRemoteControl remoteControl;
     @Inject Vibrator vibrator;
 
     @Override

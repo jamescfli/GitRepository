@@ -1,6 +1,5 @@
 package cn.jamesli.example.roboguicetest;
 
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;

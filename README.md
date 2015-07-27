@@ -568,7 +568,8 @@ after all tests, the best practice is still to check whether localService (initi
         - provided 'org.roboguice:roboblender:3.+'
         - compile 'com.google.code.findbugs:jsr305:1.3.9' for the optional Nullable annotation
     * still not solved, but identify the problem to the compiling library by reverting the problem to one single injection
-    * Problem solved: sometimes android studio couldn't install dependencies. When I got this problem , I use gradlew on console with assembleDebug, i.e. "./gradlew assembleDebug".
+    * Compiling issue solved: sometimes android studio couldn't install dependencies. When I got this problem , I use gradlew on console with assembleDebug, i.e. "./gradlew assembleDebug".
+    * Issue: [java.lang.NullPointerException](https://github.com/roboguice/roboguice/issues/273) for Injections in CustomView. Work around at the moment by retrieving conventional findViewById()
 
 103. AT94CustomizedAlertDialog
     * Simple Dialog

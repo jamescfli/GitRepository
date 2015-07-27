@@ -11,13 +11,10 @@ import android.widget.TextView;
 import cn.jamesli.example.at93roboguicetest.R;
 import roboguice.inject.InjectView;
 
-/**
- * Created by jamesli on 15-7-24.
- */
 public class CustomView extends LinearLayout {
-    @InjectView(R.id.close_tv)
+//    @InjectView(R.id.close_tv)
     private Button buttonCloseTv;
-    @InjectView(R.id.tv_status)
+//    @InjectView(R.id.tv_status)
     private TextView textViewStatus;
 
     public CustomView(Context context) {
@@ -32,17 +29,23 @@ public class CustomView extends LinearLayout {
 
     public void initializeView(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_custom, this, true);
+        // Equivalent to getSystemService(), by tracing LayoutInflater
+        // public static LayoutInflater from(Context context) {
+        //      LayoutInflater LayoutInflater =
+        //          (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        buttonCloseTv = (Button) findViewById(R.id.close_tv);
         buttonCloseTv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 textViewStatus.setText("Closed");
             }
         });
+        textViewStatus = (TextView) findViewById(R.id.tv_status);
         textViewStatus.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

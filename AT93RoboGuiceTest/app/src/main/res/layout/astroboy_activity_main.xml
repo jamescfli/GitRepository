@@ -48,7 +48,7 @@
         android:layout_gravity="center"
         android:text="Self Destruct"/>
 
-    <org.roboguice.astroboy.view.CustomView
+    <cn.jamesli.example.at93roboguicetest.view.CustomView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>"
 
