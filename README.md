@@ -560,6 +560,7 @@ after all tests, the best practice is still to check whether localService (initi
 
 101. AT92BaiduMapTest
     * in BitBucket repository due to API key in Gradle
+    * finally revise the customized dialog map setting through DialogFragment, which borrows the idea from AT94CustomizedAlertDialog and [Android UI Intro on Dialog](http://developer.android.com/guide/topics/ui/dialogs.html)
 
 102. AT93RoboGuiceTest
     * import jars as indicated by [Downloading and Installing](https://github.com/roboguice/roboguice/wiki/Installation)
@@ -567,6 +568,7 @@ after all tests, the best practice is still to check whether localService (initi
         - provided 'org.roboguice:roboblender:3.+'
         - compile 'com.google.code.findbugs:jsr305:1.3.9' for the optional Nullable annotation
     * still not solved, but identify the problem to the compiling library by reverting the problem to one single injection
+    * Problem solved: sometimes android studio couldn't install dependencies. When I got this problem , I use gradlew on console with assembleDebug, i.e. "./gradlew assembleDebug".
 
 103. AT94CustomizedAlertDialog
     * Simple Dialog
@@ -574,4 +576,8 @@ after all tests, the best practice is still to check whether localService (initi
     * Date Picker Dialog
     * Notice Dialog by extending DialogFragment
 
-104.
+104. AT95ImageCropper
+    * test on android-crop, a image cropping activity from [Android Crop](https://github.com/jdamcd/android-crop) on GitHub
+    * Solved gradle compile problem by running build through command line, i.e. ./gradlew to install Maven dependencies.
+
+105.
