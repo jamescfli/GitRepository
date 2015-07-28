@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.google.inject.Inject;
 
@@ -34,7 +35,7 @@ public class AstroboyMasterConsoleActivity extends RoboActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sayText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        sayText.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
                 remoteControl.say(textView.getText().toString());
