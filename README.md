@@ -561,6 +561,7 @@ after all tests, the best practice is still to check whether localService (initi
 101. AT92BaiduMapTest
     * in BitBucket repository due to API key in Gradle
     * finally revise the customized dialog map setting through DialogFragment, which borrows the idea from AT94CustomizedAlertDialog and [Android UI Intro on Dialog](http://developer.android.com/guide/topics/ui/dialogs.html)
+    * rewrite setContentView(R.id.) by LayoutInflater with setContentView(View) instead
 
 102. AT93RoboGuiceTest
     * import jars as indicated by [Downloading and Installing](https://github.com/roboguice/roboguice/wiki/Installation)
@@ -583,4 +584,8 @@ after all tests, the best practice is still to check whether localService (initi
     * test on android-crop, a image cropping activity from [Android Crop](https://github.com/jdamcd/android-crop) on GitHub
     * Solved gradle compile problem by running build through command line, i.e. ./gradlew to install Maven dependencies.
 
-105.
+105. TrivialTest
+    * to differentiate onTouch and onClick
+    * onClick includes ACTION_DOWN and ACTION_UP, but those two actions does not necessarily lead to a Click (could be a swipe or slide)
+    * if return true from onTouch, the click action will be omitted by View.OnClickListener after the touch
+    * if return false, the onClick() will be initiated after the ACTION_UP

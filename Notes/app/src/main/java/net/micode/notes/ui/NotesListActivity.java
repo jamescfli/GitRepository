@@ -151,8 +151,10 @@ public class NotesListActivity extends Activity implements OnClickListener, OnIt
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK
                 && (requestCode == REQUEST_CODE_OPEN_NODE || requestCode == REQUEST_CODE_NEW_NODE)) {
+            // handle changes after adding new note or editing to existing notes
             mNotesListAdapter.changeCursor(null);
         } else {
+            // good practice
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -160,10 +162,12 @@ public class NotesListActivity extends Activity implements OnClickListener, OnIt
     private void setAppInfoFromRawRes() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sp.getBoolean(PREFERENCE_ADD_INTRODUCTION, false)) {
+            // initially the value is false
             StringBuilder sb = new StringBuilder();
-            InputStream in = null;
+            InputStream in = null;  // initiate
             try {
-                 in = getResources().openRawResource(R.raw.introduction);
+                // Open a data stream (InputStream) for reading a raw resource.
+                in = getResources().openRawResource(R.raw.introduction);
                 if (in != null) {
                     InputStreamReader isr = new InputStreamReader(in);
                     BufferedReader br = new BufferedReader(isr);
@@ -218,15 +222,18 @@ public class NotesListActivity extends Activity implements OnClickListener, OnIt
         mBackgroundQueryHandler = new BackgroundQueryHandler(this.getContentResolver());
         mCurrentFolderId = Notes.ID_ROOT_FOLDER;
         mNotesListView = (ListView) findViewById(R.id.notes_list);
+        // Add a fixed view to appear at the bottom of the list
+        // inflate(ResID, RootViewGroup)
         mNotesListView.addFooterView(LayoutInflater.from(this).inflate(R.layout.note_list_footer, null),
-                null, false);
+                null, false);   // View + Data + isSelectable
+        // TODO figure out new OnListItemClickListener() with no implementation
         mNotesListView.setOnItemClickListener(new OnListItemClickListener());
         mNotesListView.setOnItemLongClickListener(this);
         mNotesListAdapter = new NotesListAdapter(this);
         mNotesListView.setAdapter(mNotesListAdapter);
         mAddNewNote = (Button) findViewById(R.id.btn_new_note);
         mAddNewNote.setOnClickListener(this);
-        mAddNewNote.setOnTouchListener(new NewNoteOnTouchListener());
+        mAddNewNote.setOnTouchListener(new NewNoteOnTouchListener()); // default do nothing return false
         mDispatch = false;
         mDispatchY = 0;
         mOriginY = 0;
