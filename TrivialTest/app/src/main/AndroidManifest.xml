@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.jamesli.example.trivialtest" >
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- READ_EXTERNAL_STORAGE is default after this permission -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

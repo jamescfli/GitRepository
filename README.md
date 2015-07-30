@@ -381,21 +381,18 @@
 </table>
     * remember to unbindService in onDestroy() otherwise the app will leak ServiceConnection out (potential accumulated memory leakage)
 
-        <pre><code>
         if (localService != null) {
             unbindService(mConnection);
         }
-        </pre></code>
-after all tests, the best practice is still to check whether localService (initiated in onServiceConnected() with localService = myBinderLocalService.getService()) is null or not
+
+    after all tests, the best practice is still to check whether localService (initiated in onServiceConnected() with localService = myBinderLocalService.getService()) is null or not
     * in [Android document](http://developer.android.com/guide/components/bound-services.html) however, bound flag is suggested:
 
-        <pre><code>
         // Unbind from the service
         if (mBound) {
             unbindService(mConnection);
             mBound = false;
         }
-        </pre></code>
 
 70. ActivityTest61SensorList
     * SensorManager.getSensorList(Sensor.TYPE_ALL) returns List<Sensor>
@@ -589,3 +586,7 @@ after all tests, the best practice is still to check whether localService (initi
     * onClick includes ACTION_DOWN and ACTION_UP, but those two actions does not necessarily lead to a Click (could be a swipe or slide)
     * if return true from onTouch, the click action will be omitted by View.OnClickListener after the touch
     * if return false, the onClick() will be initiated after the ACTION_UP
+    * file storage, permission, internal and external, PrintWriter BufferedWriter and FileWriter, filename with Date and Time, local time by Calendar
+    * test ViewStub in existing view and layout
+
+106.
