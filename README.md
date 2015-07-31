@@ -588,5 +588,15 @@
     * if return false, the onClick() will be initiated after the ACTION_UP
     * file storage, permission, internal and external, PrintWriter BufferedWriter and FileWriter, filename with Date and Time, local time by Calendar
     * test ViewStub in existing view and layout
+    * set filename with local date and time
 
-106.
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        Date date = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String filename = "myFile_" + dateFormat.format(date) + ".dat";
+        File file = new File(<path>, <filename>);
+
+106. AT96GoogleLocation
+    * Use Google Play services location APIs, rather than Android framework location APIs (android.location)
+    * Similar example can be found in this [link](https://github.com/googlesamples/android-play-location/blob/master/BasicLocationSample/app/src/main/java/com/google/android/gms/location/sample/basiclocationsample/MainActivity.java)
+    * Connection ErrorCode = 1, due to Google Service accessibility

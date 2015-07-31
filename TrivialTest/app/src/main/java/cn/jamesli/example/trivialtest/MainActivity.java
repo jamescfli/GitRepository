@@ -96,24 +96,24 @@ public class MainActivity extends RoboActivity {
         mListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,
                 new String[] {"first", "second", "third", "fourth", "fifth"}));
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE); // or CHOICE_MODE_SINGLE
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                setTitle("Item " + (position+1) + " was clicked");
-//            }
-//        });
-        // No response on ItemSelected
-        mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "Item " + (position + 1) + " was selected", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(MainActivity.this, "Nothing was selected", Toast.LENGTH_LONG).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setTitle("Item " + (position+1) + " was clicked");
             }
         });
+//        // No response on ItemSelected
+//        mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(MainActivity.this, "Item " + (position + 1) + " was selected", Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                Toast.makeText(MainActivity.this, "Nothing was selected", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
         buttonSaveToFile.setOnClickListener(new View.OnClickListener() {
             @Override
