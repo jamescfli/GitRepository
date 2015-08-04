@@ -13,11 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.shamanland.fab.FloatingActionButton;
+import com.shamanland.fab.ShowHideOnScroll;
 
 import java.util.List;
 
 import cn.jamesli.example.at97swiperefreshlayout.common.dummydata.Cheeses;
 import cn.jamesli.example.at97swiperefreshlayout.common.logger.Log;
+
 
 public class SwipeRefreshLayoutBasicFragment extends Fragment {
 
@@ -66,6 +71,20 @@ public class SwipeRefreshLayoutBasicFragment extends Fragment {
                 R.color.swipe_color_4
         );  // refresh from 1 to 4 and loop ..
         mListView = (ListView) view.findViewById(android.R.id.list);
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Refreshing through FAB!", Toast.LENGTH_LONG).show();
+                if (!mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+                // Start our refresh background task
+                initiateRefresh();
+            }
+        });
+        mListView.setOnTouchListener(new ShowHideOnScroll(fab));
 
         return view;
     }
@@ -181,4 +200,5 @@ public class SwipeRefreshLayoutBasicFragment extends Fragment {
         mSwipeRefreshLayout.setRefreshing(false);
     }
     // END_INCLUDE (refresh_complete)
+
 }

@@ -604,3 +604,7 @@
 107. AT97SwipeRefreshLayout
     * from [link](https://developer.android.com/samples/SwipeRefreshLayoutBasic/project.html) to test Swipe Refresh
     * Generate random cheese list with fake delay for 3 seconds
+    * add FAB - FloatingActionButton - to refresh the cheese list, note that SwipeRefreshLayout can only have a single child view, so use one single FrameLayout to contain both the listview and the fab
+
+108. AT98FabTest
+    * test both [shamanland](https://github.com/shamanland/floating-action-button) and [melnykov](https://github.com/makovkastar/FloatingActionButton) FAB - Floating Action Button
