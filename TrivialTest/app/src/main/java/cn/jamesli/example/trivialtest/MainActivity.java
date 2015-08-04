@@ -167,6 +167,12 @@ public class MainActivity extends RoboActivity {
     @Override
     protected void onPause() {
         super.onPause();
+//        // save mEditText content is not necessary since the default implementation of
+//        // onSaveInstanceState() saves infomation about the state of the activity's view hierarchy,
+//        // such as the text in an EditText widget or the scroll position of a ListView
+//        // To save additional state information for your activity, you must implement onSaveInstanceState()
+//
+//        // To make the following line effective, you can comment out super.onSaveInstanceState(outState);
 //        editString = mEditText.getText().toString();
         Log.i(TAG, "onPause() => save edit string");
     }

@@ -600,3 +600,7 @@
     * Use Google Play services location APIs, rather than Android framework location APIs (android.location)
     * Similar example can be found in this [link](https://github.com/googlesamples/android-play-location/blob/master/BasicLocationSample/app/src/main/java/com/google/android/gms/location/sample/basiclocationsample/MainActivity.java)
     * Connection ErrorCode = 1, due to Google Service accessibility
+
+107. AT97SwipeRefreshLayout
+    * from [link](https://developer.android.com/samples/SwipeRefreshLayoutBasic/project.html) to test Swipe Refresh
+    * Generate random cheese list with fake delay for 3 seconds
