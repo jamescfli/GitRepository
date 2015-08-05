@@ -1,0 +1,27 @@
+<cn.jamesli.example.at99swiperefreshwithgridview.MultiSwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Keep all things in one single child view, FrameLayout -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="2" />
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_text"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+</cn.jamesli.example.at99swiperefreshwithgridview.MultiSwipeRefreshLayout>
