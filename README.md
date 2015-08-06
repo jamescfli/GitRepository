@@ -615,3 +615,6 @@
 110. BT01ActionBarCompat
     * Add action bar items through menu.xml and manually in onCreateOptionsMenu()
     * Add PopupMenu to listItem
+    * Show and Hide action bar when scrolling down and up the list view. Note: use onScrollStateChanged() in AbsListView.OnScrollListener(), rather than onScroll() method, to achieve more reasonable effects.
+
+111.

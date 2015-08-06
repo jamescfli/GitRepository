@@ -1,10 +1,14 @@
 package cn.jamesli.example.bt01actionbarcompat;
 
+import android.app.ActionBar;
 import android.app.ListFragment;
+import android.app.Notification;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -12,7 +16,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class PopupListFragment extends ListFragment implements View.OnClickListener {
+//public class PopupListFragment extends ListFragment implements View.OnClickListener {
+public class PopupListFragment extends ListFragment {
+    private ActionBar mActionBar;
+    private ListView mCheeseListView;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -23,6 +31,44 @@ public class PopupListFragment extends ListFragment implements View.OnClickListe
             items.add(Cheeses.CHEESES[i]);
         }
         setListAdapter(new PopupAdapter(items));
+
+        mActionBar = getActivity().getActionBar();
+
+        mCheeseListView = getListView();
+        mCheeseListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // The following is more favourable solution
+                final ListView lw = getListView();
+                if (scrollState == 0)
+                    Log.i("PopupListFragment", "scrolling stopped ...");
+                if (view.getId() == lw.getId()) {
+                    final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
+                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+                        // Scrolling down
+                        mActionBar.hide();
+                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                        // Scrolling up
+                        mActionBar.show();
+                    }
+                    mLastFirstVisibleItem = currentFirstVisibleItem;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                if (mLastFirstVisibleItem < firstVisibleItem) {
+//                    // Scrolling down
+//                    mActionBar.hide();
+//                } else if (mLastFirstVisibleItem > firstVisibleItem) {
+//                    // Scrolling up
+//                    mActionBar.show();
+//                }
+//                mLastFirstVisibleItem = firstVisibleItem;
+            }
+        });
     }
 
     @Override
@@ -33,15 +79,15 @@ public class PopupListFragment extends ListFragment implements View.OnClickListe
         Toast.makeText(getActivity(), "Item Clicked: " + item, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onClick(final View v) {     // When click the button
-        v.post(new Runnable() {
-            @Override
-            public void run() {
-                showPopupMenu(v);
-            }
-        });
-    }
+//    @Override
+//    public void onClick(final View v) {     // When click the button
+//        v.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                showPopupMenu(v);
+//            }
+//        });
+//    }
 
     private void showPopupMenu(View view) {
         final PopupAdapter adapter = (PopupAdapter) getListAdapter(); // method of ListFragment return ListAdapter
@@ -78,19 +124,19 @@ public class PopupListFragment extends ListFragment implements View.OnClickListe
 
             popupButton.setTag(getItem(position));
 
-            popupButton.setOnClickListener(PopupListFragment.this);
+//            popupButton.setOnClickListener(PopupListFragment.this);
 
-//            popupButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(final View v) {
-//                    v.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            showPopupMenu(v);   // access from inner class, so need to declare as final
-//                        }
-//                    });
-//                }
-//            });
+            popupButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    v.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            showPopupMenu(v);   // access from inner class, so need to declare as final
+                        }
+                    });
+                }
+            });
 
             return view;
         }
