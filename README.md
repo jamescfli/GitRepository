@@ -611,3 +611,7 @@
 
 109. AT99SwipeRefreshWithGridview
     * same with AT97SwipeRefreshLayout but apply GridView instead
+
+110. BT01ActionBarCompat
+    * Add action bar items through menu.xml and manually in onCreateOptionsMenu()
+    * Add PopupMenu to listItem

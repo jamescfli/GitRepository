@@ -1,5 +1,5 @@
-<cn.jamesli.example.at99swiperefreshwithgridview.MultiSwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.jamesli.example.at99swiperefreshwithgridview.MultiSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -21,6 +21,21 @@
             android:layout_height="wrap_content"
             android:text="@string/empty_text"
             android:layout_gravity="center"/>
+
+        <com.shamanland.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:elevation="4dp"
+            app:floatingActionButtonColor="@color/fab_background"
+            android:src="@drawable/ic_refresh_white_24dp"
+            />
 
     </FrameLayout>
 

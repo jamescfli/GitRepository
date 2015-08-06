@@ -15,6 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.shamanland.fab.FloatingActionButton;
+import com.shamanland.fab.ShowHideOnScroll;
+
 import java.util.List;
 
 import cn.jamesli.example.at99swiperefreshwithgridview.common.dummydata.Cheeses;
@@ -35,6 +38,7 @@ public class SwipeRefreshMultipleViewsFragment extends Fragment {
     private GridView mGridView;
     private ArrayAdapter<String> mListAdapter;
     private View mEmptyView;
+    private FloatingActionButton mFab;
 
     public static SwipeRefreshMultipleViewsFragment newInstance() {
         SwipeRefreshMultipleViewsFragment fragment = new SwipeRefreshMultipleViewsFragment();
@@ -64,6 +68,17 @@ public class SwipeRefreshMultipleViewsFragment extends Fragment {
         );
         mGridView = (GridView) view.findViewById(android.R.id.list);
         mEmptyView = (TextView) view.findViewById(android.R.id.empty);
+        mFab = (FloatingActionButton) view.findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+                initiateRefresh();
+            }
+        });
+        mGridView.setOnTouchListener(new ShowHideOnScroll(mFab));
 
         return view;
     }
@@ -134,7 +149,7 @@ public class SwipeRefreshMultipleViewsFragment extends Fragment {
 
     private class DummyBackgroundTask extends AsyncTask<Void, Void, List<String>> {
 
-        static final int TASK_DURATION = 3 * 1000; // 3 seconds
+        static final int TASK_DURATION = 5 * 1000; // 3 seconds
 
         @Override
         protected List<String> doInBackground(Void... params) {

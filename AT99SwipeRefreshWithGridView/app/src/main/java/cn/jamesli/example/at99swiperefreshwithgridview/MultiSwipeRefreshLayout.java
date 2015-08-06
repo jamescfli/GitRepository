@@ -34,7 +34,7 @@ public class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
         if (mSwipeableChildren != null && mSwipeableChildren.length > 0) {
             // Check if any of the children can not scroll up
             for (View view : mSwipeableChildren) {
-                if (view != null && view.isShown() && !canViewScrollUp(view)) { // reached the top
+                if (view != null && view.isShown() && !canViewScrollUp(view)) { // reached the top or bottom
                     return false;   // to start the gesture
                 }
             }
