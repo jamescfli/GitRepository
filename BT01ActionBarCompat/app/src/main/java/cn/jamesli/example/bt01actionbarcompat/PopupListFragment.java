@@ -40,6 +40,9 @@ public class PopupListFragment extends ListFragment {
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // If the view is being scrolled, this method will be *called before* the
+                // next frame of the scroll is rendered.
+                // In particular, it will be called before any calls to getView(int, View, ViewGroup).
                 // The following is more favourable solution
                 final ListView lw = getListView();
                 if (scrollState == 0)
@@ -59,6 +62,8 @@ public class PopupListFragment extends ListFragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // Callback method to be invoked when the list or grid has been scrolled.
+                // This will be *called after the scroll has completed*.
 //                if (mLastFirstVisibleItem < firstVisibleItem) {
 //                    // Scrolling down
 //                    mActionBar.hide();

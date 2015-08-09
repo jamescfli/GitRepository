@@ -617,4 +617,5 @@
     * Add PopupMenu to listItem
     * Show and Hide action bar when scrolling down and up the list view. Note: use onScrollStateChanged() in AbsListView.OnScrollListener(), rather than onScroll() method, to achieve more reasonable effects.
 
-111.
+111. BT02BLEibrary
+    * Study [Bluetooth-LE-Library-Android](https://github.com/alt236/Bluetooth-LE-Library---Android) with iBeacon nodes
