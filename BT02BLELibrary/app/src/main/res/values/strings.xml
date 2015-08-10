@@ -24,6 +24,7 @@
 
     <!-- Menu items -->
     <string name="menu_about">About</string>
+    <string name="menu_save">Save Scan Results</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
@@ -38,6 +39,7 @@
 
     <!-- Labels -->
     <string name="about_dialog_text">This is a sample application using the Bluetooth LE Library.\n\nGithub: https://github.com/alt236/Bluetooth-LE-Library---Android\n\nCopyright: Alexandros Schillings</string>
+    <string name="save_dialog_text">The scan result WILL be saved to %s folder in .csv file.</string>
     <string name="header_device_info">Device Info</string>
     <string name="header_ibeacon_data">iBeacon Data</string>
     <string name="header_raw_ad_records">Raw Ad Records</string>

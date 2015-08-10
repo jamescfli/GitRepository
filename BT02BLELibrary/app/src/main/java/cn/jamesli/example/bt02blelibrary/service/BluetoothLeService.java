@@ -17,6 +17,8 @@ import android.util.Log;
 
 import java.util.List;
 
+
+// Used in DeviceControlActivity only
 public class BluetoothLeService extends Service {
     public final static String ACTION_GATT_CONNECTED = "cn.jamesli.example.bt02blelibrary.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED = "cn.jamesli.example.bt02blelibrary.ACTION_GATT_DISCONNECTED";
@@ -38,6 +40,7 @@ public class BluetoothLeService extends Service {
     public BluetoothLeService() {
     }
 
+    // to enable communication with Bluetooth Smart or Smart Ready devices
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onCharacteristicChanged(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {

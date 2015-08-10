@@ -27,10 +27,12 @@ import uk.co.alt236.easycursor.objectcursor.EasyObjectCursor;
 
 public class BluetoothLeDeviceStore {
     private final Map<String, BluetoothLeDevice> mDeviceMap;
+    private final File mOutputDir;
 
     // initiate
-    public BluetoothLeDeviceStore() {
+    public BluetoothLeDeviceStore(final Context context) {
         mDeviceMap = new HashMap<>();
+        mOutputDir = context.getExternalCacheDir();
     }
 
     public void addDevice(final BluetoothLeDevice device) {
@@ -146,16 +148,32 @@ public class BluetoothLeDeviceStore {
         i.setType("plain/text");
         try {
 //            final File outputDir = context.getCacheDir();   // save in internal cache
-            final File outputDir = context.getExternalCacheDir();   // save in external cache
-            final File outputFile = File.createTempFile("bluetooth_le_" + timeInMillis, ".csv", outputDir);
-            outputFile.setReadable(true, false);
+//            final File outputDir = context.getExternalCacheDir();   // save in external cache
+            final File outputFile = File.createTempFile("bluetooth_le_" + timeInMillis, ".csv", mOutputDir);
+            outputFile.setReadable(true, false);    // readable + ownerOnly (false) to manipulate read permission
             generateFile(outputFile, getListAsCsv());
             i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(outputFile));
             i.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
             i.putExtra(Intent.EXTRA_SUBJECT, subject);
             i.putExtra(Intent.EXTRA_TEXT, message);
             context.startActivity(Intent.createChooser(i, context.getString(R.string.exporter_email_device_list_picker_text)));
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public File getFileSavingDirectory() {
+        return mOutputDir;
+    }
+
+    public void saveDataInExternalStorage() {
+        try {
+            final long timeInMillis = System.currentTimeMillis();
+            // createTempFile will add random index after prefix and before suffix
+            final File outputFile = File.createTempFile("bluetooth_le_"
+                    + TimeFormatter.getLocalDateTimeForFilename(timeInMillis) + "_", ".csv", mOutputDir);
+            outputFile.setReadable(true, false);
+            generateFile(outputFile, getListAsCsv());
         } catch (final IOException e) {
             e.printStackTrace();
         }

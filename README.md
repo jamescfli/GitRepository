@@ -619,3 +619,5 @@
 
 111. BT02BLEibrary
     * Study [Bluetooth-LE-Library-Android](https://github.com/alt236/Bluetooth-LE-Library---Android) with iBeacon nodes
+    * Revise share to save the scan result in external cache directory
+    * Add new TimeFormatter for saving files with Date and Time as file name

@@ -1,7 +1,6 @@
 package cn.jamesli.example.bt02blelibrary;
 
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -104,7 +103,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_connect) {
-            // TODO start DeviceControlActivity
+            // TODO start DeviceControlActivity, unfinished
             Toast.makeText(this, "DeviceControlActivity is under contruction.", Toast.LENGTH_LONG).show();
             return true;
         }

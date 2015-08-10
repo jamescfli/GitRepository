@@ -21,15 +21,20 @@
         android:orderInCategory="101"
         android:title="@string/menu_stop"
         app:showAsAction="ifRoom|withText"/>
+    <!--<item-->
+        <!--android:id="@+id/menu_share"-->
+        <!--android:icon="@drawable/ic_action_share"-->
+        <!--android:orderInCategory="102"-->
+        <!--android:title="@string/menu_share"-->
+        <!--app:showAsAction="ifRoom"/>-->
     <item
-        android:id="@+id/menu_share"
-        android:icon="@drawable/ic_action_share"
-        android:orderInCategory="102"
-        android:title="@string/menu_share"
-        app:showAsAction="ifRoom"/>
+        android:id="@+id/menu_save_to_file"
+        android:orderInCategory="103"
+        android:title="@string/menu_save"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/menu_about"
-        android:orderInCategory="103"
+        android:orderInCategory="104"
         android:title="@string/menu_about"
         app:showAsAction="never"/>
 

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.jamesli.example.bt02blelibrary.adapter.LeDeviceListAdapter;
 import cn.jamesli.example.bt02blelibrary.container.BluetoothLeDeviceStore;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        mDeviceStore = new BluetoothLeDeviceStore();
+        mDeviceStore = new BluetoothLeDeviceStore(this);
         mBluetoothUtils = new BluetoothUtils(this);
         mScanner = new BluetoothLeScanner(mLeScanCallback, mBluetoothUtils);
         updateItemCount(0);     // no scan, no BLEs
@@ -124,9 +125,11 @@ public class MainActivity extends AppCompatActivity {
             menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_progress_indeterminate);
         }
         if (mList.getCount() > 0) {
-            menu.findItem(R.id.menu_share).setVisible(true);
+//            menu.findItem(R.id.menu_share).setVisible(true);
+            menu.findItem(R.id.menu_save_to_file).setVisible(true);
         } else {
-            menu.findItem(R.id.menu_share).setVisible(false);
+//            menu.findItem(R.id.menu_share).setVisible(false);
+            menu.findItem(R.id.menu_save_to_file).setVisible(false);
         }
         return true;
     }
@@ -146,11 +149,14 @@ public class MainActivity extends AppCompatActivity {
                 mScanner.scanLeDevice(-1, false);
                 invalidateOptionsMenu();
                 break;
-            case R.id.menu_about:
-                displayAboutDialog();
+            case R.id.menu_save_to_file:
+                showSaveResultDialog();
                 break;
-            case R.id.menu_share:
-                mDeviceStore.shareDataAsEmail(this);
+            case R.id.menu_about:
+                showAboutDialog();
+                break;
+//            case R.id.menu_share:
+//                mDeviceStore.shareDataAsEmail(this);
         }
 
         return super.onOptionsItemSelected(item);
@@ -172,7 +178,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void displayAboutDialog() {
+    private void showSaveResultDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.menu_save)
+                .setMessage(getString(R.string.save_dialog_text, mDeviceStore.getFileSavingDirectory().toString()))
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mDeviceStore.saveDataInExternalStorage();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "Scan result has not been saved!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                })
+                .show();
+    }
+
+    private void showAboutDialog() {
         final int paddingSizeDp = 5;
         final float scale = getResources().getDisplayMetrics().density;
         final int dpAsPixels = (int) (paddingSizeDp * scale + 0.5f);
