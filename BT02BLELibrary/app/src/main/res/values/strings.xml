@@ -27,6 +27,7 @@
     <string name="menu_save">Save Scan Results</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_find">Find</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
     <string name="menu_share">Share</string>

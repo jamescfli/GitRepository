@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "cn.jamesli.example.bt03easycursortest"
+        minSdkVersion 21
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+//repositories {
+//    maven {
+//        url "https://dl.bintray.com/alt236/maven"
+//    }
+//
+////    // have some difficulties to access S3
+////    maven {
+////        url "https://repo.commonsware.com.s3.amazonaws.com"
+////    }
+//
+////    mavenCentral()
+//}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:22.2.1'
+//    compile 'uk.co.alt236:easycursor-android:1.0.0'
+//    compile 'com.commonsware.cwac:merge:1.1.+'
+    compile 'com.google.code.gson:gson:2.3'
+}

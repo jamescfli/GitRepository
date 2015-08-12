@@ -621,3 +621,14 @@
     * Study [Bluetooth-LE-Library-Android](https://github.com/alt236/Bluetooth-LE-Library---Android) with iBeacon nodes
     * Revise share to save the scan result in external cache directory
     * Add new TimeFormatter for saving files with Date and Time as file name
+
+112. BT03EasyCursorTest
+    * source from [EasyCursor](https://github.com/alt236/EasyCursor---Android)
+    * wrap JSONArray with EasyJsonCursor and further with JsonLoader extending from com.commonsware.cwac.loaderex.acl.AbstractCursorLoader
+    * AbstractCursorLoader requires [cwac-loaderex.jar](https://github.com/commonsguy/cwac-loaderex)
+    * inputStream.available() returns an estimated number of bytes can be read or skipped without blocking for more input. o.w. one can use BufferStream to read the whole piece line by line with StringBuilder.
+    * translate json to list by Gson tool, and wrap list to cursor with Loader in EasyObjectCursorExampleActivity
+    * access item of EasyObjectCursor through getObject(String nameOfColumn)
+    * start write integration test AndroidTestCase and use Assert.assertTrue .assertEquals
+
+113.

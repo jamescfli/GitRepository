@@ -102,10 +102,14 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_connect) {
+        switch (id) {
+        case R.id.menu_connect:
             // TODO start DeviceControlActivity, unfinished
-            Toast.makeText(this, "DeviceControlActivity is under contruction.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Under construction ..", Toast.LENGTH_LONG).show();
             return true;
+        case R.id.menu_find:
+            // TODO try to find the BLE device
+            Toast.makeText(this, "Still under construction ..", Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
