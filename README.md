@@ -631,4 +631,16 @@
     * access item of EasyObjectCursor through getObject(String nameOfColumn)
     * start write integration test AndroidTestCase and use Assert.assertTrue .assertEquals
 
-113.
+113. BT04SuperSwipeRefresh
+    * to test [SuperSwipeRefreshLayout](https://github.com/nuptboyzhb/SuperSwipeRefreshLayout) suggested by Trinea
+    * RecyclerView, ListView and ScrollView
+    * Apply RecyclerView to decouple list from it's container
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // or
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        // or water-fall gridlayout
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
+114. BT05
