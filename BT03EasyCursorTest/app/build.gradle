@@ -38,4 +38,5 @@ dependencies {
 //    compile 'uk.co.alt236:easycursor-android:1.0.0'
 //    compile 'com.commonsware.cwac:merge:1.1.+'
     compile 'com.google.code.gson:gson:2.3'
+    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
 }
