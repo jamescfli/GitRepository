@@ -16,13 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jamesli.example.bt04superswiperefresh.R;
+import cn.jamesli.example.bt04superswiperefresh.adapter.MultipleItemAdapter;
+import cn.jamesli.example.bt04superswiperefresh.adapter.NormalRecyclerViewAdapter;
 import cn.jamesli.example.bt04superswiperefresh.adapter.RecyclerAdapter;
 import cn.jamesli.example.bt04superswiperefresh.view.SuperSwipeRefreshLayout;
 
 public class GridViewActivity extends Activity {
 
     private RecyclerView recyclerView;
-    private RecyclerAdapter mAdapter;
+//    private NormalRecyclerViewAdapter mAdapter;
+    private MultipleItemAdapter mAdapter;
     private StaggeredGridLayoutManager layoutManager;
     private SuperSwipeRefreshLayout swipeRefreshLayout;
 
@@ -43,7 +46,8 @@ public class GridViewActivity extends Activity {
         // .. or mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         // to set layout dynamically, which can not be down by ListView
 
-        mAdapter = new RecyclerAdapter(this);
+//        mAdapter = new NormalRecyclerViewAdapter(this);
+        mAdapter = new MultipleItemAdapter(this);
         recyclerView.setAdapter(mAdapter);
 
         // SuperSwipeRefreshLayout
@@ -77,7 +81,7 @@ public class GridViewActivity extends Activity {
             }
         });
 
-        initDatas();
+//        initDatas();
     }
 
     private View createHeaderView() {
@@ -93,13 +97,13 @@ public class GridViewActivity extends Activity {
         return headerView;
     }
 
-    private void initDatas() {
-        List<String> list = new ArrayList<String>();
-        for (int i = 0; i < 30; i++) {
-            list.add("item " + i);
-        }
-        mAdapter.addAll(list, 0);
-    }
+//    private void initDatas() {
+//        List<String> list = new ArrayList<String>();
+//        for (int i = 0; i < 30; i++) {
+//            list.add("item " + i);
+//        }
+//        mAdapter.addAll(list, 0);
+//    }
 
 
 }

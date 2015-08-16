@@ -643,4 +643,5 @@
         // or water-fall gridlayout
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-114. BT05
+114. BT05AndroidSwipeLayout
+    * try [Android Swipe Layout](https://github.com/daimajia/AndroidSwipeLayout)
