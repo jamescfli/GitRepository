@@ -5,8 +5,8 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "cn.jamesli.example.bt02blelibrary"
-        minSdkVersion 19
+        applicationId "cn.jamesli.example.bt06ibeacontx"
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -19,16 +19,8 @@ android {
     }
 }
 
-//repositories {
-//    maven {
-//        url "https://repo.commonsware.com.s3.amazonaws.com"
-//    }
-//}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'uk.co.alt236:bluetooth-le-library-android:1.0.0'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-//    compile 'uk.co.alt236:easycursor-android:1.0.0'
-//    compile 'com.commonsware.cwac:merge:1.1.+'
+    compile 'com.android.support:support-v4:22.2.1'
+    compile 'org.altbeacon:android-beacon-library:2+@aar'
 }

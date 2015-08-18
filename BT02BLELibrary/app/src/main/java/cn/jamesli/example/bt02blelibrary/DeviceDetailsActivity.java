@@ -105,11 +105,11 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         switch (id) {
         case R.id.menu_connect:
             // TODO start DeviceControlActivity, unfinished
-            Toast.makeText(this, "Under construction ..", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Under construction ..", Toast.LENGTH_SHORT).show();
             return true;
         case R.id.menu_find:
             // TODO try to find the BLE device
-            Toast.makeText(this, "Still under construction ..", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Still under construction ..", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

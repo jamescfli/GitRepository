@@ -645,3 +645,7 @@
 
 114. BT05AndroidSwipeLayout
     * try [Android Swipe Layout](https://github.com/daimajia/AndroidSwipeLayout)
+
+115. BT06iBeaconTx
+    * source [ALT Beacon Transmitter Android](https://github.com/AltBeacon/altbeacon-transmitter-android)
+    * javadoc at [here](http://altbeacon.github.io/android-beacon-library/javadoc/)
