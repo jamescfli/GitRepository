@@ -35,21 +35,26 @@ public class MainActivity extends Activity {
         if (checkPrerequisites()) {
             // context + BeaconParser
             // format specified in the BeaconParser
+            // Layout: Beacon type (2 bytes, 0x02-15), UUID 16byts 4-19, Major 2 bytes 20-21,
+            // Minor 2 bytes 22-23, Measured Power 1 byte 25
             mBeaconTransmitter = new BeaconTransmitter(this, new BeaconParser()
-                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));     // 02-15 required by iBeacon
 //                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
             // .. bytes 0-1 of the BLE manufacturer advertisements are the two byte manufacturer code
             Beacon beacon = new Beacon.Builder()
-//                    .setBluetoothName("Mobile as Beacon")   // seems not working when being observed
-                    .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6")
-                    .setId2("1")
-                    .setId3("2")
+                    .setBluetoothName("MotoGasBeacon")   // seems not working when being observed
+//                    .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6") // 16bytes UUID
+                    .setId1("FE0E1948-76E5-4C81-9734-B8FD81792773") // MAC Generated: MacBook:~$uuidgen
+                    .setId2("1")                                    // Major
+                    .setId3("2")                                    // Minor
                     // IDs: the a list of the multi-part identifiers of the beacon. Together,
                     // these identifiers signify a unique beacon.
                     // The identifiers are ordered by significance for the purpose of grouping beacons
-                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
-                    .setTxPower(-59)    // default, actually received power at 1m from Tx
-                    .setDataFields(Arrays.asList(new Long[]{0l, 1l})) // data fields included in the beacon advertisement.
+//                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
+                    .setManufacturer(0x004C) // Apple Inc. the real message would be (in reverse sequence) 4C, 00 before 02, 15
+                    .setTxPower(-59)    // default value, 0xC5 = -59dBm received power at 1m from Tx
+                    // .. i.e. Measured power is set by holding a receiver one meter from the beacon
+                    .setDataFields(Arrays.asList(new Long[]{0l, 1l, 2l})) // data fields included in the beacon advertisement.
                     .build();
             mBeaconTransmitter.startAdvertising(beacon);
         }
