@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import uk.co.alt236.easycursor.objectcursor.EasyObjectCursor;
 
 // ActionBarActivity was deprecated, use AppCompatActivity instead.
 public class MainActivity extends AppCompatActivity {
+    private final static String TAG = "MainActivity";
     private TextView mTvBluetoothLeStatus;
     private TextView mTvBluetoothStatus;
     private TextView mTvItemCount;
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
             final BluetoothLeDevice deviceLe = new BluetoothLeDevice(device, rssi, scanRecord, System.currentTimeMillis());
+            // TODO strange? can not find foo iBeacon transmitter's name, set by
+            // Beacon.Builder().setBluetoothName("MotoAsBeacon")
+            if (deviceLe.getName() == null) {
+                Log.d(TAG, deviceLe.getAddress().toString() + deviceLe.getName().toString());
+            }
             mDeviceStore.addDevice(deviceLe);
             final EasyObjectCursor<BluetoothLeDevice> c = mDeviceStore.getDeviceCursor();
 
