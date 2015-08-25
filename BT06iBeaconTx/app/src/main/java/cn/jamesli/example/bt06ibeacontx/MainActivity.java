@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 import cn.jamesli.example.bt06ibeacontx.util.BluetoothUtils;
 
-@TargetApi(21)
+@TargetApi(21)      // Suppress Warning Lint
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private BeaconTransmitter mBeaconTransmitter;
@@ -46,15 +46,15 @@ public class MainActivity extends Activity {
             // .. bytes 0-1 of the BLE manufacturer advertisements are the two byte manufacturer code
             Beacon beacon = new Beacon.Builder()
                     .setBluetoothName("MotoAsBeacon")   // seems not working when being observed
-//                    .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6") // 16bytes UUID
-                    .setId1("FE0E1948-76E5-4C81-9734-B8FD81792773") // MAC Generated: MacBook:~$uuidgen
+                    .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6") // 16bytes UUID for AltBeacon
+//                    .setId1("FE0E1948-76E5-4C81-9734-B8FD81792773") // MAC Generated: MacBook:~$uuidgen
                     .setId2("1")                                    // Major
                     .setId3("2")                                    // Minor
                     // IDs: the a list of the multi-part identifiers of the beacon. Together,
                     // these identifiers signify a unique beacon.
                     // The identifiers are ordered by significance for the purpose of grouping beacons
 //                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
-//                    .setManufacturer(0x0118)    // for Radius Networks
+//                    .setManufacturer(0x0118)    // for Radius Networks AltBeacon
                     .setManufacturer(0x004C)    // Apple Inc. the real message would be (in reverse sequence) 4C, 00 before 02, 15
                     .setTxPower(-59)    // default value, 0xC5 = -59dBm received power at 1m from Tx
                     // .. i.e. Measured power is set by holding a receiver one meter from the beacon
@@ -74,18 +74,20 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
+            // requires Android 5.0
             int result = BeaconTransmitter.checkTransmissionSupported(this);
             switch (result) {
-                case BeaconTransmitter.NOT_SUPPORTED_MIN_SDK:
+                case BeaconTransmitter.NOT_SUPPORTED_MIN_SDK:   // value 1
+                    // TODO if BeaconTransmitter requires Android 5.0, how it would be possible to end it up here?
                     Log.i(TAG, "SDK version is less or equal to API 18.");
                     break;
-                case BeaconTransmitter.NOT_SUPPORTED_BLE:
+                case BeaconTransmitter.NOT_SUPPORTED_BLE:       // value 2
                     Log.i(TAG, "BLE is not supported.");
                     break;
-                case BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER:
+                case BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER:     // value 4
                     Log.i(TAG, "Could not get Advertiser. Either not supported by chipset or manufacturer");
                     break;
-                case BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER_MULTIPLE_ADVERTISEMENTS:
+                case BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER_MULTIPLE_ADVERTISEMENTS: // 5
                     Log.i(TAG, "Could not get Multiple Advertiser. Either not supported by chipset or manufacturer");
                     break;
                 default:

@@ -1,11 +1,14 @@
 package cn.jamesli.example.bt06ibeacontx.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import java.lang.annotation.Target;
 
 /**
  * Created by jamesli on 15-8-18.
@@ -17,9 +20,12 @@ public final class BluetoothUtils {
 
     public BluetoothUtils(final Activity activity) {
         mActivity = activity;
+        // API 18 BluetoothManager
         final BluetoothManager btManager = (BluetoothManager) mActivity
                 .getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = btManager.getAdapter(); // null => not have Bluetooth
+//        // .. or you can do the same by
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     public void askUserToEnableBluetoothIfNeeded() {
