@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,11 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private BeaconTransmitter mBeaconTransmitter;
     private BluetoothUtils mBluetoothUtils;
+    private Beacon mBeacon;
     private TextView mTextViewStatus;
+
+    private Button mButtonStart;
+    private Button mButtonStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,48 +54,46 @@ public class MainActivity extends Activity {
 //                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));     // 02-15 required by iBeacon
                     .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
             // .. bytes 0-1 of the BLE manufacturer advertisements are the two byte manufacturer code
-            Beacon beacon = new Beacon.Builder()
+            mBeacon = new Beacon.Builder()
                     .setBluetoothName("MotoAsBeacon")   // seems not working when being observed
                     .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6") // 16bytes UUID for AltBeacon
-//                    .setId1("FE0E1948-76E5-4C81-9734-B8FD81792773") // MAC Generated: MacBook:~$uuidgen
+//                    .setId1("DF7E1C79-43E9-44FF-886F-1D1F7DA6997A") // UUID from TimedBeaconSimulator, or MacBook:~$uuidgen
                     .setId2("1")                                    // Major
                     .setId3("2")                                    // Minor
                     // IDs: the a list of the multi-part identifiers of the beacon. Together,
                     // these identifiers signify a unique beacon.
                     // The identifiers are ordered by significance for the purpose of grouping beacons
-                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
+//                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
 //                    .setManufacturer(0x0118)    // for Radius Networks AltBeacon
 //                    .setManufacturer(0x004C)    // Apple Inc. the real message would be (in reverse sequence) 4C, 00 before 02, 15
                     .setTxPower(-59)    // default value, 0xC5 = -59dBm received power at 1m from Tx
                     // .. i.e. Measured power is set by holding a receiver one meter from the beacon
                     .setDataFields(Arrays.asList(new Long[]{0l})) // data fields included in the beacon advertisement.
                     .build();
-            // transmit with highest frequency and highest Tx power
+            // transmit with highest frequency (10Hz) and highest Tx power (-56dBm)
             mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
             mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
 //            mBeaconTransmitter.startAdvertising(beacon);
-            mBeaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
-                @Override
-                public void onStartFailure(final int errorCode) {
-                    Log.e(TAG, "Advertisement start failed with code: " + errorCode);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mTextViewStatus.setText("failed to start iBeacon Tx due to error: "
-                                    + errorCode);
-                        }
-                    });
-                }
+            startBeaconTransmitting();
 
+            mButtonStart = (Button) findViewById(R.id.button_start);
+            mButtonStop = (Button) findViewById(R.id.button_stop);
+            mButtonStart.setEnabled(false);
+            mButtonStop.setEnabled(true);
+            mButtonStart.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                    Log.i(TAG, "Advertisement start succeeded.");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mTextViewStatus.setText("iBeacon Tx has been started");
-                        }
-                    });
+                public void onClick(View v) {
+                    startBeaconTransmitting();
+                    mButtonStart.setEnabled(false);
+                    mButtonStop.setEnabled(true);
+                }
+            });
+            mButtonStop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    stopBeaconTransmitting();
+                    mButtonStart.setEnabled(true);
+                    mButtonStop.setEnabled(false);
                 }
             });
         } else {
@@ -115,10 +119,41 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void startBeaconTransmitting() {
+        mBeaconTransmitter.startAdvertising(mBeacon, new AdvertiseCallback() {
+            @Override
+            public void onStartFailure(final int errorCode) {
+                Log.e(TAG, "Advertisement start failed with code: " + errorCode);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTextViewStatus.setText("failed to start iBeacon Tx due to error: "
+                                + errorCode);
+                    }
+                });
+            }
+            @Override
+            public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                Log.i(TAG, "Advertisement start succeeded.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTextViewStatus.setText("iBeacon Tx has been started");
+                    }
+                });
+            }
+        });
+    }
+
+    private void stopBeaconTransmitting() {
+        mBeaconTransmitter.stopAdvertising();
+        mTextViewStatus.setText("iBeacon Tx has been shut down");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mBeaconTransmitter.stopAdvertising();
+        stopBeaconTransmitting();
     }
 
     @TargetApi(21)

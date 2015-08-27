@@ -30,6 +30,7 @@ public class LogToFile {
             mPrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(this.mDataFile)));
         } catch (IOException e) {
             Log.e(TAG, "Could not open CSV file(s)", e);
+            e.printStackTrace();
         }
     }
     public void close()

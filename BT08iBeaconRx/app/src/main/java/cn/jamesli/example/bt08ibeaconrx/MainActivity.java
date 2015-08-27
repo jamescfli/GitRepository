@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private TextView mTextViewParas;
     private EditText mEditTextParas;
 //    private EditText edA,edB,edC;
+    private Button buttonStart;
+    private Button buttonStop;
     private static final String[] arrayFilters ={
             "RunningAverageRssiFilter",
             "ArmaRssiFilter",
@@ -73,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 //        edA = (EditText)findViewById(R.id.edA);
 //        edB = (EditText)findViewById(R.id.edB);
 //        edC = (EditText)findViewById(R.id.edC);
+
+        buttonStart = (Button) findViewById(R.id.button_start);
+        buttonStop = (Button) findViewById(R.id.button_stop);
+        buttonStop.setEnabled(false);
 
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
@@ -152,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 Log.i("MainActivity", "didRangeBeaconsInRegion() " + String.valueOf(beacons.size()));
+                logToDisplay("beacon size: " + beacons.size(), mTextViewParas);
+                // TODO figure out why beacons.size() == 0
                 if (beacons.size() > 0) {
                     beaconFirst = beacons.iterator().next();
                     logToDisplay(beaconFirst.getId1() + "\nRSS: " + beaconFirst.getRssi()
@@ -165,23 +174,26 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private void logToDisplay(final String line, final TextView tv) {
         runOnUiThread(new Runnable() {
             public void run() {
-                tv.setText(line + "\n");    // refresh with new measurement
+                tv.setText(line + "\n" + tv.getText().toString());    // refresh with new measurement
             }
         });
     }
-    public void buttonStart(View view)
-    {
+    public void buttonStart(View view) {
         NoProcessFilter.clear();    // clear historical measurements
         try {
             mBeaconManager.startRangingBeaconsInRegion(regionBeacon);
+            buttonStart.setEnabled(false);
+            buttonStop.setEnabled(true);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
     }
-    public void buttonStop(View view){
+
+    public void buttonStop(View view) {
         try {
             mBeaconManager.stopRangingBeaconsInRegion(regionBeacon);
+            buttonStart.setEnabled(true);
+            buttonStop.setEnabled(false);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
