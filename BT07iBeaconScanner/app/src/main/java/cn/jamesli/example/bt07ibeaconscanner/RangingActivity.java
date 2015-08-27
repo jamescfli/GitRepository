@@ -2,8 +2,6 @@ package cn.jamesli.example.bt07ibeaconscanner;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
 
 import org.altbeacon.beacon.Beacon;
@@ -24,7 +22,7 @@ public class RangingActivity extends AppCompatActivity implements BeaconConsumer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranging);
 
-        mBeaconManager.bind(this);
+        mBeaconManager.bind(this);  // bind BeaconService
     }
 
     @Override
@@ -37,6 +35,7 @@ public class RangingActivity extends AppCompatActivity implements BeaconConsumer
     protected void onPause() {
         super.onPause();
         if (mBeaconManager.isBound(this))
+            // go to background mode after onPause()
             mBeaconManager.setBackgroundMode(true);
     }
 
@@ -46,7 +45,7 @@ public class RangingActivity extends AppCompatActivity implements BeaconConsumer
         if (mBeaconManager.isBound(this))
             mBeaconManager.setBackgroundMode(false);
     }
-
+    // BeaconConsumer interface method:
     @Override
     public void onBeaconServiceConnect() {
         mBeaconManager.setRangeNotifier(new RangeNotifier() {

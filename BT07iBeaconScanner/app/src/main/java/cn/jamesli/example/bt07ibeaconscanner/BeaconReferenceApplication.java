@@ -11,7 +11,6 @@ import android.util.Log;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
@@ -21,10 +20,10 @@ import org.altbeacon.beacon.startup.RegionBootstrap;
  * Created by jamesli on 15-8-19.
  */
 public class BeaconReferenceApplication extends Application implements BootstrapNotifier {
-    private static final String TAG = "BeaconRefApp";
+    private static final String TAG = "BeaconRefApplication";
     // to set up background launching of an app when a user enters a beacon Region
     private RegionBootstrap regionBootstrap;
-    private BackgroundPowerSaver backgroundPowerSaver;
+//    private BackgroundPowerSaver backgroundPowerSaver;
     private boolean haveDetectedBeaconSinceBoot = false;
     private MonitoringActivity monitoringActivity = null;
 
@@ -34,8 +33,8 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
         BeaconManager mBeaconManager = BeaconManager.getInstanceForApplication(this);
         // find Apple inc. iBeacon, 0xaabb is for AltBeacon
         mBeaconManager.getBeaconParsers().add(new BeaconParser()
-                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25")); // AltBeacon
-//                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25")); // Apple Inc.
+//                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25")); // AltBeacon already set by default
+                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25")); // Apple Inc.
         Log.d(TAG, "setting up background monitoring for beacons and power saving");
         // uniqueId field distinguish this Region
         Region region = new Region("BackgroundRegion", null, null, null);
@@ -46,7 +45,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
         regionBootstrap = new RegionBootstrap(this, region);
         // automatically cause the BeaconLibrary to save battery whenever the application
         // is not visible.  This reduces bluetooth power usage by about 60%
-        backgroundPowerSaver = new BackgroundPowerSaver(this);  // auto battery savor
+//        backgroundPowerSaver = new BackgroundPowerSaver(this);  // auto battery savor
     }
 
     @Override
@@ -65,7 +64,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
                 monitoringActivity.logToDisplay("I see a beacon again");
             } else {
                 Log.d(TAG, "Sending notification");
-                sendNotification();
+                sendNotification(); // run as Notification, started by service
             }
         }
     }
@@ -100,6 +99,6 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
     }
 
     public void setMonitoringActivity(MonitoringActivity activity) {
-        this.monitoringActivity = activity;
+        this.monitoringActivity = activity; // unset and set monitoringActivity in onPause() and onResume()
     }
 }

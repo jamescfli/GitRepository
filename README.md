@@ -656,4 +656,7 @@
     </tr>
     </table>
 
-116. BT06iBeaconScanner
+116. BT07iBeaconScanner
+
+117. BT08iBeaonRx
+    * receive AltBeacon and save it to external cache as csv files
