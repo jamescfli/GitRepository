@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
@@ -27,11 +28,14 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private BeaconTransmitter mBeaconTransmitter;
     private BluetoothUtils mBluetoothUtils;
+    private TextView mTextViewStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mTextViewStatus = (TextView) findViewById(R.id.text_view_status);
 
         mBluetoothUtils = new BluetoothUtils(this);
 
@@ -41,8 +45,8 @@ public class MainActivity extends Activity {
             // Layout: Beacon type (2 bytes, 0x02-15), UUID 16byts 4-19, Major 2 bytes 20-21,
             // Minor 2 bytes 22-23, Measured Power 1 byte 25
             mBeaconTransmitter = new BeaconTransmitter(this, new BeaconParser()
-                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));     // 02-15 required by iBeacon
-//                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+//                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));     // 02-15 required by iBeacon
+                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
             // .. bytes 0-1 of the BLE manufacturer advertisements are the two byte manufacturer code
             Beacon beacon = new Beacon.Builder()
                     .setBluetoothName("MotoAsBeacon")   // seems not working when being observed
@@ -53,24 +57,39 @@ public class MainActivity extends Activity {
                     // IDs: the a list of the multi-part identifiers of the beacon. Together,
                     // these identifiers signify a unique beacon.
                     // The identifiers are ordered by significance for the purpose of grouping beacons
-//                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
+                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
 //                    .setManufacturer(0x0118)    // for Radius Networks AltBeacon
-                    .setManufacturer(0x004C)    // Apple Inc. the real message would be (in reverse sequence) 4C, 00 before 02, 15
+//                    .setManufacturer(0x004C)    // Apple Inc. the real message would be (in reverse sequence) 4C, 00 before 02, 15
                     .setTxPower(-59)    // default value, 0xC5 = -59dBm received power at 1m from Tx
                     // .. i.e. Measured power is set by holding a receiver one meter from the beacon
-                    .setDataFields(Arrays.asList(new Long[]{0l, 1l, 2l})) // data fields included in the beacon advertisement.
+                    .setDataFields(Arrays.asList(new Long[]{0l})) // data fields included in the beacon advertisement.
                     .build();
+            // transmit with highest frequency and highest Tx power
+            mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+            mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
 //            mBeaconTransmitter.startAdvertising(beacon);
             mBeaconTransmitter.startAdvertising(beacon, new AdvertiseCallback() {
-
                 @Override
-                public void onStartFailure(int errorCode) {
+                public void onStartFailure(final int errorCode) {
                     Log.e(TAG, "Advertisement start failed with code: " + errorCode);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mTextViewStatus.setText("failed to start iBeacon Tx due to error: "
+                                    + errorCode);
+                        }
+                    });
                 }
 
                 @Override
                 public void onStartSuccess(AdvertiseSettings settingsInEffect) {
                     Log.i(TAG, "Advertisement start succeeded.");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mTextViewStatus.setText("iBeacon Tx has been started");
+                        }
+                    });
                 }
             });
         } else {
@@ -133,21 +152,6 @@ public class MainActivity extends Activity {
             return false;
         }
         mBluetoothUtils.askUserToEnableBluetoothIfNeeded();
-//        if (!((BluetoothManager) getApplicationContext()
-//                .getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().isEnabled()) {
-//            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Bluetooth not enabled");
-//            builder.setMessage("Please enable Bluetooth and restart this app.");
-//            builder.setPositiveButton(android.R.string.ok, null);
-//            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                @Override
-//                public void onDismiss(DialogInterface dialog) {
-//                    finish();
-//                }
-//            });
-//            builder.show();
-//            return false;
-//        }
         try {
             // Check to see if the getBluetoothLeAdvertiser is available.
             // If not, this will throw an exception indicating we are not running Android L
