@@ -660,3 +660,6 @@
 
 117. BT08iBeaonRx
     * receive AltBeacon and save it to external cache as csv files
+
+118. BT09iBeaconMonitoringAndRanging
+    * get Monitoring and Ranging worked

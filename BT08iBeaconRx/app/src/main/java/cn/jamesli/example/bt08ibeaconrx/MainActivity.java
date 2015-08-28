@@ -15,6 +15,7 @@ import android.widget.TextView;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 import org.altbeacon.beacon.logging.LogManager;
@@ -83,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
+        BeaconParser appleIBeacon = new BeaconParser()
+                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+        mBeaconManager.getBeaconParsers().add(appleIBeacon);
         mBeaconManager.bind(this);   // unbind in onDestroy()
 //        mBeaconManager.setDebug(true);  // deprecated
         LogManager.setLogger(Loggers.verboseLogger());
@@ -120,13 +124,13 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     break;
                 case 2:
                     mBeaconManager.setRssiFilterImplClass(NoProcessFilter.class);
-                    mTextViewParas.setText("NoFilter:");
+                    mTextViewParas.setText("NoProcessFilter:");
                     iFilterParas = 0;
-                    mEditTextParas.setText(String.valueOf(iFilterParas));
+                    mEditTextParas.setText("Para N/A");
                     break;
                 default:
                     mBeaconManager.setRssiFilterImplClass(ArmaRssiFilter.class);
-                    mTextViewParas.setText("ARMA:");
+                    mTextViewParas.setText("Default filter: ARMA");
             }
         }
 
@@ -134,8 +138,17 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mBeaconManager.isBound(this)) mBeaconManager.setBackgroundMode(true);
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mBeaconManager.isBound(this)) mBeaconManager.setBackgroundMode(false);
+    }
 
     @Override
     protected void onDestroy() {
@@ -159,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 Log.i("MainActivity", "didRangeBeaconsInRegion() " + String.valueOf(beacons.size()));
-                logToDisplay("beacon size: " + beacons.size(), mTextViewParas);
+                logToDisplay("beacon size: " + beacons.size(), mTextViewStatus);
                 // TODO figure out why beacons.size() == 0
                 if (beacons.size() > 0) {
                     beaconFirst = beacons.iterator().next();
@@ -169,6 +182,12 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                 }
             }
         });
+//        // then start the ranging action
+//        try {
+//            mBeaconManager.startRangingBeaconsInRegion(regionBeacon);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void logToDisplay(final String line, final TextView tv) {
@@ -198,13 +217,13 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             e.printStackTrace();
         }
 
-        ArrayList<Integer> tmp = NoProcessFilter.getRssiResultArray();
-        mTextViewStatus.setText("length: " + tmp.size());
+        ArrayList<Integer> rssiResultArray = NoProcessFilter.getRssiResultArray();
+        mTextViewStatus.setText("length: " + rssiResultArray.size());
         DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
         String filename = "CurrentStatus"+dateFormat.format(mDate.getTime())+".csv";
         mLogToFile = new LogToFile(this, filename);
-        for(int i = 0; i < tmp.size(); i++) {
-            mLogToFile.write(tmp.get(i).toString());
+        for(int i = 0; i < rssiResultArray.size(); i++) {
+            mLogToFile.write(rssiResultArray.get(i).toString());
         }
         mLogToFile.close();
     }

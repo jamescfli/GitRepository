@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
                     .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
             // .. bytes 0-1 of the BLE manufacturer advertisements are the two byte manufacturer code
             mBeacon = new Beacon.Builder()
-                    .setBluetoothName("MotoAsBeacon")   // seems not working when being observed
+//                    .setBluetoothName("MotoAsBeacon")   // seems not working when being observed
                     .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6") // 16bytes UUID for AltBeacon
 //                    .setId1("DF7E1C79-43E9-44FF-886F-1D1F7DA6997A") // UUID from TimedBeaconSimulator, or MacBook:~$uuidgen
                     .setId2("1")                                    // Major
@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
                     // these identifiers signify a unique beacon.
                     // The identifiers are ordered by significance for the purpose of grouping beacons
 //                    .setManufacturer(0x0000) // A two byte code indicating the beacon manufacturer, some devices cannot detect beacons with a manufacturer code > 0x00ff
-//                    .setManufacturer(0x0118)    // for Radius Networks AltBeacon
+                    .setManufacturer(0x0118)    // for Radius Networks AltBeacon
 //                    .setManufacturer(0x004C)    // Apple Inc. the real message would be (in reverse sequence) 4C, 00 before 02, 15
                     .setTxPower(-59)    // default value, 0xC5 = -59dBm received power at 1m from Tx
                     // .. i.e. Measured power is set by holding a receiver one meter from the beacon
@@ -74,12 +74,12 @@ public class MainActivity extends Activity {
             mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
             mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
 //            mBeaconTransmitter.startAdvertising(beacon);
-            startBeaconTransmitting();
+//            startBeaconTransmitting();
 
             mButtonStart = (Button) findViewById(R.id.button_start);
             mButtonStop = (Button) findViewById(R.id.button_stop);
-            mButtonStart.setEnabled(false);
-            mButtonStop.setEnabled(true);
+            mButtonStart.setEnabled(true);
+            mButtonStop.setEnabled(false);
             mButtonStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -101,7 +101,6 @@ public class MainActivity extends Activity {
             int result = BeaconTransmitter.checkTransmissionSupported(this);
             switch (result) {
                 case BeaconTransmitter.NOT_SUPPORTED_MIN_SDK:   // value 1
-                    // TODO if BeaconTransmitter requires Android 5.0, how it would be possible to end it up here?
                     Log.i(TAG, "SDK version is less or equal to API 18.");
                     break;
                 case BeaconTransmitter.NOT_SUPPORTED_BLE:       // value 2

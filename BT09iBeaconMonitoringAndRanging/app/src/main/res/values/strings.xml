@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BT09iBeaconMonitoringAndRanging</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_ranging">Ranging</string>
+    <string name="title_activity_ranging">RangingActivity</string>
+</resources>
