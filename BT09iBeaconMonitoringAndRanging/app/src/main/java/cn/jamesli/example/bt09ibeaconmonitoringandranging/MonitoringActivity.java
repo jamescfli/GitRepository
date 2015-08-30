@@ -29,12 +29,12 @@ public class MonitoringActivity extends AppCompatActivity implements BeaconConsu
         mTextViewStatus = (TextView) findViewById(R.id.text_view_status);
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
-//        // Add AltBeacon Parser, which has been by default added to BeaconManager
-//        mBeaconManager.getBeaconParsers().add(new BeaconParser()
-//                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        // Add iBeacon Parser
+        // Add AltBeacon Parser, which has been by default added to BeaconManager
         mBeaconManager.getBeaconParsers().add(new BeaconParser()
-                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+//        // Add iBeacon Parser
+//        mBeaconManager.getBeaconParsers().add(new BeaconParser()
+//                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
     }
 
     @Override
