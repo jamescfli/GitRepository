@@ -13,9 +13,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.weiwangcn.betterspinner.library.BetterSpinner;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
@@ -33,6 +38,19 @@ public class MainActivity extends Activity {
     private Beacon mBeacon;
     private TextView mTextViewStatus;
 
+    private Spinner mSpinnerTxPower;
+    private Spinner mSpinnerTxFrequency;
+    private static final String[] TX_POWER_LEVEL = new String[] {
+            "Tx Power High -56dBm",
+            "Tx Power Medium -66dBm",
+            "Tx Power Low -76dBm"
+    };
+    private static final String[] TX_FREQUENCY_LEVEL = new String[] {
+            "Freq High 10Hz",
+            "Freq Medium 3Hz",
+            "Freq Low 1Hz"
+    };
+
     private Button mButtonStart;
     private Button mButtonStop;
 
@@ -42,9 +60,15 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTextViewStatus = (TextView) findViewById(R.id.text_view_status);
+        mSpinnerTxPower = (Spinner) findViewById(R.id.spinnerTxPower);
+        mSpinnerTxFrequency = (Spinner) findViewById(R.id.spinnerTxFrequency);
+        mButtonStart = (Button) findViewById(R.id.button_start);
+        mButtonStop = (Button) findViewById(R.id.button_stop);
 
+        uiComponentInitiate();
+
+        // prepare for open Bluetooth in checkPrerequisites()
         mBluetoothUtils = new BluetoothUtils(this);
-
         if (checkPrerequisites()) {
             // context + BeaconParser
             // format specified in the BeaconParser
@@ -55,7 +79,7 @@ public class MainActivity extends Activity {
                     .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
             // .. bytes 0-1 of the BLE manufacturer advertisements are the two byte manufacturer code
             mBeacon = new Beacon.Builder()
-//                    .setBluetoothName("MotoAsBeacon")   // seems not working when being observed
+                    .setBluetoothName("MotoAsBeacon")   // seems not working when being observed
                     .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6") // 16bytes UUID for AltBeacon
 //                    .setId1("DF7E1C79-43E9-44FF-886F-1D1F7DA6997A") // UUID from TimedBeaconSimulator, or MacBook:~$uuidgen
                     .setId2("1")                                    // Major
@@ -70,32 +94,12 @@ public class MainActivity extends Activity {
                     // .. i.e. Measured power is set by holding a receiver one meter from the beacon
                     .setDataFields(Arrays.asList(new Long[]{0l})) // data fields included in the beacon advertisement.
                     .build();
-            // transmit with highest frequency (10Hz) and highest Tx power (-56dBm)
-            mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-            mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-//            mBeaconTransmitter.startAdvertising(beacon);
-//            startBeaconTransmitting();
+//            // transmit with highest frequency (10Hz) and highest Tx power (-56dBm)
+//            mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+//            mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
 
-            mButtonStart = (Button) findViewById(R.id.button_start);
-            mButtonStop = (Button) findViewById(R.id.button_stop);
             mButtonStart.setEnabled(true);
             mButtonStop.setEnabled(false);
-            mButtonStart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startBeaconTransmitting();
-                    mButtonStart.setEnabled(false);
-                    mButtonStop.setEnabled(true);
-                }
-            });
-            mButtonStop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    stopBeaconTransmitting();
-                    mButtonStart.setEnabled(true);
-                    mButtonStop.setEnabled(false);
-                }
-            });
         } else {
             // requires Android 5.0
             int result = BeaconTransmitter.checkTransmissionSupported(this);
@@ -115,6 +119,121 @@ public class MainActivity extends Activity {
                 default:
                     Log.i(TAG, "Turning on BLE or some other cases.");
             }
+        }
+    }
+
+    private void uiComponentInitiate() {
+        ArrayAdapter<String> adapterTxPower = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, TX_POWER_LEVEL);
+        ArrayAdapter<String> adapterTxFreq = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, TX_FREQUENCY_LEVEL);
+        mSpinnerTxPower.setAdapter(adapterTxPower);
+        mSpinnerTxFrequency.setAdapter(adapterTxFreq);
+//        mSpinnerTxPower.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                switch (position) {
+//                    case 0:
+//                        mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+//                        Toast.makeText(MainActivity.this, "High Tx Power is set", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 1:
+//                        mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM);
+//                        Toast.makeText(MainActivity.this, "Medium Tx Power is set", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 2:
+//                        mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_LOW);
+//                        Toast.makeText(MainActivity.this, "Low Tx Power is set", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    default:
+//                        Toast.makeText(MainActivity.this, "Wrong Selection!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // n.a.
+//            }
+//        });
+//        mSpinnerTxFrequency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                switch (position) {
+//                    case 0:
+//                        mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+//                        Toast.makeText(MainActivity.this, "10Hz Beacon Tx", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 1:
+//                        mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED);
+//                        Toast.makeText(MainActivity.this, "3Hz Beacon Tx", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 2:
+//                        mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER);
+//                        Toast.makeText(MainActivity.this, "1Hz Beacon Tx", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    default:
+//                        Toast.makeText(MainActivity.this, "Wrong Selection!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // n.a.
+//            }
+//        });
+        mButtonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initiateBeaconTxPowerAndFrequency();
+                startBeaconTransmitting();
+                mButtonStart.setEnabled(false);
+                mButtonStop.setEnabled(true);
+                mSpinnerTxPower.setEnabled(false);
+                mSpinnerTxFrequency.setEnabled(false);
+            }
+        });
+        mButtonStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopBeaconTransmitting();
+                mButtonStart.setEnabled(true);
+                mButtonStop.setEnabled(false);
+                mSpinnerTxPower.setEnabled(true);
+                mSpinnerTxFrequency.setEnabled(true);
+            }
+        });
+    }
+
+    private void initiateBeaconTxPowerAndFrequency() {
+        switch (mSpinnerTxPower.getSelectedItemPosition()) {
+            case 0:
+                mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+//                Toast.makeText(MainActivity.this, "High Tx Power is Set", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM);
+//                Toast.makeText(MainActivity.this, "Medium Tx Power is Set", Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_LOW);
+//                Toast.makeText(MainActivity.this, "Low Tx Power is Set", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(MainActivity.this, "Wrong Selection!", Toast.LENGTH_SHORT).show();
+        }
+        switch (mSpinnerTxFrequency.getSelectedItemPosition()) {
+            case 0:
+                mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+//                Toast.makeText(MainActivity.this, "10Hz Beacon Tx Rate", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED);
+//                Toast.makeText(MainActivity.this, "3Hz Beacon Tx Rate", Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                mBeaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER);
+//                Toast.makeText(MainActivity.this, "1Hz Beacon Tx Rate", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(MainActivity.this, "Wrong Selection!", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -11,11 +11,11 @@ import android.widget.TextView;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 
@@ -34,21 +34,21 @@ public class RangingActivity extends AppCompatActivity implements BeaconConsumer
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
         // Since mBeaconManager is shared by the two Activities, i.e. Monitoring and Ranging
-        // we don't need to add the parsers again
-        // TODO try without AltBeacon Parser
+        // we don't need to add the AltBeacon parser "m:2-3=beac ..." again
 //        // Add AltBeacon Parser
 //        mBeaconManager.getBeaconParsers().add(new BeaconParser()
 //                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
 //        // Add iBeacon Parser
 //        mBeaconManager.getBeaconParsers().add(new BeaconParser()
 //                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-//        mBeaconManager.bind(this);
+        mBeaconManager.bind(this);
 
         String uuidString = "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6";
         Identifier uuid = Identifier.parse(uuidString);
         Identifier majorId = Identifier.parse("1");
         Identifier minorId = Identifier.parse("2");
         regionBeacon = new Region("myRangingRegion", uuid, majorId, minorId);
+//        regionBeacon = new Region("myRangingRegion", null, null, null);
 
         // Note: this is important
         mBeaconManager.bind(this);
@@ -88,14 +88,6 @@ public class RangingActivity extends AppCompatActivity implements BeaconConsumer
         mBeaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(final Collection<Beacon> beacons, Region region) {
-//                // for test
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mTextViewRangingResults.setText("beacons.size() = " + beacons.size() + "\n"
-//                                + mTextViewRangingResults.getText());
-//                    }
-//                });
                 if (beacons.size() > 0) {
                     Log.i(TAG, "I see some beacon(s).");
                     StringBuilder builder = new StringBuilder();

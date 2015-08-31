@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.1'
 //    compile 'org.altbeacon:android-beacon-library:2+@aar'
     compile project(':android-beacon-library-master')
+    compile 'com.weiwangcn.betterspinner:library:1.1.0'
 }

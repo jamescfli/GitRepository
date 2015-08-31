@@ -11,13 +11,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <Spinner
+        android:id="@+id/spinnerTxPower"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tx Power"
+        android:layout_below="@+id/text_view_status"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="38dp" />
+
+    <Spinner
+        android:id="@+id/spinnerTxFrequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tx Frequency"
+        android:layout_below="@+id/spinnerTxPower"
+        android:layout_alignParentStart="true" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
         android:id="@+id/button_start"
-        android:layout_below="@+id/text_view_status"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/spinnerTxFrequency"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="35dp" />
 
     <Button
         android:layout_width="wrap_content"
