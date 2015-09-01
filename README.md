@@ -663,3 +663,6 @@
 
 118. BT09iBeaconMonitoringAndRanging
     * get Monitoring and Ranging worked
+
+119. BT10iBeaconTxRx
+    * Try to accomodate Tx and Rx into one App

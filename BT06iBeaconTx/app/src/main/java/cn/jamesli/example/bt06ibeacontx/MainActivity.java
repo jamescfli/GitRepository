@@ -209,6 +209,7 @@ public class MainActivity extends Activity {
 //                Toast.makeText(MainActivity.this, "High Tx Power is Set", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
+                // Note: medium is the default value
                 mBeaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM);
 //                Toast.makeText(MainActivity.this, "Medium Tx Power is Set", Toast.LENGTH_SHORT).show();
                 break;

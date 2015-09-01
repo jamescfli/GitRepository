@@ -174,15 +174,15 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         mBeaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                Log.i("MainActivity", "didRangeBeaconsInRegion() beacons.size() = "
-                        + String.valueOf(beacons.size()));
+            Log.i("MainActivity", "didRangeBeaconsInRegion() beacons.size() = "
+                    + String.valueOf(beacons.size()));
 //                logToDisplay("beacon size: " + beacons.size(), mTextViewStatus);
-                if (beacons.size() > 0) {
-                    beaconFirst = beacons.iterator().next();
-                    logToDisplay(beaconFirst.getId1() + "\nRSS: " + beaconFirst.getRssi()
-                            + "\nTXPower: " + beaconFirst.getTxPower()
-                            + "\nDistance: " + beaconFirst.getDistance(), mTextViewStatus);
-                }
+            if (beacons.size() > 0) {
+                beaconFirst = beacons.iterator().next();
+                logToDisplay(beaconFirst.getId1() + "\nRSS: " + beaconFirst.getRssi()
+                        + "\nTXPower: " + beaconFirst.getTxPower()
+                        + "\nDistance: " + beaconFirst.getDistance(), mTextViewStatus);
+            }
             }
         });
 //        // then start the ranging action
@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             e.printStackTrace();
         }
 
+        // Bad practice: show save it in onBeaconServiceConnect() not NoProcessFilter
         ArrayList<Integer> rssiResultArray = NoProcessFilter.getRssiResultArray();
         mTextViewStatus.setText("length: " + rssiResultArray.size());
         DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
