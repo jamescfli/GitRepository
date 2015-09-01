@@ -15,7 +15,7 @@ import android.widget.TextView;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 import org.altbeacon.beacon.logging.LogManager;
@@ -36,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private TextView mTextViewStatus;
     private Spinner mSpinnerFilter;
     private TextView mTextViewParas;
-    private EditText mEditTextParas;
-//    private EditText edA,edB,edC;
+//    private EditText mEditTextParas;
     private Button buttonStart;
     private Button buttonStop;
     private static final String[] arrayFilters ={
@@ -47,13 +46,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     };
     private ArrayAdapter<String> adapterFilters;
     private double iFilterParas;
-//    private double a,b,c;
     private Beacon beaconFirst;
-    private Region regionBeacon = new Region("myRegionUniqueId", null, null, null);
-    private LogToFile mLogToFile;
-//    Time time = new Time();   // deprecated
+    private Region regionBeacon;
     private Date mDate = new Date();
-
+//    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         mSpinnerFilter.setOnItemSelectedListener(new SpinnerSelectedListenerFilter());
 
         mTextViewParas = (TextView)findViewById(R.id.txPar);
-        mEditTextParas = (EditText)findViewById(R.id.edPar);
+//        mEditTextParas = (EditText)findViewById(R.id.edPar);
 //        edA = (EditText)findViewById(R.id.edA);
 //        edB = (EditText)findViewById(R.id.edB);
 //        edC = (EditText)findViewById(R.id.edC);
@@ -84,17 +80,24 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
 
         mBeaconManager = BeaconManager.getInstanceForApplication(this);
-        BeaconParser appleIBeacon = new BeaconParser()
-                .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-        mBeaconManager.getBeaconParsers().add(appleIBeacon);
+//        // default AltBeacom with beac header has already been added to parser by default
+//        BeaconParser altBeacon = new BeaconParser()
+//                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+//        mBeaconManager.getBeaconParsers().add(altBeacon);
+        mBeaconManager.setRssiFilterImplClass(NoProcessFilter.class);
+        // DEFAULT_FOREGROUND_SCAN_PERIOD = 1100(ms), in order to catch 10Hz beacons, we set
+        mBeaconManager.setForegroundScanPeriod(110);
         mBeaconManager.bind(this);   // unbind in onDestroy()
-//        mBeaconManager.setDebug(true);  // deprecated
         LogManager.setLogger(Loggers.verboseLogger());
         LogManager.setVerboseLoggingEnabled(true);
-        if (mBeaconManager.isBound(this))
-            mBeaconManager.setBackgroundMode(false);
-        mBeaconManager.setRssiFilterImplClass(NoProcessFilter.class);
-        ArmaRssiFilter.setDEFAULT_ARMA_SPEED(0.25);
+//        ArmaRssiFilter.setDEFAULT_ARMA_SPEED(0.25);
+        String uuidString = "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6";
+        Identifier uuid = Identifier.parse(uuidString);
+        Identifier majorId = Identifier.parse("1");
+        Identifier minorId = Identifier.parse("2");
+        regionBeacon = new Region("myRangingRegion", uuid, majorId, minorId);
+        // or
+        regionBeacon = new Region("myRangingRegion", null, null, null);
 
         mTextViewStatus = (TextView)findViewById(R.id.tvStatus);
 //        a = 0.42093;
@@ -114,19 +117,19 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     mBeaconManager.setRssiFilterImplClass(RunningAverageRssiFilter.class);
                     mTextViewParas.setText("Average:");
                     iFilterParas = 5000;
-                    mEditTextParas.setText(String.valueOf(iFilterParas));
+//                    mEditTextParas.setText(String.valueOf(iFilterParas));
                     break;
                 case 1:
                     mBeaconManager.setRssiFilterImplClass(ArmaRssiFilter.class);
                     mTextViewParas.setText("ARMA:");
                     iFilterParas = 0.25;
-                    mEditTextParas.setText(String.valueOf(iFilterParas));
+//                    mEditTextParas.setText(String.valueOf(iFilterParas));
                     break;
                 case 2:
                     mBeaconManager.setRssiFilterImplClass(NoProcessFilter.class);
                     mTextViewParas.setText("NoProcessFilter:");
                     iFilterParas = 0;
-                    mEditTextParas.setText("Para N/A");
+//                    mEditTextParas.setText("Para N/A");
                     break;
                 default:
                     mBeaconManager.setRssiFilterImplClass(ArmaRssiFilter.class);
@@ -141,13 +144,13 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mBeaconManager.isBound(this)) mBeaconManager.setBackgroundMode(true);
+//        if (mBeaconManager.isBound(this)) mBeaconManager.setBackgroundMode(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mBeaconManager.isBound(this)) mBeaconManager.setBackgroundMode(false);
+//        if (mBeaconManager.isBound(this)) mBeaconManager.setBackgroundMode(false);
     }
 
     @Override
@@ -171,9 +174,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         mBeaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                Log.i("MainActivity", "didRangeBeaconsInRegion() " + String.valueOf(beacons.size()));
-                logToDisplay("beacon size: " + beacons.size(), mTextViewStatus);
-                // TODO figure out why beacons.size() == 0
+                Log.i("MainActivity", "didRangeBeaconsInRegion() beacons.size() = "
+                        + String.valueOf(beacons.size()));
+//                logToDisplay("beacon size: " + beacons.size(), mTextViewStatus);
                 if (beacons.size() > 0) {
                     beaconFirst = beacons.iterator().next();
                     logToDisplay(beaconFirst.getId1() + "\nRSS: " + beaconFirst.getRssi()
@@ -221,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         mTextViewStatus.setText("length: " + rssiResultArray.size());
         DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
         String filename = "CurrentStatus"+dateFormat.format(mDate.getTime())+".csv";
-        mLogToFile = new LogToFile(this, filename);
+        LogToFile mLogToFile = new LogToFile(this, filename);
         for(int i = 0; i < rssiResultArray.size(); i++) {
             mLogToFile.write(rssiResultArray.get(i).toString());
         }

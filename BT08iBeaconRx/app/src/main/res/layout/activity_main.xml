@@ -16,106 +16,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Average:"
+        android:text="Average: No Processing"
         android:id="@+id/txPar"
         android:layout_below="@+id/spFilter"
         android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edPar"
-        android:layout_below="@+id/txPar"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="d=A*(r/t)^B+C"
-        android:id="@+id/textView"
-        android:layout_below="@+id/edPar"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="A:"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="B:"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/edA"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="C:"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/edB"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edA"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textView2" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edB"
-        android:layout_below="@+id/edA"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textView4" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edC"
-        android:layout_below="@+id/edB"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textView4" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
         android:id="@+id/button_update"
-        android:layout_below="@+id/edC"
         android:layout_alignParentStart="true"
         android:enabled="false"
-        android:onClick="btUpdatecoefficient" />
+        android:onClick="btUpdatecoefficient"
+        android:layout_below="@+id/txPar" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
         android:id="@+id/button_start"
-        android:layout_below="@+id/edC"
         android:layout_toEndOf="@+id/button_update"
-        android:onClick="buttonStart" />
+        android:onClick="buttonStart"
+        android:layout_below="@+id/txPar" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop"
         android:id="@+id/button_stop"
-        android:layout_below="@+id/edC"
         android:layout_toEndOf="@+id/button_start"
-        android:onClick="buttonStop" />
+        android:onClick="buttonStop"
+        android:layout_below="@+id/txPar" />
 
     <ScrollView
         android:layout_width="match_parent"
