@@ -7,4 +7,7 @@
     <dimen name="three_grid_unit">24dp</dimen>
     <dimen name="one_and_a_half_grid_unit">12dp</dimen>
 
+    <!-- LDrawer -->
+    <dimen name="navdrawer_width">260dp</dimen>
+
 </resources>

@@ -666,6 +666,9 @@
 
 119. BT10iBeaconTxRx
     * Try to accomodate Tx and Rx into one App
+    * Change Rx from Activity to Fragment, found HostActivity
+    * Add LDrawer to HostActivity
+    * Add Tx to TxFragment
 
 120. BT11LDrawerTest
     * Try LDrawer with nice animation on the action bar home button when opening drawer on the left

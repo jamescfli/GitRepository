@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- for Fragment background -->
     <color name="light_gray">#fff5f5f5</color>
+    <!-- for LDrawer ActionBar -->
+    <color name="actionbar_color">#0088FF</color>
 </resources>
