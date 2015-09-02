@@ -666,3 +666,8 @@
 
 119. BT10iBeaconTxRx
     * Try to accomodate Tx and Rx into one App
+
+120. BT11LDrawerTest
+    * Try LDrawer with nice animation on the action bar home button when opening drawer on the left
+
+121.
