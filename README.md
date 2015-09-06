@@ -673,4 +673,5 @@
 120. BT11LDrawerTest
     * Try LDrawer with nice animation on the action bar home button when opening drawer on the left
 
-121.
+121. BT12StaggeredGrid
+    * Learn [Android Staggered Grid](https://github.com/etsy/AndroidStaggeredGrid)
