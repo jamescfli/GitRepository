@@ -30,12 +30,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_sgv_fragment:
                 startActivity(new Intent(this, StaggeredGridActivityFragment.class));
                 break;
-//            case R.id.btn_sgv_empty_view:
-//                startActivity(new Intent(this, StaggeredGridEmptyViewActivity.class));
-//                break;
-//            case R.id.btn_listview:
-//                startActivity(new Intent(this, ListViewActivity.class));
-//                break;
+            case R.id.btn_sgv_empty_view:
+                startActivity(new Intent(this, StaggeredGridEmptyViewActivity.class));
+                break;
+            case R.id.btn_listview:
+                startActivity(new Intent(this, ListViewActivity.class));
+                break;
         }
     }
 }

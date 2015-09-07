@@ -6,4 +6,6 @@
     <string name="title_activity_staggered_grid">StaggeredGridActivity</string>
     <string name="title_activity_staggered_grid_activity_fragment">StaggeredGridActivityFragment
     </string>
+    <string name="title_activity_list_view">ListViewActivity</string>
+    <string name="title_activity_staggered_grid_empty_view">StaggeredGridEmptyViewActivity</string>
 </resources>

@@ -1,5 +1,6 @@
 package cn.jamesli.example.bt12staggeredgrid;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -39,6 +40,7 @@ public class StaggeredGridActivityFragment extends FragmentActivity {
     }
 
 
+    @SuppressLint("ValidFragment")
     private class StaggeredGridFragment extends Fragment implements
             AbsListView.OnScrollListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
         private StaggeredGridView mGridView;

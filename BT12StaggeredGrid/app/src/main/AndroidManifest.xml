@@ -24,6 +24,14 @@
             android:name=".StaggeredGridActivityFragment"
             android:label="@string/title_activity_staggered_grid_activity_fragment" >
         </activity>
+        <activity
+            android:name=".ListViewActivity"
+            android:label="@string/title_activity_list_view" >
+        </activity>
+        <activity
+            android:name=".StaggeredGridEmptyViewActivity"
+            android:label="@string/title_activity_staggered_grid_empty_view" >
+        </activity>
     </application>
 
 </manifest>
