@@ -144,10 +144,30 @@ public class TxFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (isBluetoothEnabled()) {
-                    initiateBeaconTxPowerAndRate();     // read from spinner selections
-                    startBeaconTransmitting();
-                    mButtonTxStart.setEnabled(false);
-                    mButtonTxStop.setEnabled(true);
+                    int flag = BeaconTransmitter.checkTransmissionSupported(getActivity());
+                    if (flag == 0) {
+                        initiateBeaconTxPowerAndRate();     // read from spinner selections
+                        startBeaconTransmitting();
+                        mButtonTxStart.setEnabled(false);
+                        mButtonTxStop.setEnabled(true);
+                    } else {
+                        switch (flag) {
+                            case BeaconTransmitter.NOT_SUPPORTED_MIN_SDK:   // value 1
+                                mTextViewStatus.setText("Status: SDK version is less or equal to API 18.");
+                                break;
+                            case BeaconTransmitter.NOT_SUPPORTED_BLE:       // value 2
+                                mTextViewStatus.setText("Status: BLE is not supported.");
+                                break;
+                            case BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER:     // value 4
+                                mTextViewStatus.setText("Status: could not get Advertiser. Either not supported by chipset or manufacturer");
+                                break;
+                            case BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER_MULTIPLE_ADVERTISEMENTS: // 5
+                                mTextViewStatus.setText("Status: could not get Multiple Advertiser. Either not supported by chipset or manufacturer");
+                                break;
+                            default:
+                                mTextViewStatus.setText("Status: BLE does not work for unknown reason.");
+                        }
+                    }
                 } else {
                     Toast.makeText(getActivity(), "Please turn Bluetooth on!", Toast.LENGTH_LONG).show();
                 }
@@ -210,7 +230,7 @@ public class TxFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mTextViewStatus.setText("iBeacon Tx has been started");
+                        mTextViewStatus.setText("Status: iBeacon Tx has been started");
                     }
                 });
             }
@@ -221,7 +241,7 @@ public class TxFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= 21) {
             mBeaconTransmitter.stopAdvertising();
         }
-        mTextViewStatus.setText("iBeacon Tx has been shut down");
+        mTextViewStatus.setText("Status: iBeacon Tx has been shut down");
     }
 
     private boolean isBluetoothEnabled() {
