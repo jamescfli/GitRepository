@@ -8,12 +8,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="cn.jamesli.example.bt10ibeacontxrx.fragment.TxFragment">
+    tools:context="cn.jamesli.example.bt10ibeacontxrx.fragment.WifiTxFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tx Settings:"
+        android:text="Wifi Tx Settings:"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin" />
 
@@ -28,13 +28,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tx power"/>
+            android:text="BSSID"/>
 
-        <cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner
-            android:id="@+id/spinner_tx_power"
+        <TextView
+            android:id="@+id/text_view_wifi_bssid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:text="@string/wifi_default_wifi_bssid" />
 
     </LinearLayout>
 
@@ -49,10 +50,32 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tx Rate"/>
+            android:text="SSID"/>
+
+        <EditText
+            android:id="@+id/edit_text_wifi_ssid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/wifi_default_wifi_ssid" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Auth Alg"/>
 
         <cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner
-            android:id="@+id/spinner_tx_rate"
+            android:id="@+id/spinner_wifi_auth_alg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2" />
@@ -67,13 +90,13 @@
         android:paddingBottom="@dimen/activity_vertical_margin" >
 
         <Button
-            android:id="@+id/button_tx_start"
+            android:id="@+id/button_wifi_tx_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start" />
 
         <Button
-            android:id="@+id/button_tx_stop"
+            android:id="@+id/button_wifi_tx_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Stop" />
@@ -87,12 +110,11 @@
         android:paddingBottom="@dimen/activity_vertical_margin" >
 
         <TextView
-            android:id="@+id/text_view_tx_status"
+            android:id="@+id/text_view_wifi_tx_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Status: "/>
 
     </ScrollView>
-
 
 </LinearLayout>

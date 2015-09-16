@@ -2,18 +2,15 @@ package cn.jamesli.example.bt10ibeacontxrx.fragment;
 
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +31,12 @@ import cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TxFragment#newInstance} factory method to
+ * Use the {@link BeaconTxFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 @TargetApi(21)
-public class TxFragment extends Fragment {
-    private static final String TAG = "TxFragment";
+public class BeaconTxFragment extends Fragment {
+    private static final String TAG = "BeaconTxFragment";
     private BeaconTransmitter mBeaconTransmitter;
     private Beacon mBeacon;
 
@@ -59,6 +56,7 @@ public class TxFragment extends Fragment {
     private Button mButtonTxStart;
     private Button mButtonTxStop;
     private TextView mTextViewStatus;
+    private static String mFragmentTitle;
 
     /**
      * Use this factory method to create a new instance of
@@ -66,12 +64,12 @@ public class TxFragment extends Fragment {
      *
      * @return A new instance of fragment TxFragment.
      */
-    public static TxFragment newInstance() {
-        TxFragment fragment = new TxFragment();
-        return fragment;
+    public static BeaconTxFragment newInstance(String fragmentTitle) {
+        mFragmentTitle = fragmentTitle;
+        return new BeaconTxFragment();
     }
 
-    public TxFragment() {
+    public BeaconTxFragment() {
         // Required empty public constructor
     }
 
@@ -84,8 +82,8 @@ public class TxFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View viewTxFragment = inflater.inflate(R.layout.fragment_tx, container, false);
-        getActivity().setTitle("Transmitter");
+        View viewTxFragment = inflater.inflate(R.layout.fragment_beacon_tx, container, false);
+        getActivity().setTitle(mFragmentTitle);
 
         initiateUi(viewTxFragment);
 
@@ -129,8 +127,8 @@ public class TxFragment extends Fragment {
     }
 
     private void initiateUi(View view) {
-        mSpinnerTxPower = (NiceSpinner) view.findViewById(R.id.spinner_tx_power);
-        mSpinnerTxRate = (NiceSpinner) view.findViewById(R.id.spinner_tx_rate);
+        mSpinnerTxPower = (NiceSpinner) view.findViewById(R.id.spinner_beacon_tx_power);
+        mSpinnerTxRate = (NiceSpinner) view.findViewById(R.id.spinner_beacon_tx_rate);
         ArrayAdapter<String> adapterTxPower = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, TX_POWER_LEVEL);
         ArrayAdapter<String> adapterTxRate = new ArrayAdapter<String>(getActivity(),
@@ -138,8 +136,8 @@ public class TxFragment extends Fragment {
         mSpinnerTxPower.setAdapter(adapterTxPower);
         mSpinnerTxRate.setAdapter(adapterTxRate);
 
-        mButtonTxStart = (Button) view.findViewById(R.id.button_tx_start);
-        mButtonTxStop = (Button) view.findViewById(R.id.button_tx_stop);
+        mButtonTxStart = (Button) view.findViewById(R.id.button_beacon_tx_start);
+        mButtonTxStop = (Button) view.findViewById(R.id.button_beacon_tx_stop);
         mButtonTxStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +180,7 @@ public class TxFragment extends Fragment {
             }
         });
 
-        mTextViewStatus = (TextView) view.findViewById(R.id.text_view_tx_status);
+        mTextViewStatus = (TextView) view.findViewById(R.id.text_view_beacon_tx_status);
         mTextViewStatus.setText("Status: ");
     }
 
@@ -238,7 +236,7 @@ public class TxFragment extends Fragment {
     }
 
     private void stopBeaconTransmitting() {
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21 && mBeaconTransmitter != null) {
             mBeaconTransmitter.stopAdvertising();
         }
         mTextViewStatus.setText("Status: iBeacon Tx has been shut down");
@@ -249,10 +247,7 @@ public class TxFragment extends Fragment {
             final BluetoothManager bluetoothManager = (BluetoothManager) getActivity()
                     .getSystemService(Context.BLUETOOTH_SERVICE);
             BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-            if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
-                return false;
-            }
-            return true;
+            return (bluetoothAdapter != null || bluetoothAdapter.isEnabled());
         } else {
             return false;
         }

@@ -11,4 +11,10 @@
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
 
+    <!-- wifi strings -->
+    <string name="wifi_default_wifi_ssid">NoName</string>
+    <string name="wifi_default_wifi_bssid">00:00:00:00:00:00</string>
+    <string name="wifi_SMT1_wifi_ssid">SM705</string>
+    <string name="wifi_SMT1_wifi_bssid">b4:0b:44:0b:60:e8</string>
+
 </resources>

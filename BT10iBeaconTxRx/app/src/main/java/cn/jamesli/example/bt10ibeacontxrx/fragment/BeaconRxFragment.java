@@ -43,11 +43,12 @@ import cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RxFragment#newInstance} factory method to
+ * Use the {@link BeaconRxFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RxFragment extends Fragment implements BeaconConsumer {
-    private static final String TAG = "RxFragment";
+public class BeaconRxFragment extends Fragment implements BeaconConsumer {
+    private static final String TAG = "BeaconRxFragment";
+    private static final String SAVE_FILE_PREFIX = "BeaconRssiResult";
 
     // for UI
     private NiceSpinner mSpinnerSampleRate;
@@ -64,6 +65,7 @@ public class RxFragment extends Fragment implements BeaconConsumer {
     private Button mButtonStop;
     private Button mButtonSave;
     private TextView mTextViewStatus;
+    private static String mFragmentTitle;
 
     // for AltBeacon Scanner
     private static BeaconManager mBeaconManager;
@@ -87,12 +89,12 @@ public class RxFragment extends Fragment implements BeaconConsumer {
      *
      * @return A new instance of fragment RxFragment.
      */
-    public static RxFragment newInstance() {
-        RxFragment fragment = new RxFragment();
-        return fragment;
+    public static BeaconRxFragment newInstance(String fragmentTitle) {
+        mFragmentTitle = fragmentTitle;
+        return new BeaconRxFragment();
     }
 
-    public RxFragment() {
+    public BeaconRxFragment() {
         // Required empty public constructor
     }
 
@@ -110,8 +112,8 @@ public class RxFragment extends Fragment implements BeaconConsumer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View viewRxFragment = inflater.inflate(R.layout.fragment_rx, container, false);
-        getActivity().setTitle("Receiver");
+        View viewRxFragment = inflater.inflate(R.layout.fragment_beacon_rx, container, false);
+        getActivity().setTitle(mFragmentTitle);
         initiateUi(viewRxFragment);
         return viewRxFragment;
     }
@@ -122,8 +124,8 @@ public class RxFragment extends Fragment implements BeaconConsumer {
         try {
             mBeaconManager.stopRangingBeaconsInRegion(mBeaconRegion);
             resumeButtonsToStartMode();
-            mTextViewStatus.setText("Status: scanning has been stopped, with totally, "
-                    + rssiScanResultArray.size() + " samples.");
+//            mTextViewStatus.setText("Status: scanning has been stopped, with totally, "
+//                    + rssiScanResultArray.size() + " samples.");
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -176,21 +178,21 @@ public class RxFragment extends Fragment implements BeaconConsumer {
     }
 
     private void initiateUi(View view) {
-        mSpinnerSampleRate = (NiceSpinner) view.findViewById(R.id.spinner_rx_sample_rate);
+        mSpinnerSampleRate = (NiceSpinner) view.findViewById(R.id.spinner_beacon_rx_sample_rate);
         mSpinnerSampleRate.attachDataSource(sampleRateItems);
         mSpinnerSampleRate.setSelectedIndex(0); // default 10Hz
 
-        mSpinnerAveraging = (NiceSpinner) view.findViewById(R.id.spinner_rx_averaging);
+        mSpinnerAveraging = (NiceSpinner) view.findViewById(R.id.spinner_beacon_rx_averaging);
         mSpinnerAveraging.attachDataSource(averagingMethods);
         mSpinnerAveraging.setSelectedIndex(2); // default No Process
 
-        mSpinnerNumberOfSamples = (NiceSpinner) view.findViewById(R.id.spinner_rx_number_of_samples);
+        mSpinnerNumberOfSamples = (NiceSpinner) view.findViewById(R.id.spinner_beacon_rx_number_of_samples);
         mSpinnerNumberOfSamples.attachDataSource(numberOfSamplesArray);
         mSpinnerNumberOfSamples.setSelectedIndex(0); // default 20 samples
 
-        mButtonStart = (Button) view.findViewById(R.id.button_rx_start);
-        mButtonStop = (Button) view.findViewById(R.id.button_rx_stop);
-        mButtonSave = (Button) view.findViewById(R.id.button_rx_save);
+        mButtonStart = (Button) view.findViewById(R.id.button_beacon_rx_start);
+        mButtonStop = (Button) view.findViewById(R.id.button_beacon_rx_stop);
+        mButtonSave = (Button) view.findViewById(R.id.button_beacon_rx_save);
         resumeButtonsToStartMode();     // Button enabled or disabled
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,7 +232,7 @@ public class RxFragment extends Fragment implements BeaconConsumer {
                 } else {
                     // Note Date will update to current time in this way, Unique Date will generate one storage file
                     Date dateTimeForNow = new Date();
-                    String filename = "RssiResult" + dateFormat.format(dateTimeForNow.getTime())+".csv";
+                    String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())+".csv";
                     LogToFile mLogToFile = new LogToFile(getActivity(), filename);
                     for(int i = 0; i < rssiScanResultArray.size(); i++) {
                         mLogToFile.write(rssiScanResultArray.get(i).toString());
@@ -246,7 +248,7 @@ public class RxFragment extends Fragment implements BeaconConsumer {
                 }
             }
         });
-        mTextViewStatus = (TextView) view.findViewById(R.id.text_view_rx_status);
+        mTextViewStatus = (TextView) view.findViewById(R.id.text_view_beacon_rx_status);
     }
 
     private void resumeButtonsToStartMode() {
@@ -268,10 +270,7 @@ public class RxFragment extends Fragment implements BeaconConsumer {
             final BluetoothManager bluetoothManager = (BluetoothManager) getActivity()
                     .getSystemService(Context.BLUETOOTH_SERVICE);
             BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-            if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
-                return false;
-            }
-            return true;
+            return (bluetoothAdapter != null && bluetoothAdapter.isEnabled());
         } else {
             return false;
         }

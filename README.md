@@ -669,6 +669,8 @@
     * Change Rx from Activity to Fragment, found HostActivity
     * Add LDrawer to HostActivity
     * Add Tx to TxFragment
+    * Add Wifi Tx and Rx for further field test, by Java reflection
+    * Revise App name accordingly to BT10BeaconWifiTxRx
 
 120. BT11LDrawerTest
     * Try LDrawer with nice animation on the action bar home button when opening drawer on the left

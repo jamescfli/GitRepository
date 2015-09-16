@@ -31,6 +31,7 @@ public class LogToFile {
             e.printStackTrace();
         }
     }
+
     public boolean close() {
         if (mPrintWriter != null) {
             mPrintWriter.close();

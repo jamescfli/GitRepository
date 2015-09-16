@@ -15,8 +15,9 @@ import com.ikimuhendis.ldrawer.ActionBarDrawerToggle;
 import com.ikimuhendis.ldrawer.DrawerArrowDrawable;
 
 import cn.jamesli.example.bt10ibeacontxrx.R;
-import cn.jamesli.example.bt10ibeacontxrx.fragment.RxFragment;
-import cn.jamesli.example.bt10ibeacontxrx.fragment.TxFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.BeaconRxFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.BeaconTxFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiTxFragment;
 
 public class HostActivity extends Activity {
     private static final String TAG = "RxActivity";
@@ -26,8 +27,14 @@ public class HostActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
 
-    private RxFragment rxFragment;
-    private TxFragment txFragment;
+    private BeaconRxFragment beaconRxFragment;
+    private BeaconTxFragment beaconTxFragment;
+//    private WifiRxFragment wifiRxFragment;
+    private WifiTxFragment wifiTxFragment;
+
+    private final String[] valuesMenuList = new String[] {
+            "Beacon Receiver", "Beacon Transmitter", "WiFi Receiver", "WiFi Transmitter"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +44,9 @@ public class HostActivity extends Activity {
         initiateLDrawer();
 
         if (savedInstanceState == null) {
-            rxFragment = RxFragment.newInstance();
+            beaconRxFragment = BeaconRxFragment.newInstance(valuesMenuList[0]);
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, rxFragment).commit();
+                    .add(R.id.container, beaconRxFragment).commit();
         }
     }
 
@@ -75,9 +82,6 @@ public class HostActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-        String[] valuesMenuList = new String[] {
-                "Receiver", "Transmitter"
-        };
         ArrayAdapter<String> adapterMenuList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, valuesMenuList);
         mDrawerList.setAdapter(adapterMenuList);
@@ -86,19 +90,30 @@ public class HostActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        if (rxFragment == null) {
-                            rxFragment = RxFragment.newInstance();
+                        if (beaconRxFragment == null) {
+                            beaconRxFragment = BeaconRxFragment.newInstance(valuesMenuList[0]);
                         }
                         getFragmentManager().beginTransaction()
-                                .replace(R.id.container, rxFragment).commit();
+                                .replace(R.id.container, beaconRxFragment).commit();
                         mDrawerLayout.closeDrawer(mDrawerList);
                         break;
                     case 1:
-                        if (txFragment == null) {
-                            txFragment = TxFragment.newInstance();
+                        if (beaconTxFragment == null) {
+                            beaconTxFragment = BeaconTxFragment.newInstance(valuesMenuList[1]);
                         }
                         getFragmentManager().beginTransaction()
-                                .replace(R.id.container, txFragment).commit();
+                                .replace(R.id.container, beaconTxFragment).commit();
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                        break;
+                    case 2:
+                        // TODO
+                        break;
+                    case 3:
+                        if (wifiTxFragment == null) {
+                            wifiTxFragment = WifiTxFragment.newInstance(valuesMenuList[3]);
+                        }
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, wifiTxFragment).commit();
                         mDrawerLayout.closeDrawer(mDrawerList);
                         break;
                 }
