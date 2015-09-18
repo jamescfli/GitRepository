@@ -17,6 +17,7 @@ import com.ikimuhendis.ldrawer.DrawerArrowDrawable;
 import cn.jamesli.example.bt10ibeacontxrx.R;
 import cn.jamesli.example.bt10ibeacontxrx.fragment.BeaconRxFragment;
 import cn.jamesli.example.bt10ibeacontxrx.fragment.BeaconTxFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiRxFragment;
 import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiTxFragment;
 
 public class HostActivity extends Activity {
@@ -29,7 +30,7 @@ public class HostActivity extends Activity {
 
     private BeaconRxFragment beaconRxFragment;
     private BeaconTxFragment beaconTxFragment;
-//    private WifiRxFragment wifiRxFragment;
+    private WifiRxFragment wifiRxFragment;
     private WifiTxFragment wifiTxFragment;
 
     private final String[] valuesMenuList = new String[] {
@@ -106,7 +107,12 @@ public class HostActivity extends Activity {
                         mDrawerLayout.closeDrawer(mDrawerList);
                         break;
                     case 2:
-                        // TODO
+                        if (wifiRxFragment == null) {
+                            wifiRxFragment = WifiRxFragment.newInstance(valuesMenuList[2]);
+                        }
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, wifiRxFragment).commit();
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         break;
                     case 3:
                         if (wifiTxFragment == null) {

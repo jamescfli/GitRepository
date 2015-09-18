@@ -30,17 +30,17 @@ public class WifiTxFragment extends Fragment {
     private WifiApManager mWifiApManager;
 
     // for UI
-    private TextView mTextViewWifiBssid;
-    private EditText mEditTextWifiSsid;
-    private NiceSpinner mSpinnerWifiAuthAlg;
-    private Button mButtonWifiStart;
-    private Button mButtonWifiStop;
+    private TextView mTextViewWifiTxBssid;
+    private EditText mEditTextWifiTxSsid;
+    private NiceSpinner mSpinnerWifiTxAuthAlg;
+    private Button mButtonWifiTxStart;
+    private Button mButtonWifiTxStop;
     private static final String[] WIFI_AUTH_ALGORITHM = new String[] {
             "LEAP, Network EAP",
             "OPEN, for WPA/WPA2",
             "SHARED, static WEP"
     };
-    private TextView mTextViewWifiStatus;
+    private TextView mTextViewWifiTxStatus;
     private static String mFragmentTitle;
 
     public static WifiTxFragment newInstance(String fragmentTitle) {
@@ -85,13 +85,13 @@ public class WifiTxFragment extends Fragment {
         Log.d(TAG, "onResume()");
         super.onResume();
         if (mWifiApManager.isWifiApEnabled()) {
-            mTextViewWifiStatus.setText("Status: WiFi AP has been started.");
-            mButtonWifiStart.setEnabled(false);
-            mButtonWifiStop.setEnabled(true);
+            mTextViewWifiTxStatus.setText("Status: WiFi AP has been started.");
+            mButtonWifiTxStart.setEnabled(false);
+            mButtonWifiTxStop.setEnabled(true);
         } else {
-            mTextViewWifiStatus.setText("Status: WiFi AP has NOT been started.");
-            mButtonWifiStart.setEnabled(true);
-            mButtonWifiStop.setEnabled(false);
+            mTextViewWifiTxStatus.setText("Status: WiFi AP has NOT been started.");
+            mButtonWifiTxStart.setEnabled(true);
+            mButtonWifiTxStop.setEnabled(false);
         }
     }
 
@@ -106,73 +106,73 @@ public class WifiTxFragment extends Fragment {
     }
 
     private void initiateUi(View view) {
-        mTextViewWifiBssid = (TextView) view.findViewById(R.id.text_view_wifi_bssid);
+        mTextViewWifiTxBssid = (TextView) view.findViewById(R.id.text_view_wifi_bssid);
         String bssid = (mWifiConfig.BSSID != null && mWifiConfig.BSSID.length() > 0) ?
                 mWifiConfig.BSSID : getString(R.string.wifi_default_wifi_bssid);
-        mTextViewWifiBssid.setText(bssid);
-        mEditTextWifiSsid = (EditText) view.findViewById(R.id.edit_text_wifi_ssid);
+        mTextViewWifiTxBssid.setText(bssid);
+        mEditTextWifiTxSsid = (EditText) view.findViewById(R.id.edit_text_wifi_ssid);
         String ssid = (mWifiConfig.SSID != null && mWifiConfig.SSID.length() > 0) ?
                 mWifiConfig.SSID : getString(R.string.wifi_default_wifi_ssid);
-        mEditTextWifiSsid.setText(ssid);
-        mSpinnerWifiAuthAlg = (NiceSpinner) view.findViewById(R.id.spinner_wifi_auth_alg);
+        mEditTextWifiTxSsid.setText(ssid);
+        mSpinnerWifiTxAuthAlg = (NiceSpinner) view.findViewById(R.id.spinner_wifi_auth_alg);
         ArrayAdapter<String> adapterWifiAuthAlg = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, WIFI_AUTH_ALGORITHM);
-        mSpinnerWifiAuthAlg.setAdapter(adapterWifiAuthAlg);
-        mSpinnerWifiAuthAlg.setSelectedIndex(1);    // OPEN as default value
-        mButtonWifiStart = (Button) view.findViewById(R.id.button_wifi_tx_start);
-        mButtonWifiStop = (Button) view.findViewById(R.id.button_wifi_tx_stop);
-        mButtonWifiStart.setOnClickListener(new View.OnClickListener() {
+        mSpinnerWifiTxAuthAlg.setAdapter(adapterWifiAuthAlg);
+        mSpinnerWifiTxAuthAlg.setSelectedIndex(1);    // OPEN as default value
+        mButtonWifiTxStart = (Button) view.findViewById(R.id.button_wifi_tx_start);
+        mButtonWifiTxStop = (Button) view.findViewById(R.id.button_wifi_tx_stop);
+        mButtonWifiTxStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setWifiConfigurationBeforeStart();
                 if (mWifiApManager.setWifiApEnabled(mWifiConfig, true)) {
                     if (mWifiApManager.isWifiApEnabled()) {
-                        mTextViewWifiStatus.setText("Status: WiFi AP has been started");
-                        mButtonWifiStart.setEnabled(false);
-                        mButtonWifiStop.setEnabled(true);
+                        mTextViewWifiTxStatus.setText("Status: WiFi AP has been started");
+                        mButtonWifiTxStart.setEnabled(false);
+                        mButtonWifiTxStop.setEnabled(true);
                         // freeze EditText and Spinner
-                        mEditTextWifiSsid.setEnabled(false);
-                        mSpinnerWifiAuthAlg.setEnabled(false);
+                        mEditTextWifiTxSsid.setEnabled(false);
+                        mSpinnerWifiTxAuthAlg.setEnabled(false);
                     } else {
-                        mTextViewWifiStatus.setText("Status: for some reason, " +
+                        mTextViewWifiTxStatus.setText("Status: for some reason, " +
                                 "WiFI AP is still disabled after pressing start button.");
                     }
                 } else {
-                    mTextViewWifiStatus.setText("Status: for some reason, " +
+                    mTextViewWifiTxStatus.setText("Status: for some reason, " +
                             "WiFI AP has not been started properly.");
                 }
             }
         });
-        mButtonWifiStop.setOnClickListener(new View.OnClickListener() {
+        mButtonWifiTxStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mWifiApManager.setWifiApEnabled(mWifiConfig, false)) {
                     if (mWifiApManager.isWifiApEnabled()) {
-                        mTextViewWifiStatus.setText("Status: for some reason, " +
+                        mTextViewWifiTxStatus.setText("Status: for some reason, " +
                                 "WiFI AP is still enabled after pressing stop button.");
                     } else {
-                        mTextViewWifiStatus.setText("Status: WiFi AP has been stopped");
-                        mButtonWifiStart.setEnabled(true);
-                        mButtonWifiStop.setEnabled(false);
+                        mTextViewWifiTxStatus.setText("Status: WiFi AP has been stopped");
+                        mButtonWifiTxStart.setEnabled(true);
+                        mButtonWifiTxStop.setEnabled(false);
                         // release EditText and Spinner
-                        mEditTextWifiSsid.setEnabled(true);
-                        mSpinnerWifiAuthAlg.setEnabled(true);
+                        mEditTextWifiTxSsid.setEnabled(true);
+                        mSpinnerWifiTxAuthAlg.setEnabled(true);
                     }
                 } else {
-                    mTextViewWifiStatus.setText("Status: note WiFi AP has not been stopped properly.");
+                    mTextViewWifiTxStatus.setText("Status: note WiFi AP has not been stopped properly.");
                 }
             }
         });
-        mTextViewWifiStatus = (TextView) view.findViewById(R.id.text_view_wifi_tx_status);
+        mTextViewWifiTxStatus = (TextView) view.findViewById(R.id.text_view_wifi_tx_status);
     }
 
     private void setWifiConfigurationBeforeStart() {
         // read SSID
-        String ssid = mEditTextWifiSsid.getText().toString();
+        String ssid = mEditTextWifiTxSsid.getText().toString();
         if (ssid != null && ssid.length() > 0) {
             mWifiConfig.SSID = ssid;
         }
-        switch (mSpinnerWifiAuthAlg.getSelectedIndex()) {
+        switch (mSpinnerWifiTxAuthAlg.getSelectedIndex()) {
             case 0:
                 mWifiConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.LEAP);
                 break;
