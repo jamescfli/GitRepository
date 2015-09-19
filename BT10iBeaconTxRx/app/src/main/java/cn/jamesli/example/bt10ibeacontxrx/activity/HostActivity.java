@@ -17,6 +17,10 @@ import com.ikimuhendis.ldrawer.DrawerArrowDrawable;
 import cn.jamesli.example.bt10ibeacontxrx.R;
 import cn.jamesli.example.bt10ibeacontxrx.fragment.BeaconRxFragment;
 import cn.jamesli.example.bt10ibeacontxrx.fragment.BeaconTxFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiFindDirectionAroundLandmarkFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiFindFingerprintFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiFindLandmarkApFragment;
+import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiFingerprintMarkerFragment;
 import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiRxFragment;
 import cn.jamesli.example.bt10ibeacontxrx.fragment.WifiTxFragment;
 
@@ -28,14 +32,17 @@ public class HostActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
 
+    // Fragments
     private BeaconRxFragment beaconRxFragment;
     private BeaconTxFragment beaconTxFragment;
     private WifiRxFragment wifiRxFragment;
     private WifiTxFragment wifiTxFragment;
+    private WifiFingerprintMarkerFragment wifiFingerprintMarkerFragment;
+    private WifiFindLandmarkApFragment wifiFindLandmarkApFragment;
+    private WifiFindDirectionAroundLandmarkFragment wifiFindDirectionAroundLandmarkFragment;
+    private WifiFindFingerprintFragment wifiFindFingerprintFragment;
 
-    private final String[] valuesMenuList = new String[] {
-            "Beacon Receiver", "Beacon Transmitter", "WiFi Receiver", "WiFi Transmitter"
-    };
+    private String[] valuesMenuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +90,7 @@ public class HostActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
+        valuesMenuList = getResources().getStringArray(R.array.menu_list_items);
         ArrayAdapter<String> adapterMenuList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, valuesMenuList);
         mDrawerList.setAdapter(adapterMenuList);
@@ -121,6 +129,45 @@ public class HostActivity extends Activity {
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.container, wifiTxFragment).commit();
                         mDrawerLayout.closeDrawer(mDrawerList);
+                        break;
+                    case 4:
+                        if (wifiFingerprintMarkerFragment == null) {
+                            wifiFingerprintMarkerFragment = WifiFingerprintMarkerFragment
+                                    .newInstance(valuesMenuList[4]);
+                        }
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, wifiFingerprintMarkerFragment).commit();
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                        break;
+                    case 5:
+                        if (wifiFindLandmarkApFragment == null) {
+                            wifiFindLandmarkApFragment = WifiFindLandmarkApFragment
+                                    .newInstance(valuesMenuList[5]);
+                        }
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, wifiFindLandmarkApFragment).commit();
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                        break;
+                    case 6:
+                        if (wifiFindDirectionAroundLandmarkFragment == null) {
+                            wifiFindDirectionAroundLandmarkFragment = WifiFindDirectionAroundLandmarkFragment
+                                    .newInstance(valuesMenuList[6]);
+                        }
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, wifiFindDirectionAroundLandmarkFragment).commit();
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                        break;
+                    case 7:
+                        if (wifiFindFingerprintFragment == null) {
+                            wifiFindFingerprintFragment = WifiFindFingerprintFragment
+                                    .newInstance(valuesMenuList[7]);
+                        }
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, wifiFindFingerprintFragment).commit();
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                        break;
+                    case 8: // Exit
+                        finish();
                         break;
                 }
             }

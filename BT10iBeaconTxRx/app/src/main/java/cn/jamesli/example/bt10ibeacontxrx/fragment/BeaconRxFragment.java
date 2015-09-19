@@ -1,6 +1,5 @@
 package cn.jamesli.example.bt10ibeacontxrx.fragment;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -49,6 +48,7 @@ import cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner;
 public class BeaconRxFragment extends Fragment implements BeaconConsumer {
     private static final String TAG = "BeaconRxFragment";
     private static final String SAVE_FILE_PREFIX = "BeaconRssiResult";
+    private static final String SAVE_FILE_APPENDIX = ".csv";
 
     // for UI
     private NiceSpinner mSpinnerSampleRate;
@@ -232,14 +232,15 @@ public class BeaconRxFragment extends Fragment implements BeaconConsumer {
                 } else {
                     // Note Date will update to current time in this way, Unique Date will generate one storage file
                     Date dateTimeForNow = new Date();
-                    String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())+".csv";
+                    String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())
+                            + SAVE_FILE_APPENDIX;
                     LogToFile mLogToFile = new LogToFile(getActivity(), filename);
                     for(int i = 0; i < rssiScanResultArray.size(); i++) {
                         mLogToFile.write(rssiScanResultArray.get(i).toString());
                     }
                     if (mLogToFile.close()) {
                         mTextViewStatus.setText("Message: RSSI data " + rssiScanResultArray.size()
-                                + "(samples) was successfully saved to file.");
+                                + " (samples) was successfully saved to file.");
                         // delete old data as long as it is successfully saved
                         rssiScanResultArray.clear();    // to prevent duplicate savings
                     } else {

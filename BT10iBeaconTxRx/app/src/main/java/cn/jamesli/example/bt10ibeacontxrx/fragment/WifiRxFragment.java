@@ -41,9 +41,13 @@ import cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner;
 public class WifiRxFragment extends Fragment {
     private static final String TAG = "WifiRxFragment";
     private static final String SAVE_FILE_PREFIX = "WifiRssiResult";
+    private static final String SAVE_FILE_APPENDIX = ".csv";
+    private static final int WIFI_RX_SENSITIVITY = -100;   // RSSI -100dBm as the sensitivity
 
     // for WiFi
     private WifiManager mWifiManager;
+    // Note: it is kind of risky to put SSID as the key due to duplicating names, better use BSSID
+    // TODO revise SSID to BSSID as the key, or use (SSID, BSSID) combo as the key
     private String mTargetApSsid = null; // work as a target AP unique ID
     private WifiScanReceiver mWifiScanReceiver;
     private Map<String, ScanResult> mWifiKeyScanResultMap;
@@ -206,14 +210,16 @@ public class WifiRxFragment extends Fragment {
                 } else {
                     // Date will update to current time in this way
                     Date dateTimeForNow = new Date();
-                    String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())+".csv";
+                    String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())
+                            + SAVE_FILE_APPENDIX;
                     LogToFile mLogToFile = new LogToFile(getActivity(), filename);
                     for(int i = 0, SIZE = mWifiScanBatchedResult.size(); i < SIZE; i++) {
                         mLogToFile.write(mWifiScanBatchedResult.get(i).toString());
                     }
                     if (mLogToFile.close()) {
-                        mTextViewWifiRxStatus.setText("Message: RSSI data " + mWifiScanBatchedResult.size()
-                                + "(samples) was successfully saved to file.");
+                        mTextViewWifiRxStatus.setText("Message: RSSI data "
+                                + mWifiScanBatchedResult.size()
+                                + " (samples) was successfully saved to file.");
                         // delete old data as long as it is successfully saved
                         mWifiScanBatchedResult.clear();    // to prevent duplicate savings
                         mButtonWifiSave.setEnabled(false);  // avoid further save
@@ -264,7 +270,7 @@ public class WifiRxFragment extends Fragment {
                     if (mWifiKeyScanResultMap.keySet().contains(mTargetApSsid)) {
                         mWifiScanBatchedResult.add(mWifiKeyScanResultMap.get(mTargetApSsid).level);
                     } else {
-                        mWifiScanBatchedResult.add(0);  // 0 dBm means fail to scan "mTargetApSsid"
+                        mWifiScanBatchedResult.add(WIFI_RX_SENSITIVITY);  // 0 dBm means fail to scan "mTargetApSsid"
                     }
                     if ((--mWifiScanSampleCounter) > 0) {
                         mNumberProgressBar.setProgress((int) (mWifiScanSampleTotal
@@ -281,7 +287,7 @@ public class WifiRxFragment extends Fragment {
                         int counterEffectiveValue = 0;
                         float averageRssiForThisBatch = 0;
                         for (int rssi : mWifiScanBatchedResult) {
-                            if (rssi != 0) {
+                            if (rssi > WIFI_RX_SENSITIVITY) {
                                 counterEffectiveValue++;
                                 averageRssiForThisBatch += rssi;
                             }
