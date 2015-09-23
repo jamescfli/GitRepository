@@ -135,11 +135,14 @@ public class WifiTxFragment extends Fragment {
                         mSpinnerWifiTxAuthAlg.setEnabled(false);
                     } else {
                         mTextViewWifiTxStatus.setText("Status: for some reason, " +
-                                "WiFI AP is still disabled after pressing start button.");
+                                "WiFI AP is still disabled after pressing start button. Maybe, " +
+                                "it is because the hotspot is starting off. Please wait and " +
+                                "press the Start button again.");
                     }
                 } else {
                     mTextViewWifiTxStatus.setText("Status: for some reason, " +
-                            "WiFI AP has not been started properly.");
+                            "enabling WiFI AP was not successful, i.e. return false from " +
+                            "WifiApManager#setWifiApEnabled().");
                 }
             }
         });

@@ -9,6 +9,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import java.util.Map;
 import cn.jamesli.example.bt10ibeacontxrx.R;
 import cn.jamesli.example.bt10ibeacontxrx.filestorage.LogToFile;
 import cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner;
+import cn.jamesli.example.bt10ibeacontxrx.util.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,18 +44,16 @@ public class WifiRxFragment extends Fragment {
     private static final String TAG = "WifiRxFragment";
     private static final String SAVE_FILE_PREFIX = "WifiRssiResult";
     private static final String SAVE_FILE_APPENDIX = ".csv";
-    private static final int WIFI_RX_SENSITIVITY = -100;   // RSSI -100dBm as the sensitivity
 
     // for WiFi
     private WifiManager mWifiManager;
     // Note: it is kind of risky to put SSID as the key due to duplicating names, better use BSSID
-    // TODO revise SSID to BSSID as the key, or use (SSID, BSSID) combo as the key
-    private String mTargetApSsid = null; // work as a target AP unique ID
+    private String mTargetApBssid = null; // work as a target AP (to be measured) unique ID
     private WifiScanReceiver mWifiScanReceiver;
-    private Map<String, ScanResult> mWifiKeyScanResultMap;
+    private Map<String, ScanResult> mWifiKeyScanResultMap;  // BSSID -> ScanResult
     private int mWifiScanSampleTotal;       // select from 5, 10, 20 samples per point
     private int mWifiScanSampleCounter;     // count from mWifiScanSampleTotal down to 0
-    private boolean isWifiScanOn;   // sometime, startScan() gives more results than required, lazy solution by toggle
+    private boolean isWifiScanRequested;   // sometime, startScan() gives more results than required, lazy solution by toggle
 
 
     // for UI
@@ -100,6 +100,7 @@ public class WifiRxFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume()");
         super.onResume();
         // need to scan first, in order to measure multiple samples
         mButtonWifiStart.setEnabled(false);
@@ -110,14 +111,15 @@ public class WifiRxFragment extends Fragment {
         // register WifiScanReceiver for scan results ready action
         getActivity().registerReceiver(mWifiScanReceiver,
                 new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        isWifiScanOn = false;
+        isWifiScanRequested = false;
     }
 
     @Override
     public void onPause() {
+        Log.d(TAG, "onPause()");
         super.onPause();
         getActivity().unregisterReceiver(mWifiScanReceiver);
-        isWifiScanOn = false;
+        isWifiScanRequested = false;
     }
 
     private void initiateUi(View view) {
@@ -151,9 +153,9 @@ public class WifiRxFragment extends Fragment {
                     mWifiManager.setWifiEnabled(true);
                 }
                 // nullify target AP to signify it is Scan button being pressed
-                mTargetApSsid = null;
+                mTargetApBssid = null;
                 if (mWifiManager.startScan()) {
-                    isWifiScanOn = true;
+                    isWifiScanRequested = true;
                     // disable Scan and Start button to avoid multiple scan
                     mButtonWifiScan.setEnabled(false);
                     mButtonWifiStart.setEnabled(false);
@@ -167,8 +169,15 @@ public class WifiRxFragment extends Fragment {
         mButtonWifiStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTargetApSsid = mSpinnerListOfAps.getText().toString();
-                if (mTargetApSsid != null) {
+                mTargetApBssid = null;
+                String targetApSsid = mSpinnerListOfAps.getText().toString();
+                for (ScanResult scanResult : mWifiKeyScanResultMap.values()) {
+                    if (targetApSsid.equals(scanResult.SSID)) {
+                        mTargetApBssid = scanResult.BSSID;
+                        break;
+                    }
+                }
+                if (mTargetApBssid != null) {
                     // there has been a list of APs, we are only interested in mTargetApSsid AP
                     // turn on wifi receiving if not enabled
                     if (!mWifiManager.isWifiEnabled()) {
@@ -184,7 +193,7 @@ public class WifiRxFragment extends Fragment {
                     // prepare the result holder
                     mWifiScanBatchedResult = new ArrayList<Integer>();
                     if (mWifiManager.startScan()) {
-                        isWifiScanOn = true;
+                        isWifiScanRequested = true;
                         // disable Scan and Start button to avoid multiple scan
                         mButtonWifiScan.setEnabled(false);
                         mButtonWifiStart.setEnabled(false);
@@ -195,8 +204,8 @@ public class WifiRxFragment extends Fragment {
                         mTextViewWifiRxStatus.setText("Status: batched scan has been stared.");
                     }
                 } else {
-                    mTextViewWifiRxStatus.setText("Status: there is nothing in the list of APs. " +
-                            "Press SCAN button first!");
+                    mTextViewWifiRxStatus.setText("Status: nothing in the list of APs, " +
+                            "or corresponding SSID was not in AP list. Press SCAN button first!");
                 }
             }
         });
@@ -239,15 +248,18 @@ public class WifiRxFragment extends Fragment {
         List<ScanResult> wifiScanResultList;
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isWifiScanOn) {
-                if (mTargetApSsid == null) {  // Scan button was pressed
+            if (isWifiScanRequested) {
+                if (mTargetApBssid == null) {  // Scan button was pressed
                     wifiScanResultList = mWifiManager.getScanResults();
                     mWifiKeyScanResultMap = new HashMap<>();
                     for (ScanResult scanResult : wifiScanResultList) {
-                        mWifiKeyScanResultMap.put(scanResult.SSID, scanResult);
+                        mWifiKeyScanResultMap.put(scanResult.BSSID, scanResult);
                     }
-                    List<String> wifiKeyList = new ArrayList<>();
-                    wifiKeyList.addAll(mWifiKeyScanResultMap.keySet());
+                    List<String> wifiKeyList = new ArrayList<>();   // for display in Spinner
+                    // display the SSID only
+                    for (ScanResult scanResult : mWifiKeyScanResultMap.values()) {
+                        wifiKeyList.add(scanResult.SSID);
+                    }
                     ArrayAdapter<String> adapterListOfAps = new ArrayAdapter<>(getActivity(),
                             android.R.layout.simple_dropdown_item_1line, wifiKeyList);
                     mSpinnerListOfAps.setAdapter(adapterListOfAps);
@@ -258,19 +270,19 @@ public class WifiRxFragment extends Fragment {
                     mButtonWifiStart.setEnabled(true);
                     // update status
                     mTextViewWifiRxStatus.setText("Status: single scan has been finished.");
-                    isWifiScanOn = false;
+                    isWifiScanRequested = false;
                 } else {                            // Start button was pressed
                     // mTargetApSsid != null, the AP we are interested
                     wifiScanResultList = mWifiManager.getScanResults();
                     mWifiKeyScanResultMap = new HashMap<>();
                     for (ScanResult scanResult : wifiScanResultList) {
-                        mWifiKeyScanResultMap.put(scanResult.SSID, scanResult);
+                        mWifiKeyScanResultMap.put(scanResult.BSSID, scanResult);
                     }
                     // check mTargetApSsid has new scan value?
-                    if (mWifiKeyScanResultMap.keySet().contains(mTargetApSsid)) {
-                        mWifiScanBatchedResult.add(mWifiKeyScanResultMap.get(mTargetApSsid).level);
+                    if (mWifiKeyScanResultMap.keySet().contains(mTargetApBssid)) {
+                        mWifiScanBatchedResult.add(mWifiKeyScanResultMap.get(mTargetApBssid).level);
                     } else {
-                        mWifiScanBatchedResult.add(WIFI_RX_SENSITIVITY);  // 0 dBm means fail to scan "mTargetApSsid"
+                        mWifiScanBatchedResult.add(Constants.WIFI_RX_SENSITIVITY);  // -100 dBm means fail to scan "mTargetApBssid"
                     }
                     if ((--mWifiScanSampleCounter) > 0) {
                         mNumberProgressBar.setProgress((int) (mWifiScanSampleTotal
@@ -287,7 +299,7 @@ public class WifiRxFragment extends Fragment {
                         int counterEffectiveValue = 0;
                         float averageRssiForThisBatch = 0;
                         for (int rssi : mWifiScanBatchedResult) {
-                            if (rssi > WIFI_RX_SENSITIVITY) {
+                            if (rssi > Constants.WIFI_RX_SENSITIVITY) {
                                 counterEffectiveValue++;
                                 averageRssiForThisBatch += rssi;
                             }
@@ -296,7 +308,7 @@ public class WifiRxFragment extends Fragment {
                         mTextViewWifiRxStatus.setText("Status: batched scan has been finished. " +
                                 "Totally, " + counterEffectiveValue + " effective values and " +
                                 "the avearge RSSI = " + averageRssiForThisBatch + ".");
-                        isWifiScanOn = false;
+                        isWifiScanRequested = false;
                     }
                 }
             }
@@ -305,7 +317,13 @@ public class WifiRxFragment extends Fragment {
 
     private void updateMacAddressOfShownAp(String apNameSsid) {
         if (apNameSsid != null && apNameSsid.length() > 0) {
-            mTextViewMacAddress.setText(mWifiKeyScanResultMap.get(apNameSsid).BSSID);
+            mTextViewMacAddress.setText("N/A");
+            for (ScanResult scanResult : mWifiKeyScanResultMap.values()) {
+                if (apNameSsid.equals(scanResult.SSID)) {
+                    mTextViewMacAddress.setText(scanResult.BSSID);
+                    break;
+                }
+            }
         } else {
             mTextViewMacAddress.setText("N/A");
         }
