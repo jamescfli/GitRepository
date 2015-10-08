@@ -1,4 +1,4 @@
-package cn.jamesli.example.bt10ibeacontxrx.wifitutils;
+package cn.jamesli.example.bt10ibeacontxrx.wifitutil;
 
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;

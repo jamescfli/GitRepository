@@ -6,4 +6,6 @@ package cn.jamesli.example.bt10ibeacontxrx.util;
 public class Constants {
 
     public static final int WIFI_RX_SENSITIVITY = -100;   // RSSI -100dBm as the sensitivity
+
+    public static final String DEFAULT_WIFI_FINGERPRINT_NAME = "Fingerprint";
 }

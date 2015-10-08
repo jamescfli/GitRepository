@@ -233,7 +233,7 @@ public class WifiRxFragment extends Fragment {
                         mWifiScanBatchedResult.clear();    // to prevent duplicate savings
                         mButtonWifiSave.setEnabled(false);  // avoid further save
                     } else {
-                        mTextViewWifiRxStatus.setText("Error: File saving failed!");
+                        mTextViewWifiRxStatus.setText("Error: File saving fails!");
                     }
                 }
             }

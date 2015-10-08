@@ -1,4 +1,4 @@
-package cn.jamesli.example.bt10ibeacontxrx.wifitutils;
+package cn.jamesli.example.bt10ibeacontxrx.wifitutil;
 
 /**
  * Created by jamesli on 15/9/16.

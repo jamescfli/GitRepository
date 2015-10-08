@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import cn.jamesli.example.bt10ibeacontxrx.R;
 import cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner;
-import cn.jamesli.example.bt10ibeacontxrx.wifitutils.WifiApManager;
+import cn.jamesli.example.bt10ibeacontxrx.wifitutil.WifiApManager;
 
 /**
  * A simple {@link Fragment} subclass.

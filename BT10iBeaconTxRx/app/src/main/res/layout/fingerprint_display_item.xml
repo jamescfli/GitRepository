@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:elevation="4dp" >
+
+    <TextView
+        android:id="@+id/text_view_fingerprint_item_bssid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="xx:xx:xx:xx:xx"
+        android:textSize="18sp"
+        android:layout_margin="8dp"
+        android:layout_weight="3"
+        android:gravity="start"
+        android:layout_gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/text_view_fingerprint_item_eff_scan_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15/20"
+        android:textSize="15sp"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:layout_gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/text_view_fingerprint_item_avg_rssi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-76.3dBm"
+        android:textSize="18sp"
+        android:layout_weight="2"
+        android:gravity="end"
+        android:layout_gravity="center_vertical" />
+
+</LinearLayout>

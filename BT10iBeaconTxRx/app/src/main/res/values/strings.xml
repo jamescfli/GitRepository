@@ -29,4 +29,8 @@
     <string name="wifi_SMT1_wifi_ssid">SM705</string>
     <string name="wifi_SMT1_wifi_bssid">b4:0b:44:0b:60:e8</string>
 
+    <!-- wifi fingerprint marker -->
+    <string name="wifi_fingerprint_name_hint">Fingerprint Name</string>
+    <string name="wifi_fingerprint_default_name">Fingerprint</string>
+
 </resources>
