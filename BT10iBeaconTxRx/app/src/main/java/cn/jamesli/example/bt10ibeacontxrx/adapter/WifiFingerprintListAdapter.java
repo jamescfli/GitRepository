@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import cn.jamesli.example.bt10ibeacontxrx.R;
@@ -14,7 +15,7 @@ import cn.jamesli.example.bt10ibeacontxrx.R;
  * Created by jamesli on 15/10/6.
  */
 public class WifiFingerprintListAdapter extends RecyclerView.Adapter<WifiFingerprintListAdapter.ViewHolder> {
-    private List<WifiFingerprintDisplayItem> mDataset;
+    private List<WifiFingerprintDisplayItem> mDataset = Collections.emptyList();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextViewBssid;

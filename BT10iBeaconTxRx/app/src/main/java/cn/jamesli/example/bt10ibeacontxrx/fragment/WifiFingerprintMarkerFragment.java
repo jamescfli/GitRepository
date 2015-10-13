@@ -168,6 +168,8 @@ public class WifiFingerprintMarkerFragment extends Fragment {
                 (R.id.text_view_wifi_fingerprint_mark_status);
         mRecyclerViewWifiFingerprintDisplay = (RecyclerView) view.findViewById
                 (R.id.recycler_view_wifi_fingerprint_display);
+        // size of views will not change if the data changes
+        mRecyclerViewWifiFingerprintDisplay.setHasFixedSize(true);
         // use a linear layout manager
         mRecyclerViewWifiFingerprintDisplay.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

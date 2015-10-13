@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- CHANGE_NETWORK_STATE is only required by Android 5.0.2, MotoG XT1079 -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!-- Provide approach alarm after found target fingerprint -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"

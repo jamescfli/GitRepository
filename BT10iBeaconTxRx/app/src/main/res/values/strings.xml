@@ -33,4 +33,21 @@
     <string name="wifi_fingerprint_name_hint">Fingerprint Name</string>
     <string name="wifi_fingerprint_default_name">Fingerprint</string>
 
+    <!-- wifi find fingerprint fragment -->
+    <string name="wifi_find_fingerprint_button_set_target">Target</string>
+    <string name="wifi_find_fingerprint_topple_text">RSS</string>
+    <string name="wifi_find_fingerprint_settings">Settings</string>
+    <string name="seek_bar_text_eff_ap_number"># Eff AP:</string>
+    <string name="seek_bar_text_sampling_number"># Sample:</string>
+    <string name="seek_bar_text_low_peak_window">Peak W:</string>
+    <string name="seek_bar_text_ema_factor">EMA F:</string>
+    <string name="text_view_text_status_title">Status</string>
+    <string name="text_view_text_ap_number"># Scanned AP:</string>
+    <string name="text_view_text_similar_distance">SD:</string>
+    <string name="text_view_text_smoothed_similar_distance">Smo SD:</string>
+    <string name="text_view_text_historical_minimum">Min:</string>
+    <string name="text_view_text_low_peak">Low peak:</string>
+    <string name="text_view_text_step_counter">Step counter:</string>
+    <string name="text_view_text_status_outcome_title">Outcome:</string>
+
 </resources>
