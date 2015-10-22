@@ -1,67 +1,63 @@
 package cn.jamesli.example.bt10ibeacontxrx.findtarget;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Created by jamesli on 15/10/17. TODO could be further refactorized with HighPeakDetection
+ * Created by jamesli on 15/10/17.
  */
 public class LowPeakDetection {
-    private LinkedList values = new LinkedList();
-    private int length;
-    private int peak_index;
 
-    public LowPeakDetection(int length)
-    {
-        if (length <= 0)
-        {
-            throw new IllegalArgumentException("length must be greater than zero");
+    private List<Float> valueList = new LinkedList<>();
+    private int lengthOfBufferedList;
+    private int indexOfPeak;
+
+    public LowPeakDetection(int length) {
+        if (length <= 2) {
+            throw new IllegalArgumentException("lengthOfBufferedList must be >= 3");
         }
-        this.length = length;
-        this.peak_index = this.length/2;
+        this.lengthOfBufferedList = length;
+        this.indexOfPeak = this.lengthOfBufferedList / 2;
     }
 
-    // Attention: only available when  findPeak return true !!
+    // usage note: only available when findPeak return true
     public  float getCurrentPeakValue()
     {
-        return (float) values.get(peak_index);
+        return (float) valueList.get(indexOfPeak);
     }
 
+    // add new value to ring buffer
+    // check peak:indexOfPeak is lengthOfBufferedList/2, 3 conditions that indexOfPeak is real peak:
+    // 1. 0-indexOfPeak is increasing
+    // 2. indexOfPeak-valueList.size() is decreasing
 
-    //add new vlaue to ring buffer
-    //check peak:peak_index is length/2, 3 conditions that peak_index is real peak:
-    //1. 0-peak_index is increasing
-    //2. peak_index-values.size() is decreasing
-    //3. values.get(peak_index)>thresh
+    public synchronized boolean findPeak(float value) {
+        float former;
+        float behind;
 
-    public synchronized boolean findPeak(float value)
-    {
-        float first,second;
+        if (valueList.size() == lengthOfBufferedList) {
+            valueList.remove(0);    // list full, delete the first item
+        }
+        valueList.add(value);
 
-        if (values.size() == length && length > 0)
-            values.removeFirst();
-        values.addLast(value);
+        if (valueList.size() == lengthOfBufferedList) {  // need to form a full list
+            for(int i = 0; i < indexOfPeak; i++) {
+                former = (float) valueList.get(i);
+                behind = (float) valueList.get(i + 1);
 
-        if(values.size() == length)
-        {
-            for(int i=0;i<peak_index;i++)
-            {
-                first = (float) values.get(i);
-                second = (float) values.get(i + 1);
-
-                if(first<second)//low peak
+                if (former < behind)//low peak
                     return false;
             }
             //IndexOutOfBoundsException - if the index is out of range (index < 0 || index >= size())
-            for(int i=peak_index+1;i<values.size();i++)
-            {
-                first = (float) values.get(i - 1);
-                second = (float) values.get(i);
+            for(int i = indexOfPeak+1; i< valueList.size(); i++) {
+                former = (float) valueList.get(i - 1);
+                behind = (float) valueList.get(i);
 
-                if(first>second)//low peak
+                if (former > behind)//low peak
                     return false;
             }
             return true;
         }
-        return false;
+        return false;   // no enough data yet
     }
 }

@@ -90,7 +90,7 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
     private WifiScanReceiver mWifiScanReceiver;
     private Map<String, Float> mWifiFingerprintSimpleSavor;
     private boolean isWifiScanRequested;    // lazy solution for extra wifi scan result feed
-    private boolean isWifiScanResultUsedForArrivalDetection;
+    private boolean isWifiScanResultReadyForArrivalDetection;   // detection applied only with new scan result
 
     // calculation related
     private float mSimilarDistance;
@@ -145,7 +145,9 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
         mDateTimeForNow = new Date();
         String filename = SAVE_FILE_PREFIX + dateFormat.format(mDateTimeForNow.getTime())
                 + SAVE_FILE_APPENDIX;
-        mLogToFile = new LogToFile(getActivity(), filename);
+        if (Constants.IS_DEBUG_WITH_LOG_FILE) {
+            mLogToFile = new LogToFile(getActivity(), filename);
+        }
         isWifiScanRequested = false;    // request on demand
         getActivity().registerReceiver(mWifiScanReceiver,
                 new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
@@ -155,7 +157,9 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
     public void onPause() {
         super.onPause();
         // close log file
-        mLogToFile.close();
+        if (Constants.IS_DEBUG_WITH_LOG_FILE) {
+            mLogToFile.close();
+        }
         getActivity().unregisterReceiver(mWifiScanReceiver);
     }
 
@@ -183,6 +187,14 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                     startStepCounter();
                     startRssSampling();
                     mTextViewOutcome.setText("Both step counter and RSS sampling were started.");
+                    // Note: ScanResult in wifiScanResultList has different timestamp and may vary
+                    // a lot from one AP to another. The reason is still unknown, e.g.
+                    // SSID: OCCUPY, level: -60, frequency: 2412, timestamp: 801211141093
+                    // SSID: adsl,   level: -65, frequency: 2432, timestamp: 801274971316
+                    if (Constants.IS_DEBUG_WITH_LOG_FILE) {
+                        // record the target WiFi fingerprint in log file
+                        logTargetFingerprint(new Date().getTime());     // milliseconds since 1970/01/01
+                    }
                 } else {
                     mButtonSetTarget.setEnabled(true);  // could set new target
                     stopStepCounter();
@@ -279,6 +291,35 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
         clearStatusTextView();
     }
 
+    private void logTargetFingerprint(long timestamp) {
+        // Title line
+        StringBuilder titleLine = new StringBuilder();
+        titleLine.append("Timestamp");
+        StringBuilder targetFingerprintLine = new StringBuilder();
+        targetFingerprintLine.append(timestamp);
+        for (String keyMacAddress : mWifiFingerprintSimpleSavor.keySet()) {
+            titleLine.append("," + keyMacAddress);
+            targetFingerprintLine.append("," + (float) mWifiFingerprintSimpleSavor.get(keyMacAddress));
+        }
+        // last column smoothed SD
+        titleLine.append("," + "Smoothed SD");
+        targetFingerprintLine.append("," + "N/A");
+        // write those two lines into log file
+        mLogToFile.write(titleLine.toString());
+        mLogToFile.write(targetFingerprintLine.toString());
+    }
+
+    private void logRssSampleScanResult(long timestamp, Map<String, Float> selectedApRssiList) {
+        StringBuilder rssiLine = new StringBuilder();
+        rssiLine.append(timestamp);
+        for (String keyMacAddress : mWifiFingerprintSimpleSavor.keySet()) {
+            rssiLine.append("," + selectedApRssiList.get(keyMacAddress).toString());
+        }
+        // last column smoothed SD
+        rssiLine.append("," + mSmoothedSimilarDistance);
+        mLogToFile.write(rssiLine.toString());
+    }
+
     private void startStepCounter() {
         mStepCounter = 0;
         mSimpleMovingAverage = new SimpleMovingAverage(10); // fix smoothing length to 10
@@ -307,8 +348,10 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
 
     private void initiateRssRelatedValues() {
         isSmoothedSimilarDistanceInitiated = false;
+        mSmoothedSimilarDistance = 0;
         mSmoothingAverageFactorForSimilarDistance =  mSeekBarEmaFactor.getProgress()/10.0f;
         isMinSimilarDistanceOnTrackInitiated = false;
+        mMinSimilarDistanceOnTrack = Float.NaN;
         mLowPeakDetection = new LowPeakDetection(translateSbValueToLowPeakWindowSize
                 (mSeekBarLowPeakWindowSize.getProgress()));
         isWifiBufferedScanResultSelectedApsInitiated = false;
@@ -319,7 +362,7 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
     private void startRssSampling() {
         isWifiScanRequested = true;
         isRssSamplingOn = true;
-        isWifiScanResultUsedForArrivalDetection = true; // no new Wifi yet === scanResult has been used
+        isWifiScanResultReadyForArrivalDetection = false; // no new Wifi yet
         mTextViewOutcome.setText("RSS sampling ON. Start to find target.");
         mWifiManager.startScan();
     }
@@ -344,9 +387,9 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
     }
 
     private int translateSbValueToLowPeakWindowSize(int progress) {
-        // translate seekbar progress to low peak window size 2, 4, 6, 8
-        // same number of downs and ups on both sides
-        return (progress+1)*2;
+        // translate seekbar progress to low peak window size 3, 4, 5, 6
+        // e.g. decrease, decrease, increase, increase for a peak if window size = 4
+        return (progress+3);
     }
 
     @Override
@@ -367,14 +410,20 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                     mTextViewStepCounter.setText((++mStepCounter) + " steps");
                     StringBuilder stepCounterForLog = new StringBuilder();
                     stepCounterForLog.append(new Date().getTime() + ", Step " + mStepCounter);
-                    if (isWifiBufferedScanResultSelectedApsInitiated && !isWifiScanResultUsedForArrivalDetection) {
+                    if (isWifiBufferedScanResultSelectedApsInitiated && isWifiScanResultReadyForArrivalDetection) {
                         // make sure mWifiBufferedScanResultSelectedAps has values and
                         // wifi scan has fed back new scan results and the results have not been used
                         detectArrivalAtTarget();
-                        isWifiScanResultUsedForArrivalDetection = true;
+                        // scan result used, wait for further updates on wifi scan
+                        isWifiScanResultReadyForArrivalDetection = false;
                         stepCounterForLog.append(" detect arrival");
+                        int scannedApCounter = calculateScannedApNumber();
+                        mTextViewScannedApNumber.setText(scannedApCounter + " / "
+                                + mWifiFingerprintSimpleSavor.size());
                     }
-                    mLogToFile.write(stepCounterForLog.toString());
+                    if (Constants.IS_DEBUG_WITH_LOG_FILE) {
+                        mLogToFile.write(stepCounterForLog.toString());
+                    }
                 }
                 break;
             case Sensor.TYPE_GRAVITY:
@@ -383,6 +432,20 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
             default:
                 Log.e("StepCounter", "Wrong Type onSensorChanged");
         }
+    }
+
+    private int calculateScannedApNumber() {
+        int counterEffAp = 0;
+        for (String keyMacAddress : mWifiFingerprintSimpleSavor.keySet()) {
+            for (Float rssiValue : mWifiBufferedScanResultSelectedAps.get(keyMacAddress)) {
+                if (rssiValue > Constants.WIFI_RX_SENSITIVITY) {
+                    // This AP (keyMacAddress) has effective RSSI value
+                    counterEffAp++;
+                    break;  // go to next AP
+                }
+            }
+        }
+        return counterEffAp;
     }
 
     private void detectArrivalAtTarget() {
@@ -410,12 +473,20 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
             mTextViewLowPeakTrend.setText(String.valueOf(lowPeakSimilarDistance));
             if (lowPeakSimilarDistance ==  mMinSimilarDistanceOnTrack &&
                     lowPeakSimilarDistance < Constants.TARGET_ONE_AP_SD_THRESHOLD_FOR_ARRIVAL
-                            * mWifiFingerprintSimpleSavor.size()) {
+                            * Math.sqrt(mWifiFingerprintSimpleSavor.size())) {
+                // .. SD = sqrt(sum(SD_i^2) / N), therefore low peak SD needs to compare with threshold * sqrt(N)
                 mVibratorApproachAlarm.vibrate(500);    // vibrate for half a second
                 stopRssSampling();
                 mSwitchRssScan.setChecked(false);   // stop wifi scanning
                 stopStepCounter();
                 mTextViewOutcome.setText("Arrived at Target");
+                // record the arrival event and corresponding low peak SD value in the log file
+                if (Constants.IS_DEBUG_WITH_LOG_FILE) {
+                    mLogToFile.write("Arrived at Target, " +
+                            "final Smoothed SD = " + mSmoothedSimilarDistance + ", " +
+                            "Threshold = " + (Constants.TARGET_ONE_AP_SD_THRESHOLD_FOR_ARRIVAL
+                            * Math.sqrt(mWifiFingerprintSimpleSavor.size())));
+                }
                 // resume Target button to allow setting new targets
                 mButtonSetTarget.setEnabled(true);
             }
@@ -504,8 +575,10 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                     }
                     // new scan value available in mWifiBufferedScanResultSelectedAps
                     // values have not been used and ready for arrival detection
-                    isWifiScanResultUsedForArrivalDetection = false;
-                    logRssSampleScanResult(new Date().getTime(), wifiSelectedApRssiList);
+                    isWifiScanResultReadyForArrivalDetection = true;
+                    if (Constants.IS_DEBUG_WITH_LOG_FILE) {
+                        logRssSampleScanResult(new Date().getTime(), wifiSelectedApRssiList);
+                    }
                     // keep scan and retrieve buffered RSSI values
                     mWifiManager.startScan();
                 } else {
@@ -537,37 +610,8 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                     mSwitchRssScan.setEnabled(true);
                     mSwitchRssScan.setChecked(false);
                     isWifiScanRequested = false;    // no further scan until mSwitchRssScan is On
-                    // Note: ScanResult in wifiScanResultList has different timestamp and may vary
-                    // a lot from one AP to another. The reason is still unknown, e.g.
-                    // SSID: OCCUPY, level: -60, frequency: 2412, timestamp: 801211141093
-                    // SSID: adsl,   level: -65, frequency: 2432, timestamp: 801274971316
-                    logTargetFingerprint(new Date().getTime());     // milliseconds since 1970/01/01
                 }
             }
-        }
-
-        private void logTargetFingerprint(long timestamp) {
-            // Title line
-            StringBuilder titleLine = new StringBuilder();
-            titleLine.append("Timestamp");
-            StringBuilder targetFingerprintLine = new StringBuilder();
-            targetFingerprintLine.append(timestamp);
-            for (String keyMacAddress : mWifiFingerprintSimpleSavor.keySet()) {
-                titleLine.append("," + keyMacAddress);
-                targetFingerprintLine.append("," + (float) mWifiFingerprintSimpleSavor.get(keyMacAddress));
-            }
-            // write those two lines into log file
-            mLogToFile.write(titleLine.toString());
-            mLogToFile.write(targetFingerprintLine.toString());
-        }
-
-        private void logRssSampleScanResult(long timestamp, Map<String, Float> selectedApRssiList) {
-            StringBuilder rssiLine = new StringBuilder();
-            rssiLine.append(timestamp);
-            for (String keyMacAddress : mWifiFingerprintSimpleSavor.keySet()) {
-                rssiLine.append("," + selectedApRssiList.get(keyMacAddress).toString());
-            }
-            mLogToFile.write(rssiLine.toString());
         }
     }
 }

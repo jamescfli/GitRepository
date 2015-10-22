@@ -8,68 +8,68 @@ import java.util.List;
  */
 public class HighPeakDetection {
 
-        private List<Float> values = new LinkedList<>();
-        private int lengthForSelectPeak;
-        private int peakCounter = 0;
+        private List<Float> valueList = new LinkedList<>();
+        private int lengthOfBufferedList;
+//        private int peakCounter = 0;
         private float thresholdForPeakDetection = 3;
         private int peakIndex;
 
-
         /**
-         *
-         * @param length the maximum lengthForSelectPeak
+         * @param length the maximum lengthOfBufferedList
          */
         public HighPeakDetection(int length, float threshold) {
-            if (length <= 0) {
-                throw new IllegalArgumentException("lengthForSelectPeak must be greater than zero");
+            if (length <= 2) {
+                throw new IllegalArgumentException("lengthOfBufferedList must be >= 3 to form a peak");
             }
-            this.lengthForSelectPeak = length;
-            this.peakIndex = this.lengthForSelectPeak / 2;
+            this.lengthOfBufferedList = length;
+            this.peakIndex = this.lengthOfBufferedList / 2;
             this.thresholdForPeakDetection = threshold;
         }
 
-        public int getPeaksCounter() {
-            return peakCounter;
-        }
+//        public int getPeaksCounter() {
+//            return peakCounter;
+//        }
 
-        //!!!!!!!!!!!!!!!!Attetion: only available when  findPeak return true!!!!!!!!!!!!!!!!!!!
-        public  float getcurrentpeakvalue() {
-            return 	((float) values.get(peakIndex));
-        }
+//        // usage note: only available when findPeak return true
+//        public  float getCurrentPeakValue() {
+//            return 	((float) valueList.get(peakIndex));
+//        }
 
 
-        //add new vlaue to ring buffer
-        //check peak:peakIndex is lengthForSelectPeak/2, 3 conditions that peakIndex is real peak:
-        //1. 0-peakIndex is increasing
-        //2. peakIndex-values.size() is decreasing
-        //3. values.get(peakIndex)>thresholdForPeakDetection
+        // add new value to ring buffer
+        // check peak:peakIndex is lengthOfBufferedList/2, 3 conditions that peakIndex is real peak:
+        // 1. 0-peakIndex is increasing
+        // 2. peakIndex-valueList.size() is decreasing
+        // 3. valueList.get(peakIndex)>thresholdForPeakDetection
 
         public synchronized boolean findPeak(float value) {
-            float behind,former;
-            if (values.size() == lengthForSelectPeak && lengthForSelectPeak > 0) {
-                values.remove(0);
+            float former;
+            float behind;
+            if (valueList.size() == lengthOfBufferedList) {
+                valueList.remove(0);
             }
-            values.add(new Float(value));
+            valueList.add(value);
 
-            if(values.size() == lengthForSelectPeak) {
-                for(int i=0;i< peakIndex;i++) {
-                    behind = ((float) values.get(i+1));
-                    former = ((float) values.get(i));
-                    if(behind<=former)
+            if (valueList.size() == lengthOfBufferedList) {
+                for(int i=0; i < peakIndex; i++) {
+                    behind = ((float) valueList.get(i+1));
+                    former = ((float) valueList.get(i));
+                    if(behind <= former)
                         return false;
                 }
                 //IndexOutOfBoundsException - if the index is out of range (index < 0 || index >= size())
-                for(int i= peakIndex +1;i<values.size();i++) {
-                    behind = ((float) values.get(i));
-                    former = ((float) values.get(i-1));
-                    if(behind>=former)
+                for(int i = peakIndex+1; i< valueList.size(); i++) {
+                    behind = (float) valueList.get(i);
+                    former = (float) valueList.get(i-1);
+                    if(behind >= former)
                         return false;
                 }
-                if(((float) values.get(peakIndex)) >= thresholdForPeakDetection) {
-                    peakCounter++;
+                // one extra condition by threshold
+                if(((float) valueList.get(peakIndex)) >= thresholdForPeakDetection) {
+//                    peakCounter++;
                     return true;
                 }
             }
-            return false;
+            return false;   // no enough data yet, or high peak < threshold
         }
 }

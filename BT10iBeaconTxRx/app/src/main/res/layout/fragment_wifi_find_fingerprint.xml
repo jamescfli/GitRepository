@@ -67,7 +67,8 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="4"
-            android:progress="2" /> <!-- default value 8 effective APs, 4 ~ 20 -->
+            android:progress="1"
+            android:indeterminate="false" /> <!-- 4 ~ 20 effective APs -->
 
     </LinearLayout>
 
@@ -91,7 +92,8 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="4"
-            android:progress="1" /> <!-- default value 2 samples per scan, 1 ~ 5 -->
+            android:progress="0"
+            android:indeterminate="false" /> <!-- 1 ~ 5 samples per scan -->
 
     </LinearLayout>
 
@@ -115,7 +117,8 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:max="3"
-            android:progress="1" /> <!-- default value 2 window size, 2, 4, 6, 8 -->
+            android:progress="0"
+            android:indeterminate="false" /> <!-- 3, 4, 5, 6 window size -->
 
     </LinearLayout>
 
