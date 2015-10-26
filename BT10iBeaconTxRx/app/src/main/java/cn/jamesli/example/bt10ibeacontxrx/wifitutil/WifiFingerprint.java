@@ -10,11 +10,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import cn.jamesli.example.bt10ibeacontxrx.util.Constants;
+
 /**
  * Created by jamesli on 15/9/23.
  */
 public class WifiFingerprint {
-    private static final String FINGERPRINT_DEFAULT_NAME = "Fingerprint";
     private String nameOfFingerprint;
     // Timestamp - Long, MAC address - String, one RSSI measurement - Integer
     private Table<Long, String, Integer> tableOfRssiSamples;
@@ -23,7 +24,7 @@ public class WifiFingerprint {
         if (name != null && name.length() > 0) {
             nameOfFingerprint = name;
         } else {
-            nameOfFingerprint = FINGERPRINT_DEFAULT_NAME;
+            nameOfFingerprint = Constants.DEFAULT_WIFI_FINGERPRINT_NAME;
         }
         tableOfRssiSamples = HashBasedTable.create();
     }
@@ -71,7 +72,14 @@ public class WifiFingerprint {
     }
 
     public void clear() {
-        nameOfFingerprint = FINGERPRINT_DEFAULT_NAME;
+        nameOfFingerprint = Constants.DEFAULT_WIFI_FINGERPRINT_NAME;
         tableOfRssiSamples.clear();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + this.nameOfFingerprint + " with "
+                + this.tableOfRssiSamples.columnKeySet().size()
+                + " scanned APs and " + this.tableOfRssiSamples.rowKeySet().size() + " samples.";
     }
 }
