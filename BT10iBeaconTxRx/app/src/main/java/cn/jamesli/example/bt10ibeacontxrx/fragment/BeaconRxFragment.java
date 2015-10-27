@@ -26,14 +26,10 @@ import org.altbeacon.beacon.Region;
 import org.altbeacon.beacon.service.ArmaRssiFilter;
 import org.altbeacon.beacon.service.RunningAverageRssiFilter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import cn.jamesli.example.bt10ibeacontxrx.R;
 import cn.jamesli.example.bt10ibeacontxrx.filestorage.LogToFile;
@@ -47,8 +43,6 @@ import cn.jamesli.example.bt10ibeacontxrx.nicespinner.NiceSpinner;
  */
 public class BeaconRxFragment extends Fragment implements BeaconConsumer {
     private static final String TAG = "BeaconRxFragment";
-    private static final String SAVE_FILE_PREFIX = "BeaconRssiResult";
-    private static final String SAVE_FILE_APPENDIX = ".csv";
 
     // for UI
     private NiceSpinner mSpinnerSampleRate;
@@ -81,7 +75,6 @@ public class BeaconRxFragment extends Fragment implements BeaconConsumer {
 
     // for Scan Results and File storage
     private ArrayList<Integer> rssiScanResultArray;
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
 
     /**
      * Use this factory method to create a new instance of
@@ -231,21 +224,24 @@ public class BeaconRxFragment extends Fragment implements BeaconConsumer {
                     mTextViewStatus.setText("Error: No scan results (or array.size() == 0) so far!");
                 } else {
                     // Note Date will update to current time in this way, Unique Date will generate one storage file
-                    Date dateTimeForNow = new Date();
-                    String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())
-                            + SAVE_FILE_APPENDIX;
-                    LogToFile mLogToFile = new LogToFile(getActivity(), filename);
+                    String SAVE_FILE_PREFIX = "BeaconRssiResult";
+                    String SAVE_FILE_APPENDIX = ".csv";
+                    LogToFile logToFile = new LogToFile(getActivity(), SAVE_FILE_PREFIX, SAVE_FILE_APPENDIX);
+                    StringBuilder tempScanResultArray = new StringBuilder();
                     for(int i = 0; i < rssiScanResultArray.size(); i++) {
-                        mLogToFile.write(rssiScanResultArray.get(i).toString());
+                        tempScanResultArray.append(rssiScanResultArray.get(i).toString() + "\n");
                     }
-                    if (mLogToFile.close()) {
-                        mTextViewStatus.setText("Message: RSSI data " + rssiScanResultArray.size()
+                    logToFile.saveToExternalCacheDir(tempScanResultArray.toString());
+                    mTextViewStatus.setText("Message: RSSI data " + rssiScanResultArray.size()
                                 + " (samples) was successfully saved to file.");
-                        // delete old data as long as it is successfully saved
-                        rssiScanResultArray.clear();    // to prevent duplicate savings
-                    } else {
-                        mTextViewStatus.setText("Error: File saving failed!");
-                    }
+//                    if (mLogToFile.close()) {
+//                        mTextViewStatus.setText("Message: RSSI data " + rssiScanResultArray.size()
+//                                + " (samples) was successfully saved to file.");
+//                        // delete old data as long as it is successfully saved
+//                        rssiScanResultArray.clear();    // to prevent duplicate savings
+//                    } else {
+//                        mTextViewStatus.setText("Error: File saving failed!");
+//                    }
                 }
             }
         });

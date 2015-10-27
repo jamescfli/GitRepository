@@ -21,12 +21,8 @@ import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import cn.jamesli.example.bt10ibeacontxrx.R;
@@ -38,8 +34,6 @@ import cn.jamesli.example.bt10ibeacontxrx.wifitutil.WifiFingerprint;
 
 public class WifiFingerprintMarkerFragment extends Fragment {
     private static final String TAG = "WifiFpMarkerFragment";
-    private static final String SAVE_FILE_PREFIX = "Fingerprint";
-    private static final String SAVE_FILE_APPENDIX = ".csv";
 
     // for WiFi
     private WifiManager mWifiManager;
@@ -62,9 +56,6 @@ public class WifiFingerprintMarkerFragment extends Fragment {
 
     // save Scan result to
     private WifiFingerprint mWifiFingerprint;
-
-    // for file storage
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
 
     // for displaying fingerprint in RecyclerView
     private RecyclerView.Adapter mFingerprintListAdapter;
@@ -175,15 +166,15 @@ public class WifiFingerprintMarkerFragment extends Fragment {
     }
 
     private void saveFingerprintWithAllRssiValues() {
-        Date dateTimeForNow = new Date();
-        String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())
-                + SAVE_FILE_APPENDIX;
-        LogToFile mLogToFile = new LogToFile(getActivity(), filename);
+        String SAVE_FILE_PREFIX = "Fingerprint";
+        String SAVE_FILE_APPENDIX = ".csv";
+        LogToFile mLogToFile = new LogToFile(getActivity(), SAVE_FILE_PREFIX, SAVE_FILE_APPENDIX);
+        StringBuilder tempFingerprintToLog = new StringBuilder();
         // achieve the row and column set of the RSSI table
         final Set<Long> rowSetRssiTable = mWifiFingerprint.getTimestampSet();
         final Set<String> columnSetRssiTable = mWifiFingerprint.getMacAddressSet();
         // input fingerprint name
-        mLogToFile.write(mWifiFingerprint.getNameOfFingerprint());
+        tempFingerprintToLog.append(mWifiFingerprint.getNameOfFingerprint() + "\n");
         // input MAC address of all scanned AP
         StringBuilder lineOfMacAddresses = new StringBuilder();
         String prefix = "";
@@ -195,7 +186,7 @@ public class WifiFingerprintMarkerFragment extends Fragment {
 //        // or use Guava method - Joiner
 //        String lineOfMacAddresses = Joiner.on(',').useForNull("N/A")
 //                .join(Arrays.asList(columnSetRssiTable));
-        mLogToFile.write(lineOfMacAddresses.toString());
+        tempFingerprintToLog.append(lineOfMacAddresses + "\n");
         // input RSSI content
         String rssiValueAsString;
         for (Long timestamp : rowSetRssiTable) {
@@ -211,15 +202,12 @@ public class WifiFingerprintMarkerFragment extends Fragment {
 //                                    mWifiFingerprint.getRssi(timestamp, macAddress);
                 lineOfRssi.append(rssiValueAsString);
             }
-            mLogToFile.write(lineOfRssi.toString());
+            tempFingerprintToLog.append(lineOfRssi + "\n");
         }
-        if (mLogToFile.close()) {
-            mTextViewWifiStatus.setText("Message: whole RSSI table saved.");
-            mWifiFingerprint.clear();
-            mButtonSave.setEnabled(false);
-        } else {
-            mTextViewWifiStatus.setText("Error: file saving failed");
-        }
+        mLogToFile.saveToExternalCacheDir(tempFingerprintToLog.toString());
+        mTextViewWifiStatus.setText("Message: whole RSSI table saved.");
+        mWifiFingerprint.clear();
+        mButtonSave.setEnabled(false);
     }
 
     private void saveFingerprintWithAverageRssiValues() {

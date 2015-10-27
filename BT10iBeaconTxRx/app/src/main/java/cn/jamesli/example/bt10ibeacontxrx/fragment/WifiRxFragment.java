@@ -21,13 +21,9 @@ import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import cn.jamesli.example.bt10ibeacontxrx.R;
@@ -42,8 +38,6 @@ import cn.jamesli.example.bt10ibeacontxrx.util.Constants;
  */
 public class WifiRxFragment extends Fragment {
     private static final String TAG = "WifiRxFragment";
-    private static final String SAVE_FILE_PREFIX = "WifiRssiResult";
-    private static final String SAVE_FILE_APPENDIX = ".csv";
 
     // for WiFi
     private WifiManager mWifiManager;
@@ -70,7 +64,6 @@ public class WifiRxFragment extends Fragment {
 
     // for Scan Results and File storage
     private List<Integer> mWifiScanBatchedResult;
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
 
     public static WifiRxFragment newInstance(String fragmentTitle) {
         mFragmentTitle = fragmentTitle;
@@ -217,24 +210,20 @@ public class WifiRxFragment extends Fragment {
                 if (mWifiScanBatchedResult == null || mWifiScanBatchedResult.size() <= 0) {
                     mTextViewWifiRxStatus.setText("Error: No scan results available!");
                 } else {
-                    // Date will update to current time in this way
-                    Date dateTimeForNow = new Date();
-                    String filename = SAVE_FILE_PREFIX + dateFormat.format(dateTimeForNow.getTime())
-                            + SAVE_FILE_APPENDIX;
-                    LogToFile mLogToFile = new LogToFile(getActivity(), filename);
+                    String SAVE_FILE_PREFIX = "WifiRssiResult";
+                    String SAVE_FILE_APPENDIX = ".csv";
+                    LogToFile mLogToFile = new LogToFile(getActivity(), SAVE_FILE_PREFIX, SAVE_FILE_APPENDIX);
+                    StringBuilder tempWifiBatchScanResult = new StringBuilder();
                     for(int i = 0, SIZE = mWifiScanBatchedResult.size(); i < SIZE; i++) {
-                        mLogToFile.write(mWifiScanBatchedResult.get(i).toString());
+                        tempWifiBatchScanResult.append(mWifiScanBatchedResult.get(i).toString() + "\n");
                     }
-                    if (mLogToFile.close()) {
-                        mTextViewWifiRxStatus.setText("Message: RSSI data "
-                                + mWifiScanBatchedResult.size()
-                                + " (samples) was successfully saved to file.");
-                        // delete old data as long as it is successfully saved
-                        mWifiScanBatchedResult.clear();    // to prevent duplicate savings
-                        mButtonWifiSave.setEnabled(false);  // avoid further save
-                    } else {
-                        mTextViewWifiRxStatus.setText("Error: File saving fails!");
-                    }
+                    mLogToFile.saveToExternalCacheDir(tempWifiBatchScanResult.toString());
+                    mTextViewWifiRxStatus.setText("Message: RSSI data "
+                            + mWifiScanBatchedResult.size()
+                            + " (samples) was successfully saved to file.");
+                    // delete old data as long as it is successfully saved
+                    mWifiScanBatchedResult.clear();    // to prevent duplicate savings
+                    mButtonWifiSave.setEnabled(false);  // avoid further save
                 }
             }
         });

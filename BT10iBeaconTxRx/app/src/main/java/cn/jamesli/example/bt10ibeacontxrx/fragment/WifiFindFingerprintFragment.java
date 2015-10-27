@@ -23,15 +23,12 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import cn.jamesli.example.bt10ibeacontxrx.R;
@@ -71,11 +68,7 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
     private TextView mTextViewOutcome;
 
     // log file storage
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
-    private static final String SAVE_FILE_PREFIX = "FindTargetLog";
-    private static final String SAVE_FILE_APPENDIX = ".csv";
-    private Date mDateTimeForNow;
-    private LogToFile mLogToFile;
+    private StringBuilder mContentSavedToLogFile;   // temp storage for log file content
 
     // mobile sensors / components
     private SensorManager mSensorManagerPedometer;
@@ -148,13 +141,10 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
     public void onResume() {
         super.onResume();
         // initiate log file
-        mDateTimeForNow = new Date();
-        String filename = SAVE_FILE_PREFIX + dateFormat.format(mDateTimeForNow.getTime())
-                + SAVE_FILE_APPENDIX;
-        if (Constants.IS_DEBUG_WITH_LOG_FILE) {
-            mLogToFile = new LogToFile(getActivity(), filename);
-        }
         isWifiScanRequested = false;    // request on demand
+        if (Constants.IS_DEBUG_WITH_LOG_FILE) {
+            mContentSavedToLogFile = new StringBuilder();
+        }
         getActivity().registerReceiver(mWifiScanReceiver,
                 new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
@@ -162,9 +152,12 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
     @Override
     public void onPause() {
         super.onPause();
-        // close log file
-        if (Constants.IS_DEBUG_WITH_LOG_FILE) {
-            mLogToFile.close();
+        // log to file if DEBUG requires and temp savor has content
+        if (Constants.IS_DEBUG_WITH_LOG_FILE && mContentSavedToLogFile.length() > 0) {
+            String SAVE_FILE_PREFIX = "FindTargetLog";
+            String SAVE_FILE_APPENDIX = ".csv";
+            LogToFile logToFile = new LogToFile(getActivity(), SAVE_FILE_PREFIX, SAVE_FILE_APPENDIX);
+            logToFile.saveToExternalCacheDir(mContentSavedToLogFile.toString());
         }
         getActivity().unregisterReceiver(mWifiScanReceiver);
     }
@@ -342,11 +335,11 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
             targetFingerprintLine.append("," + (float) mWifiFingerprintSimpleSavor.get(keyMacAddress));
         }
         // last column smoothed SD
-        titleLine.append("," + "Smoothed SD");
-        targetFingerprintLine.append("," + "N/A");
+        titleLine.append("," + "Smoothed SD" + "\n");
+        targetFingerprintLine.append("," + "N/A" + "\n");
         // write those two lines into log file
-        mLogToFile.write(titleLine.toString());
-        mLogToFile.write(targetFingerprintLine.toString());
+        mContentSavedToLogFile.append(titleLine);
+        mContentSavedToLogFile.append(targetFingerprintLine);
     }
 
     private void logRssSampleScanResult(long timestamp, Map<String, Float> selectedApRssiList) {
@@ -356,8 +349,8 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
             rssiLine.append("," + selectedApRssiList.get(keyMacAddress).toString());
         }
         // last column smoothed SD
-        rssiLine.append("," + mSmoothedSimilarDistance);
-        mLogToFile.write(rssiLine.toString());
+        rssiLine.append("," + mSmoothedSimilarDistance + "\n");
+        mContentSavedToLogFile.append(rssiLine);
     }
 
     private void startStepCounter() {
@@ -461,8 +454,9 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                         mTextViewScannedApNumber.setText(scannedApCounter + " / "
                                 + mNumberOfEffApsForTarget);
                     }
+                    stepCounterForLog.append("\n");
                     if (Constants.IS_DEBUG_WITH_LOG_FILE) {
-                        mLogToFile.write(stepCounterForLog.toString());
+                        mContentSavedToLogFile.append(stepCounterForLog);
                     }
                 }
                 break;
@@ -532,10 +526,10 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                 mTextViewOutcome.setText("Arrived at Target");
                 // record the arrival event and corresponding low peak SD value in the log file
                 if (Constants.IS_DEBUG_WITH_LOG_FILE) {
-                    mLogToFile.write("Arrived at Target, " +
+                    mContentSavedToLogFile.append("Arrived at Target, " +
                             "final Smoothed SD = " + mSmoothedSimilarDistance + ", " +
                             "Threshold = " + (Constants.TARGET_ONE_AP_SD_THRESHOLD_FOR_ARRIVAL
-                            * Math.sqrt(mNumberOfEffApsForTarget)));
+                            * Math.sqrt(mNumberOfEffApsForTarget)) + "\n");
                 }
                 // resume Target button to allow setting new targets
                 mButtonSetTarget.setEnabled(true);
