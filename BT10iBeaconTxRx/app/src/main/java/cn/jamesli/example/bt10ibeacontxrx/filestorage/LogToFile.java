@@ -30,14 +30,17 @@ public class LogToFile {
         protected String doInBackground(String... params) {
             String resultMessage = "successfully saved.";
             File dataFile = new File(mContext.getExternalCacheDir(), mLogFileName);
+            // write the file once without BufferedWriter()
+            PrintWriter pw = null;
             try {
                 // write the file once without BufferedWriter()
-                PrintWriter pw = new PrintWriter(new FileWriter(dataFile));
+                pw = new PrintWriter(new FileWriter(dataFile));
                 pw.println(params[0]);
-                pw.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 resultMessage = e.toString();
+            } finally {
+                pw.close();
             }
             return resultMessage;
         }
@@ -47,6 +50,7 @@ public class LogToFile {
             Toast.makeText(mContext, "'" + mLogFileName + "' was " + resultMessage,
                     Toast.LENGTH_LONG).show();
 //            // android.view.WindowLeaked: leaked window com.android.internal.policy.impl.PhoneWindow$DecorView
+//            //  trying to show a Dialog after you've exited an Activity/Fragment
 //            new AlertDialog.Builder(mContext).setMessage("'" + mLogFileName + "' was " + resultMessage).
 //                    setPositiveButton("OK",null).show();
         }

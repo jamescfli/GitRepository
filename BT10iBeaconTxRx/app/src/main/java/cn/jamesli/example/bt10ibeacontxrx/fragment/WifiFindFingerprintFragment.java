@@ -433,9 +433,9 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
             case Sensor.TYPE_LINEAR_ACCELERATION:
                 mAcceleration = event.values.clone();
                 //smooth
-                if(mGravity[2]>mGravity[1])
+                if(mGravity[2]>mGravity[1])     // mobile lays down to be paralleled with floor ground
                     smaAcc = mSimpleMovingAverage.add(mAcceleration[2]);
-                else
+                else    // if mobile stands up straight
                     smaAcc = mSimpleMovingAverage.add(mAcceleration[1]);
 
                 // detected step
@@ -513,8 +513,10 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
             float lowPeakSimilarDistance = mLowPeakDetection.getCurrentPeakValue();
             mTextViewLowPeakTrend.setText(String.valueOf(lowPeakSimilarDistance));
             if (lowPeakSimilarDistance ==  mMinSimilarDistanceOnTrack &&
-                    lowPeakSimilarDistance < Constants.TARGET_ONE_AP_SD_THRESHOLD_FOR_ARRIVAL
-                            * Math.sqrt(mNumberOfEffApsForTarget)) {
+                    lowPeakSimilarDistance <
+                            (Constants.TARGET_ONE_AP_SD_THRESHOLD_FOR_ARRIVAL
+                            * Math.sqrt(mNumberOfEffApsForTarget)
+                            * Constants.BALLPARK_DISTANCE_THRESHOLD_APPROACH_TO_NEAR)) {
                 // .. Note: SD = sqrt(sum(SD_i^2) / N), therefore low peak SD needs to compare
                 // with threshold * sqrt(N)
 
@@ -529,7 +531,8 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                     mContentSavedToLogFile.append("Arrived at Target, " +
                             "final Smoothed SD = " + mSmoothedSimilarDistance + ", " +
                             "Threshold = " + (Constants.TARGET_ONE_AP_SD_THRESHOLD_FOR_ARRIVAL
-                            * Math.sqrt(mNumberOfEffApsForTarget)) + "\n");
+                            * Math.sqrt(mNumberOfEffApsForTarget)
+                            * Constants.BALLPARK_DISTANCE_THRESHOLD_APPROACH_TO_NEAR) + "\n");
                 }
                 // resume Target button to allow setting new targets
                 mButtonSetTarget.setEnabled(true);
@@ -553,7 +556,7 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
                 }
             }
             if (effRssiCounter == 0) {
-                // no valid valud detected by scan
+                // no valid value detected by scan
                 effAverageRssi = Constants.WIFI_RX_SENSITIVITY; // use sensitivity to fill valid value
             } else {
                 effAverageRssi = effAverageRssi / effRssiCounter;
@@ -593,6 +596,15 @@ public class WifiFindFingerprintFragment extends Fragment implements SensorEvent
             if (isWifiScanRequested) {      // make sure it is the requested one
                 if (isRssSamplingOn) {
                     wifiScanResultList = mWifiManager.getScanResults();     // get raw data
+
+                    // TODO in the future we could improve stability of scanResult by buffered the
+                    // last round scan result, if certain selected AP was missed in this round, we
+                    // can use last round RSSI value instead. But this can not last for more than
+                    // one round, i.e. two consecutive -100dBm's means null in this round.
+                    // This can deal with the case when approaching fingerprint and missing one RSSI
+                    // value from one of the selected APs of the fingerprint, due to no access to AP
+                    // temporarily, i.e. -68dBm, null, -70dBm for MAC xx:xx:xx:xx:xx.
+                    // And don't forget to log the temp value for debug.
 
                     // collect RSSI value of the interested / selected APs
                     // and save the results to wifiSelectedApRssiList

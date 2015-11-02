@@ -12,7 +12,7 @@ public class Constants {
     // for find fingerprint target
     public static final float STEP_COUNTER_ACC_THRESHOLD = 1.2f;    // customized for people
     public static final float TARGET_ONE_AP_SD_THRESHOLD_FOR_ARRIVAL = 10.0f;
-    public static final float BALLPARK_DISTANCE_THRESHOLD_APPROACH_TO_NEAR = 1.0f;
+    public static final float BALLPARK_DISTANCE_THRESHOLD_APPROACH_TO_NEAR = 0.75f;
     public static final float BALLPARK_DISTANCE_THRESHOLD_NEAR_TO_FAR = 1.5f;
 
     // for debug info in Log file mLogToFile
