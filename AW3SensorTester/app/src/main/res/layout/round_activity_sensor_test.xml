@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SensorTestActivity"
+    tools:deviceIds="wear_round">
+
+    <!-- titles -->
+    <TextView
+        android:id="@+id/text_title_gyro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gyro:"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="80dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acc:"
+        android:id="@+id/text_title_acc"
+        android:layout_above="@+id/text_title_gyro"
+        android:layout_alignStart="@+id/text_title_gyro"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LAcc:"
+        android:id="@+id/text_title_lacc"
+        android:layout_above="@+id/text_title_acc"
+        android:layout_alignStart="@+id/text_title_acc"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mag:"
+        android:id="@+id/text_title_mag"
+        android:layout_below="@+id/text_title_gyro"
+        android:layout_alignStart="@+id/text_title_gyro"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Grav:"
+        android:id="@+id/text_title_grav"
+        android:layout_below="@+id/text_title_mag"
+        android:layout_alignStart="@+id/text_title_mag"
+        android:layout_marginTop="12dp" />
+
+    <!-- measurements -->
+    <TextView
+        android:id="@+id/text_measure_gyro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="80dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:id="@+id/text_measure_acc"
+        android:layout_above="@+id/text_measure_gyro"
+        android:layout_alignEnd="@+id/text_measure_gyro"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:id="@+id/text_measure_lacc"
+        android:layout_above="@+id/text_measure_acc"
+        android:layout_alignEnd="@+id/text_measure_acc"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:id="@+id/text_measure_mag"
+        android:layout_below="@+id/text_measure_gyro"
+        android:layout_alignEnd="@+id/text_measure_gyro"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:id="@+id/text_measure_grav"
+        android:layout_below="@+id/text_measure_mag"
+        android:layout_alignEnd="@+id/text_measure_mag"
+        android:layout_marginTop="12dp" />
+
+</RelativeLayout>
