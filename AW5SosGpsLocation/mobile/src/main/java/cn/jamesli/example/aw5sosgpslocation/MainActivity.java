@@ -87,8 +87,13 @@ public class MainActivity extends Activity {
     }
 
     private void getCurrentGpsLocation() {
-        mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationUpdateListener, getMainLooper());
-        mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mLocationUpdateListener, getMainLooper());
+        // it seems NETWORK_PROVIDER is more critical than GPS_PROVIDER for valid location feedback
+//        mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationUpdateListener, getMainLooper());
+//        mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mLocationUpdateListener, getMainLooper());
+        // looper	a Looper object whose message queue will be used to implement the callback mechanism,
+        //          or null to make callbacks on the calling thread
+        mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, mLocationUpdateListener, null);
+        mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mLocationUpdateListener, null);
         mTextViewStatus.setText("Request a single update ..");
         Log.i("MainActivity", "GPS_Provider - " + mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
         Log.i("MainActivity", "NETWORK_Provider - " + mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
