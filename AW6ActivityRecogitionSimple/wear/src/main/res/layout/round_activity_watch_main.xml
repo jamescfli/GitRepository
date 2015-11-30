@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WatchMainActivity"
+    tools:deviceIds="wear_round"
+    android:id="@+id/round_watch_layout">
+
+    <TextView
+        android:id="@+id/text_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_round"
+        android:layout_above="@+id/button_save"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DStair"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_down_stair"
+        android:layout_alignTop="@+id/button_walking"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UStair"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_up_stair"
+        android:layout_alignTop="@+id/button_walking"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bking"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_biking"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/button_down_stair" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dving"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_driving"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/button_up_stair" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_save"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/button_walking" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Walk"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_walking"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
