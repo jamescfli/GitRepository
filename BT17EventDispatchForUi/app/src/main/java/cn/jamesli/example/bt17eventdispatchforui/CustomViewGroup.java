@@ -23,8 +23,8 @@ public class CustomViewGroup extends RelativeLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.i(TAG, "CustomViewGroup.onTouchEvent: " + event.toString());
-//        return super.onTouchEvent(event);
-        return true;    // Case 5, consumed by ViewGroup
+        return super.onTouchEvent(event);
+//        return true;    // Case 5, consumed by ViewGroup
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CustomViewGroup extends RelativeLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         Log.i(TAG, "CustomViewGroup.onInterceptTouchEvent: " + ev.toString());
-//        return super.onInterceptTouchEvent(ev);
-        return true;    // Case 5, consumed by ViewGroup
+        return super.onInterceptTouchEvent(ev);
+//        return true;    // Case 5, consumed by ViewGroup
     }
 }

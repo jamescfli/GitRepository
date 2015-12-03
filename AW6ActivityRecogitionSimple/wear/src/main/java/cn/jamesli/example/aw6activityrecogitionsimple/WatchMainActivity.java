@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -16,7 +17,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WatchMainActivity extends Activity implements SensorEventListener{
+public class WatchMainActivity extends Activity implements SensorEventListener {
+    private static final String TAG = "WatchMainActivity";
 
     private TextView mTextViewStatus;
     private Button mButtonDownStairs;
@@ -52,6 +54,9 @@ public class WatchMainActivity extends Activity implements SensorEventListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_main);
+
+        Log.i(TAG, "onCreate()");
+
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
@@ -161,7 +166,7 @@ public class WatchMainActivity extends Activity implements SensorEventListener{
         isActivityButtonPressed = true;
         mListAccData = new ArrayList<>();   // temp data savor
         mSensorManager.registerListener(this, mSensorAcc,
-                SensorManager.SENSOR_DELAY_GAME);
+                SensorManager.SENSOR_DELAY_UI);
         disableRestButtons(activityLabel);
         mTextViewStatus.setText("Start recording acc data ..");
     }
@@ -220,13 +225,39 @@ public class WatchMainActivity extends Activity implements SensorEventListener{
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume()");
 //        setScreenBrightness(+1);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i(TAG, "onPause()");
 //        setScreenBrightness(-1);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart()");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "onRestart()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy()");
     }
 
     private void setScreenBrightness(int brightness) {
