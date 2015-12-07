@@ -32,7 +32,7 @@ public class SensorMeasureSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String MEASURES_TABLE_CREATE = "create table "
             + MEASURES_TABLE
             + " (" +
-            MEASURE_ID + "INTEGER PRIMARY KEY, " +
+            MEASURE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_ACC_TIMESTAMP + " INTEGER not null, " +
             COLUMN_ACC_X + " REAL not null, " +
             COLUMN_ACC_Y + " REAL not null, " +
