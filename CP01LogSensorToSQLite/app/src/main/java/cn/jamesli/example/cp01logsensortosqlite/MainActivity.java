@@ -64,7 +64,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         mSensorMeasureSavor.open();
         if (mListAccMeasure.size() == mListGyroMeasure.size()) {
             for (int i = 0, SIZE = mListAccMeasure.size(); i < SIZE; i++) {
-                mSensorMeasureSavor.createMeasure(mListAccMeasure.get(i), mListGyroMeasure.get(i));
+                mSensorMeasureSavor.createMeasure(i, mListAccMeasure.get(i), mListGyroMeasure.get(i));
             }
         } else {
             throw new IllegalArgumentException("Acc list and Gyro list do not match in item numbers.");

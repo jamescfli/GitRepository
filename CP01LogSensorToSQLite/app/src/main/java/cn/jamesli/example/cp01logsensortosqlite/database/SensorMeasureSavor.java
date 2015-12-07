@@ -58,7 +58,7 @@ public class SensorMeasureSavor {
         DateFormat dateFormat = new SimpleDateFormat("yyMMdd'T'HHmmss", Locale.CHINA);
         String databaseFileName = DATABASE_FILENAME_SUFFIX
                 + dateFormat.format(new Date().getTime()) + DATABASE_FILENAME_APPENDIX;
-        dbHelper = new SensorMeasureSQLiteOpenHelper(context, databaseFileName, null);
+        dbHelper = new SensorMeasureSQLiteOpenHelper(context, databaseFileName);
     }
 
     public void open() throws SQLException {
@@ -70,10 +70,11 @@ public class SensorMeasureSavor {
     }
 
     // public for database operation
-    public boolean createMeasure(AccSensorDataItem accDataItem, GyroSensorDataItem gyroDataItem) {
+    public boolean createMeasure(int measureIndex, AccSensorDataItem accDataItem, GyroSensorDataItem gyroDataItem) {
         // Class is used to store a set of values that ContentResolver can process
         ContentValues values = new ContentValues();
-        // key + String value from { "Love it", "Cool", "Very nice", "Good", "Fair", "Hate it" }
+        // note: do not put index _id into values, content only
+//        values.put(SensorMeasureSQLiteOpenHelper.MEASURE_ID, measureIndex);
         values.put(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_TIMESTAMP, accDataItem.getAccTimeStamp());
         values.put(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_X, accDataItem.getAccXAxisMeasure());
         values.put(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Y, accDataItem.getAccYAxisMeasure());
@@ -83,23 +84,23 @@ public class SensorMeasureSavor {
         values.put(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Y, gyroDataItem.getGyroYAxisMeasure());
         values.put(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Z, gyroDataItem.getGyroZAxisMeasure());
         // insert ( table, nullColumnHack, contentValues )
+//        try {
+//            long insertId = database.insertOrThrow(
+//                    SensorMeasureSQLiteOpenHelper.MEASURES_TABLE,    // table_name
+//                    null,                                // nullColumnHack, SQL does not allow completely empty row, assign by NULL value
+//                    values);                            // map contains the initial column values for the row
+//            // .. row ID of the newly inserted row, or -1 if an error occurred
+//            // .. use insertOrThrow and catch SQLException for debug
+//            return (insertId >= 0);
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+
         long insertId = database.insert(
-                SensorMeasureSQLiteOpenHelper.MEASURES_TABLE, 	// table_name
-                null,								// nullColumnHack, SQL does not allow completely empty row, assign by NULL value
-                values);							// map contains the initial column values for the row
-        // then read it back from database
-        Cursor cursor = database.query(				// return a Cursor object positioned before the first entry
-                SensorMeasureSQLiteOpenHelper.MEASURES_TABLE,	// table_name
-                allColumns, 						// a list of columns to return
-                SensorMeasureSQLiteOpenHelper.MEASURE_ID + " = " + insertId, 	// a filter declaring which rows to return, SQL WHERE format
-                null,								// selectionArgs
-                null, 								// groupBy, how to group rows
-                null, 								// having, which row groups to include in the cursor
-                null);								// orderBy, how to order the rows
-        cursor.moveToFirst();	// get the first + latest one, cursor.mCount = 1, mCurrentRowID = insertId
-        boolean isValueSaved = isCursorHasValue(cursor);
-        cursor.close();
-        return isValueSaved;
+                SensorMeasureSQLiteOpenHelper.MEASURES_TABLE,    // table_name
+                null,
+                values);
+        return (insertId >= 0);
     }
 
     // public for database operation

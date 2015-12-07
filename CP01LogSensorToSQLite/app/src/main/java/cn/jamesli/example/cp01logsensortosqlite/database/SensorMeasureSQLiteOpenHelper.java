@@ -2,16 +2,10 @@ package cn.jamesli.example.cp01logsensortosqlite.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by jamesli on 15/12/5.
@@ -38,7 +32,7 @@ public class SensorMeasureSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String MEASURES_TABLE_CREATE = "create table "
             + MEASURES_TABLE
             + " (" +
-            MEASURE_ID + "integer primary key autoincrement, " +
+            MEASURE_ID + "INTEGER PRIMARY KEY, " +
             COLUMN_ACC_TIMESTAMP + " INTEGER not null, " +
             COLUMN_ACC_X + " REAL not null, " +
             COLUMN_ACC_Y + " REAL not null, " +
@@ -49,55 +43,17 @@ public class SensorMeasureSQLiteOpenHelper extends SQLiteOpenHelper {
             COLUMN_GYRO_Z + " REAL not null);";
 
     private SQLiteDatabase database;
-    private File mDatabaseFilePath;
-    private String mDatabaseFileName;
 
-    public SensorMeasureSQLiteOpenHelper(Context context, String name,
-                                         SQLiteDatabase.CursorFactory factory) {
+    public SensorMeasureSQLiteOpenHelper(Context context, String name) {
         // name: of the database file, or null for an in-memory database
-        super(context, name, factory, DATABASE_VERSION);
-        mDatabaseFilePath = context.getExternalCacheDir();
-        mDatabaseFileName = name;
-        try {
-//            database = SQLiteDatabase.openDatabase(mDatabaseFilePath
-//                    + File.separator + mDatabaseFileName, null, SQLiteDatabase.OPEN_READWRITE);
-            database = SQLiteDatabase.openDatabase(mDatabaseFilePath
-                    + File.separator + mDatabaseFileName, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        }
-        catch (SQLiteException ex) {
-            Log.e(TAG, "error -- " + ex.getMessage(), ex);
-            // error means tables does not exits
-            createTables();
-        }
-        finally {
-            close();
-        }
-    }
-
-    private void createTables() {
-        database.execSQL(MEASURES_TABLE_CREATE);
+        super(context, context.getExternalCacheDir() + File.separator + name, null, DATABASE_VERSION);
+        // .. put the database in external cache storage for further adb pull
     }
 
     public void close() {
         if (database != null) {
             database.close();
         }
-    }
-
-    public SQLiteDatabase getReadableDatabase()
-    {
-        database = SQLiteDatabase.openDatabase(mDatabaseFilePath
-                        + File.separator + mDatabaseFileName, null,
-                SQLiteDatabase.OPEN_READONLY);
-        return database;
-    }
-
-    public SQLiteDatabase getWritableDatabase()
-    {
-        database = SQLiteDatabase.openDatabase(mDatabaseFilePath
-                        + File.separator + mDatabaseFileName, null,
-                SQLiteDatabase.OPEN_READWRITE);
-        return database;
     }
 
     @Override
