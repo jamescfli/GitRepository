@@ -29,28 +29,17 @@ public class SensorMeasureSavor {
     private static final String DATABASE_FILENAME_SUFFIX = "measure_db_";
     private static final String DATABASE_FILENAME_APPENDIX = ".db";
     private SensorMeasureSQLiteOpenHelper dbHelper;	// wrapper
-    private static final String[] allColumns = {
-            SensorMeasureSQLiteOpenHelper.MEASURE_ID,
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_TIMESTAMP,
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_X,
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Y,
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Z,
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_TIMESTAMP,
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_X,
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Y,
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Z
-    };
     private static final String[] accColumns = {
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_TIMESTAMP,
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_X,
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Y,
-            SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Z
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_TIMESTAMP,
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_X,
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Y,
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Z
     };
     private static final String[] gyroColumns = {
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_TIMESTAMP,
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_X,
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Y,
-            SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Z
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_TIMESTAMP,
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_X,
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Y,
+            SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Z
     };
 
 
@@ -75,14 +64,14 @@ public class SensorMeasureSavor {
         ContentValues values = new ContentValues();
         // note: do not put index _id into values, content only
 //        values.put(SensorMeasureSQLiteOpenHelper.MEASURE_ID, measureIndex);
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_TIMESTAMP, accDataItem.getAccTimeStamp());
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_X, accDataItem.getAccXAxisMeasure());
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Y, accDataItem.getAccYAxisMeasure());
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Z, accDataItem.getAccZAxisMeasure());
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_TIMESTAMP, gyroDataItem.getGyroTimeStamp());
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_X, gyroDataItem.getGyroXAxisMeasure());
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Y, gyroDataItem.getGyroYAxisMeasure());
-        values.put(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Z, gyroDataItem.getGyroZAxisMeasure());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_TIMESTAMP, accDataItem.getAccTimeStamp());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_X, accDataItem.getAccXAxisMeasure());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Y, accDataItem.getAccYAxisMeasure());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Z, accDataItem.getAccZAxisMeasure());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_TIMESTAMP, gyroDataItem.getGyroTimeStamp());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_X, gyroDataItem.getGyroXAxisMeasure());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Y, gyroDataItem.getGyroYAxisMeasure());
+        values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Z, gyroDataItem.getGyroZAxisMeasure());
         // insert ( table, nullColumnHack, contentValues )
 //        try {
 //            long insertId = database.insertOrThrow(
@@ -109,7 +98,7 @@ public class SensorMeasureSavor {
         // ( table, whereClause, whereArgs )
         database.delete(
                 SensorMeasureSQLiteOpenHelper.MEASURES_TABLE,
-                SensorMeasureSQLiteOpenHelper.MEASURE_ID + " = " + idMeasure,
+                SensorMeasureSQLiteOpenHelper.SensorMeasureColumns._ID + " = " + idMeasure,
                 null);  // WHERE args
     }
 
@@ -122,10 +111,10 @@ public class SensorMeasureSavor {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            long timestamp = cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_TIMESTAMP));
-            float x = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_X));
-            float y = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Y));
-            float z = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Z));
+            long timestamp = cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_TIMESTAMP));
+            float x = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_X));
+            float y = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Y));
+            float z = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Z));
             listAccDataItems.add(new AccSensorDataItem(timestamp, x, y, z));
             cursor.moveToNext();
         }
@@ -143,10 +132,10 @@ public class SensorMeasureSavor {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            long timestamp = cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_TIMESTAMP));
-            float x = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_X));
-            float y = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Y));
-            float z = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Z));
+            long timestamp = cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_TIMESTAMP));
+            float x = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_X));
+            float y = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Y));
+            float z = cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Z));
             listGyroDataItems.add(new GyroSensorDataItem(timestamp, x, y, z));
             cursor.moveToNext();
         }
@@ -160,14 +149,14 @@ public class SensorMeasureSavor {
             return false;
         } else {
             Log.i(TAG, "Saved measure is "
-                    + cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_TIMESTAMP)) + " "
-                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_X)) + " "
-                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Y)) + " "
-                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_ACC_Z)) + " "
-                    + cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_TIMESTAMP)) + " "
-                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_X)) + " "
-                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Y)) + " "
-                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.COLUMN_GYRO_Z))
+                    + cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_TIMESTAMP)) + " "
+                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_X)) + " "
+                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Y)) + " "
+                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Z)) + " "
+                    + cursor.getLong(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_TIMESTAMP)) + " "
+                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_X)) + " "
+                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Y)) + " "
+                    + cursor.getFloat(cursor.getColumnIndex(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_GYRO_Z))
             );
             return true;
         }
