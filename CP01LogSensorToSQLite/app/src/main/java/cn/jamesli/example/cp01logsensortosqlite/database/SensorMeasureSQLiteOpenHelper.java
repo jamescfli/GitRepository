@@ -52,18 +52,10 @@ public class SensorMeasureSQLiteOpenHelper extends SQLiteOpenHelper {
             SensorMeasureColumns.COLUMN_GYRO_Y + " REAL not null, " +
             SensorMeasureColumns.COLUMN_GYRO_Z + " REAL not null);";
 
-    private SQLiteDatabase database;
-
     public SensorMeasureSQLiteOpenHelper(Context context, String name) {
         // name: of the database file, or null for an in-memory database
         super(context, context.getExternalCacheDir() + File.separator + name, null, DATABASE_VERSION);
         // .. put the database in external cache storage for further adb pull
-    }
-
-    public void close() {
-        if (database != null) {
-            database.close();
-        }
     }
 
     @Override
