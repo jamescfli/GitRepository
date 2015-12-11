@@ -1,4 +1,4 @@
-package cn.jamesli.example.aw6activityrecogitionsimple;
+package cn.jamesli.example.aw6activityrecogitionsimple.measure;
 
 import android.hardware.SensorEvent;
 

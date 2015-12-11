@@ -23,9 +23,10 @@
         android:text="DStair"
         android:textSize="@dimen/text_size_for_button"
         android:textColor="@color/white"
-        android:id="@+id/button_down_stair"
+        android:id="@+id/button_downstair"
         android:layout_alignTop="@+id/button_walking"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="onClickActivityButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -34,9 +35,10 @@
         android:text="UStair"
         android:textSize="@dimen/text_size_for_button"
         android:textColor="@color/white"
-        android:id="@+id/button_up_stair"
+        android:id="@+id/button_upstair"
         android:layout_alignTop="@+id/button_walking"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="onClickActivityButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -47,7 +49,8 @@
         android:textColor="@color/white"
         android:id="@+id/button_biking"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/button_down_stair" />
+        android:layout_toEndOf="@+id/button_downstair"
+        android:onClick="onClickActivityButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -58,7 +61,8 @@
         android:textColor="@color/white"
         android:id="@+id/button_driving"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/button_up_stair" />
+        android:layout_toStartOf="@+id/button_upstair"
+        android:onClick="onClickActivityButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -80,6 +84,31 @@
         android:textColor="@color/white"
         android:id="@+id/button_walking"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickActivityButton" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Run"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_running"
+        android:layout_above="@+id/button_walking"
+        android:layout_alignStart="@+id/button_biking"
+        android:onClick="onClickActivityButton" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Still"
+        android:textSize="@dimen/text_size_for_button"
+        android:textColor="@color/white"
+        android:id="@+id/button_still"
+        android:layout_above="@+id/button_walking"
+        android:layout_alignEnd="@+id/button_driving"
+        android:onClick="onClickActivityButton" />
 
 </RelativeLayout>
