@@ -12,11 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.jamesli.example.aw6activityrecogitionsimple.database.SensorMeasureSavor;
+import cn.jamesli.example.aw6activityrecogitionsimple.database.LogToSqlFileAsync;
 import cn.jamesli.example.aw6activityrecogitionsimple.measure.AccDataItem;
 
 public class WatchMainActivity extends Activity implements SensorEventListener {
@@ -32,6 +33,7 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
     private Button mButtonStill;
 
     private Button mButtonLogToFile;
+    private boolean isSensorListenerRegistered;
     private boolean isActivityButtonPressed;
 
     private SensorManager mSensorManager;
@@ -79,27 +81,34 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
                 mButtonLogToFile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // prevent from further pressing
+                        mButtonLogToFile.setEnabled(false);
+                        // turn off Sensor Listener first
+                        // resume to initial state without saving the measurements to file
+                        isSensorListenerRegistered = false;
+                        // unregister sensor listener
+                        mSensorManager.unregisterListener(WatchMainActivity.this);
+                        Toast.makeText(WatchMainActivity.this, "Sensor Unregistered ..", Toast.LENGTH_LONG).show();
                         if (mListAccData == null || mListAccData.isEmpty()) {
                             mTextViewStatus.setText("No data in list ..");
                         } else {
                             // prepare log file
                             String nameOfActivity = mActivityLabel.toString();
-                            SensorMeasureSavor sensorMeasureSavor = new SensorMeasureSavor(
-                                    getApplicationContext(),
+                            LogToSqlFileAsync logToSqlFileAsync = new LogToSqlFileAsync(
+                                    WatchMainActivity.this,
                                     nameOfActivity
                             );
-                            sensorMeasureSavor.open();
-                            for (int i = 0, SIZE = mListAccData.size(); i < SIZE; i++) {
-                                sensorMeasureSavor.createMeasure(i, mListAccData.get(i));
-                            }
-                            sensorMeasureSavor.close();
-                            mTextViewStatus.setText("Data saved for " + nameOfActivity);
+                            mTextViewStatus.setText("Saving " + nameOfActivity + " data. Pls wait ..");
+                            logToSqlFileAsync.saveToExternalCacheDir(mListAccData);
                         }
+                        // resume the button
+                        mButtonLogToFile.setEnabled(true);
                     }
                 });
             }
         });
 
+        isSensorListenerRegistered = false;
         isActivityButtonPressed = false;
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -136,13 +145,15 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
                     throw new IllegalArgumentException("Button pressed can not be recognized!");
             }
             startRecordingAccMeasure(mActivityLabel);
+            isActivityButtonPressed = true;
         } else {
             cancelRecordingAccMeasure();
+            isActivityButtonPressed = false;
         }
     }
 
     private void startRecordingAccMeasure(ActivityInstances activityLabel) {
-        isActivityButtonPressed = true;
+        isSensorListenerRegistered = true;
         mListAccData = new ArrayList<>();   // temp data savor
         mSensorManager.registerListener(this, mSensorAcc, SensorManager.SENSOR_DELAY_UI);
         disableRestButtons(activityLabel);
@@ -150,10 +161,6 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
     }
 
     private void cancelRecordingAccMeasure() {
-        // unregister sensor listener
-        mSensorManager.unregisterListener(this);
-        // resume to initial state without saving the measurements to file
-        isActivityButtonPressed = false;
         enableAllButtons(true);
         // clear the measurements
         if (mListAccData != null) { // does not care whether it is empty or not
@@ -204,6 +211,10 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
         mButtonStill.setEnabled(enable);
     }
 
+    public TextView getTextViewStatus() {
+        return mTextViewStatus;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -244,14 +255,16 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (isSensorListenerRegistered) {
 //        if (event.sensor.getType() != Sensor.TYPE_LINEAR_ACCELERATION) {
 //            return;
 //        }
-        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
-            return;
+            if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
+                return;
+            }
+            // record the value to mListAccData
+            mListAccData.add(new AccDataItem(event));
         }
-        // record the value to mListAccData
-        mListAccData.add(new AccDataItem(event));
     }
 
     @Override
