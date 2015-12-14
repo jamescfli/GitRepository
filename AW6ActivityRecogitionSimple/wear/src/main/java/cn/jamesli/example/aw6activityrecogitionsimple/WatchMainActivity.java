@@ -101,8 +101,8 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
                             mTextViewStatus.setText("Saving " + nameOfActivity + " data. Pls wait ..");
                             logToSqlFileAsync.saveToExternalCacheDir(mListAccData);
                         }
-                        // resume the button
-                        mButtonLogToFile.setEnabled(true);
+//                        // resume the button in onPostExecute() after data has been saved
+//                        mButtonLogToFile.setEnabled(true);
                     }
                 });
             }
@@ -213,6 +213,10 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
 
     public TextView getTextViewStatus() {
         return mTextViewStatus;
+    }
+
+    public Button getButtonLogToFile() {
+        return mButtonLogToFile;
     }
 
     @Override

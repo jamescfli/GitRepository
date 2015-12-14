@@ -47,6 +47,8 @@ public class LogToSqlFileAsync {
                 public void run() {
                     ((WatchMainActivity) mContext).getTextViewStatus().setText("'"
                             + mNameOfActivity + "' data was saved.");
+                    // resume LogToFile the button after data has been saved
+                    ((WatchMainActivity) mContext).getButtonLogToFile().setEnabled(true);
                 }
             });
 
