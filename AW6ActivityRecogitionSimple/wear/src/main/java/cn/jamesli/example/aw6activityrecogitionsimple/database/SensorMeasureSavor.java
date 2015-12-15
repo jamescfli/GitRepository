@@ -56,7 +56,7 @@ public class SensorMeasureSavor {
         dbHelper.close();
     }
 
-    public boolean createMeasure(int measureIndex, AccDataItem accDataItem) {
+    public boolean createMeasure(AccDataItem accDataItem) {
         ContentValues values = new ContentValues();
         // input values, no need for _ID
         values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_TIMESTAMP, accDataItem.getTimeStamp());
@@ -68,6 +68,34 @@ public class SensorMeasureSavor {
                 null,
                 values);
         return (insertId >= 0);     // TRUE if succeeded, FALSE if failed
+    }
+
+    public boolean createBatchMeasure(List<AccDataItem> listAccDataItem) {
+        // speed up the SQLite write by putting all writings in one database transaction
+        // as a result, time consumed by database writing has been dramatically reduced
+        mDatabase.beginTransaction();
+        boolean isSavingSuccessful;
+        try {
+            ContentValues values = new ContentValues();
+            for (AccDataItem accDataItem : listAccDataItem) {
+                values.clear();
+                values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_TIMESTAMP, accDataItem.getTimeStamp());
+                values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_X, accDataItem.getXAxisAcc());
+                values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Y, accDataItem.getYAxisAcc());
+                values.put(SensorMeasureSQLiteOpenHelper.SensorMeasureColumns.COLUMN_ACC_Z, accDataItem.getZAxisAcc());
+                mDatabase.insert(SensorMeasureSQLiteOpenHelper.MEASURES_TABLE_NAME,
+                        null,
+                        values);
+            }
+            mDatabase.setTransactionSuccessful();
+            isSavingSuccessful = true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            isSavingSuccessful = false;
+        } finally {
+            mDatabase.endTransaction();
+        }
+        return isSavingSuccessful;
     }
 
     public void deleteMeasure(int idMeasure) {

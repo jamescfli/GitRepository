@@ -30,8 +30,17 @@ public class LogToSqlFileAsync {
             );
             ArrayList<AccDataItem> listAccData = new ArrayList<>(params[0]);
             sensorMeasureSavor.open();
-            for (int i = 0, SIZE = listAccData.size(); i < SIZE; i++) {
-                sensorMeasureSavor.createMeasure(i, listAccData.get(i));
+//            // low speed due to:
+//            //      begin_transaction();
+//            //      insert();
+//            //      commit_transaction();
+//            // for each record
+//            for (int i = 0, SIZE = listAccData.size(); i < SIZE; i++) {
+//                sensorMeasureSavor.createMeasure(listAccData.get(i));
+//            }
+            boolean returnFlag = sensorMeasureSavor.createBatchMeasure(listAccData);
+            if (!returnFlag) {
+                resultMessage = "failed to be saved";
             }
             sensorMeasureSavor.close();
             return resultMessage;

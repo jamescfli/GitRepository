@@ -88,7 +88,8 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
                         isSensorListenerRegistered = false;
                         // unregister sensor listener
                         mSensorManager.unregisterListener(WatchMainActivity.this);
-                        Toast.makeText(WatchMainActivity.this, "Sensor Unregistered ..", Toast.LENGTH_LONG).show();
+                        // due to time save by sqlite access, we change LENGTH_LONG to LENGTH_SHORT
+                        Toast.makeText(WatchMainActivity.this, "Sensor Unregistered ..", Toast.LENGTH_SHORT).show();
                         if (mListAccData == null || mListAccData.isEmpty()) {
                             mTextViewStatus.setText("No data in list ..");
                         } else {
