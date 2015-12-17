@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jamesli.example.aw6activityrecogitionsimple.database.LogToSqlFileAsync;
-import cn.jamesli.example.aw6activityrecogitionsimple.measure.AccDataItem;
+import cn.jamesli.example.aw6activityrecogitionsimple.measure.SensorValueItem;
 
 public class WatchMainActivity extends Activity implements SensorEventListener {
     private static final String TAG = "WatchMainActivity";
@@ -38,11 +38,17 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private Sensor mSensorAcc;
+    private Sensor mSensorGyro;
+    private boolean isAccMeasureUpdated;    // for Acc Gyro measurement saving synchronization
+    private boolean isGyroMeasureUpdated;
 
-    // temp data storage
-    private List<AccDataItem> mListAccData;
+    // temporary data savor
+    private List<SensorValueItem> mListAccData;
+    private List<SensorValueItem> mListGyroData;
+    private SensorValueItem mAccValueItem;
+    private SensorValueItem mGyroValueItem;
 
-    private enum ActivityInstances {
+    private enum ActivityInstances {    // 7 activities at the moment
         DOWNSTAIRS,
         UPSTAIRS,
         BIKING,
@@ -86,24 +92,24 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
                         // turn off Sensor Listener first
                         // resume to initial state without saving the measurements to file
                         isSensorListenerRegistered = false;
-                        // unregister sensor listener
+                        // unregister sensor listener for Acc and Gyro
                         mSensorManager.unregisterListener(WatchMainActivity.this);
                         // due to time save by sqlite access, we change LENGTH_LONG to LENGTH_SHORT
-                        Toast.makeText(WatchMainActivity.this, "Sensor Unregistered ..", Toast.LENGTH_SHORT).show();
-                        if (mListAccData == null || mListAccData.isEmpty()) {
-                            mTextViewStatus.setText("No data in list ..");
+                        Toast.makeText(WatchMainActivity.this, "Sensor unregistered ..", Toast.LENGTH_SHORT).show();
+                        if (mListAccData == null || mListGyroData == null
+                                || mListAccData.isEmpty() || mListGyroData.isEmpty()) {
+                            mTextViewStatus.setText("No data in acc/gyro list ..");
                         } else {
-                            // prepare log file
+                            // prepare persisting acc and gyro data
                             String nameOfActivity = mActivityLabel.toString();
                             LogToSqlFileAsync logToSqlFileAsync = new LogToSqlFileAsync(
                                     WatchMainActivity.this,
-                                    nameOfActivity
+                                    nameOfActivity      // for naming database
                             );
-                            mTextViewStatus.setText("Saving " + nameOfActivity + " data. Pls wait ..");
-                            logToSqlFileAsync.saveToExternalCacheDir(mListAccData);
+                            mTextViewStatus.setText("Save " + nameOfActivity + " data. Wait ..");
+                            logToSqlFileAsync.saveToExternalCacheDir(mListAccData, mListGyroData);
                         }
-//                        // resume the button in onPostExecute() after data has been saved
-//                        mButtonLogToFile.setEnabled(true);
+                        // re-enable button in onPostExecute() after data is saved in another thread
                     }
                 });
             }
@@ -113,8 +119,8 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
         isActivityButtonPressed = false;
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        mSensorAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION); // no gravity
         mSensorAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); // with gravity
+        mSensorGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
     // when one of activity buttons is pressed
@@ -155,17 +161,24 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
 
     private void startRecordingAccMeasure(ActivityInstances activityLabel) {
         isSensorListenerRegistered = true;
-        mListAccData = new ArrayList<>();   // temp data savor
-        mSensorManager.registerListener(this, mSensorAcc, SensorManager.SENSOR_DELAY_UI);
+        mListAccData = new ArrayList<>();   // temp acc data savor
+        isAccMeasureUpdated = false;        // no updates so far
+        mListGyroData = new ArrayList<>();
+        isGyroMeasureUpdated = false;
+        mSensorManager.registerListener(this, mSensorAcc, SensorManager.SENSOR_DELAY_UI);   // 16Hz
+        mSensorManager.registerListener(this, mSensorGyro, SensorManager.SENSOR_DELAY_UI);  // 16Hz
         disableRestButtons(activityLabel);
-        mTextViewStatus.setText("Start recording acc data ..");
+        mTextViewStatus.setText("Start recording ..");
     }
 
     private void cancelRecordingAccMeasure() {
         enableAllButtons(true);
         // clear the measurements
-        if (mListAccData != null) { // does not care whether it is empty or not
+        if (mListAccData != null && !mListAccData.isEmpty()) { // does not care whether it is empty or not
             mListAccData.clear();   // for further usage
+        }
+        if (mListGyroData != null && !mListGyroData.isEmpty()) {
+            mListGyroData.clear();
         }
         // show text message
         mTextViewStatus.setText("Data cleared ..");
@@ -174,7 +187,7 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
     private void disableRestButtons(ActivityInstances activityLabel) {
         enableAllButtons(false);    // disable all activity buttons
 
-        // leave the initiated activity button pressable
+        // leave the initiated activity button pressable, only one
         switch (activityLabel) {
             case DOWNSTAIRS:
                 mButtonDownStairs.setEnabled(true);
@@ -212,10 +225,12 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
         mButtonStill.setEnabled(enable);
     }
 
+    // make textView accessible from AsyncTask for saving data
     public TextView getTextViewStatus() {
         return mTextViewStatus;
     }
 
+    // make button accessible from AsyncTask for saving data
     public Button getButtonLogToFile() {
         return mButtonLogToFile;
     }
@@ -261,14 +276,34 @@ public class WatchMainActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (isSensorListenerRegistered) {
-//        if (event.sensor.getType() != Sensor.TYPE_LINEAR_ACCELERATION) {
-//            return;
-//        }
-            if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
-                return;
+            switch (event.sensor.getType()) {
+                case Sensor.TYPE_ACCELEROMETER:
+                    mAccValueItem = new SensorValueItem(event);
+                    isAccMeasureUpdated = true;
+                    if (isGyroMeasureUpdated) {
+                        // both Acc and Gyro measurements are ready, add values as a couple
+                        mListAccData.add(mAccValueItem);
+                        mListGyroData.add(mGyroValueItem);
+                        // wait for further updates
+                        isAccMeasureUpdated = false;
+                        isGyroMeasureUpdated = false;
+                    }
+                    break;
+                case Sensor.TYPE_GYROSCOPE:
+                    mGyroValueItem = new SensorValueItem(event);
+                    isGyroMeasureUpdated = true;
+                    if (isAccMeasureUpdated) {
+                        mListAccData.add(mAccValueItem);
+                        mListGyroData.add(mGyroValueItem);
+                        isAccMeasureUpdated = false;
+                        isGyroMeasureUpdated = false;
+                    }
+                    break;
+                default:
+                    Log.e(TAG, "Unexpected sensor: " + event.sensor.getType());
+                    return;     // omit all other sensors
             }
-            // record the value to mListAccData
-            mListAccData.add(new AccDataItem(event));
+
         }
     }
 

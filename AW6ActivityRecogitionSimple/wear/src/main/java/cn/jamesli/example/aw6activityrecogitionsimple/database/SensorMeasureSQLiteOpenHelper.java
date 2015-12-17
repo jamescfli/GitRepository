@@ -19,10 +19,14 @@ public class SensorMeasureSQLiteOpenHelper extends SQLiteOpenHelper {
     // content column
     public interface SensorMeasureColumns extends BaseColumns {
         // default _ID column : the unique ID for a row
-        public static final String COLUMN_ACC_TIMESTAMP = "acctimestamp";
+        public static final String COLUMN_ACC_TIMESTAMP = "accTstamp";
         public static final String COLUMN_ACC_X = "accX";
         public static final String COLUMN_ACC_Y = "accY";
         public static final String COLUMN_ACC_Z = "accZ";
+        public static final String COLUMN_GYRO_TIMESTAMP = "gyroTstamp";
+        public static final String COLUMN_GYRO_X = "gyroX";
+        public static final String COLUMN_GYRO_Y = "gyroY";
+        public static final String COLUMN_GYRO_Z = "gyroZ";
     }
 
     private static final int DATABASE_VERSION = 1;
@@ -34,7 +38,11 @@ public class SensorMeasureSQLiteOpenHelper extends SQLiteOpenHelper {
             SensorMeasureColumns.COLUMN_ACC_TIMESTAMP + " INTEGER not null, " +
             SensorMeasureColumns.COLUMN_ACC_X + " REAL not null, " +
             SensorMeasureColumns.COLUMN_ACC_Y + " REAL not null, " +
-            SensorMeasureColumns.COLUMN_ACC_Z + " REAL not null);";
+            SensorMeasureColumns.COLUMN_ACC_Z + " REAL not null, " +
+            SensorMeasureColumns.COLUMN_GYRO_TIMESTAMP + " INTEGER not null, " +
+            SensorMeasureColumns.COLUMN_GYRO_X + " REAL not null, " +
+            SensorMeasureColumns.COLUMN_GYRO_Y + " REAL not null, " +
+            SensorMeasureColumns.COLUMN_GYRO_Z + " REAL not null);";
 
     public SensorMeasureSQLiteOpenHelper(Context context, String name) {
         // name: of the database file, or null for an in-memory database
